@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 
@@ -8,12 +9,22 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Colors.grey[800]!.withOpacity(0.8),
       body: Center(
-        child: Text(
-          'Welcome to ShedMedd',
-          style:
-              TextStyle(fontSize: TextSizes.verybig, color: CustomColors.white),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 350,),
+            Text(
+              'Welcome to ShedMedd',
+              style: TextStyle(
+                  fontSize: TextSizes.verybig, color: CustomColors.white, ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            Button(title: 'Get Started',)
+          ],
         ),
       ),
     );
