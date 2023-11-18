@@ -32,6 +32,8 @@ class Splash extends StatelessWidget {
             Button(
                 title: 'Get Started',
                 action: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/shop');
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => SignUp()));
                 })

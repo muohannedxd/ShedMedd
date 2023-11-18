@@ -10,20 +10,22 @@ AppBar Bar(title) {
       title,
       style: TextStyle(
           fontSize: TextSizes.subtitle,
-          color: CustomColors.black,
+          color: CustomColors.textPrimary,
           fontWeight: FontWeight.bold),
     ),
     centerTitle: true,
     leading: Builder(
-          builder: (context) => IconButton(
-            icon: Image.asset('assets/icons/menu.png', color: CustomColors.black),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
+      builder: (context) => IconButton(
+        icon: Image.asset('assets/icons/menu.png',
+            color: CustomColors.textPrimary),
+        onPressed: () => Scaffold.of(context).openDrawer(),
+      ),
+    ),
     actions: [
       Padding(
         padding: const EdgeInsets.only(right: 14),
-        child: Image.asset('assets/icons/notification.png', color: CustomColors.black),
+        child: Image.asset('assets/icons/notification.png',
+            color: CustomColors.textPrimary),
       )
     ],
   );
