@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/screens/Shop/shop.dart';
-import 'package:shedmedd/screens/authentification/sign_up.dart';
 
 class Splash extends StatelessWidget {
   const Splash({super.key});
@@ -34,8 +32,7 @@ class Splash extends StatelessWidget {
                 action: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/shop');
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => SignUp()));
+                  //Navigator.pushNamed(context, '/signup');
                 })
           ],
         ),

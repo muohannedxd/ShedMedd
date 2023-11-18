@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/screens/Authentification/Signup.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Splash.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/shop': (context) => Shop(),
         '/discover': (context) => Discover(),
+        '/signup': (context) => SignUp(),
       },
       home: const Splash(),
     );
