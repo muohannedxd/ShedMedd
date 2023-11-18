@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ShedMedd',
       theme: ThemeData(
-          fontFamily: 'ProductSans'
-          ),
+        fontFamily: 'ProductSans',
+      ),
       home: const Splash(),
     );
   }
