@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Splash.dart';
 
 void main() {
