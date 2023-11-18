@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/screens/Shop/Discover.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Splash.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: CustomColors.bgColor, // Set the status bar color to white
+    statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
+  ));
   runApp(const MyApp());
 }
 
@@ -18,6 +25,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'ProductSans',
       ),
+      initialRoute: '/',
+      routes: {
+        '/shop': (context) => Shop(),
+        '/discover': (context) => Discover(),
+      },
       home: const Splash(),
     );
   }

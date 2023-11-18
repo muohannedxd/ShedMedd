@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/screens/Shop/shop.dart';
 
 class Splash extends StatelessWidget {
   const Splash({super.key});
@@ -31,8 +30,8 @@ class Splash extends StatelessWidget {
             Button(
                 title: 'Get Started',
                 action: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Shop()));
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/shop');
                 })
           ],
         ),
