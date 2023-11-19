@@ -131,6 +131,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutterotpfield:
+    dependency: "direct main"
+    description:
+      name: flutterotpfield
+      sha256: "2aa4f8c5e7b7e7a829b83f5a4bc04ba24813672b2ddd4c8a6725f64967756ec8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   image:
     dependency: transitive
     description:

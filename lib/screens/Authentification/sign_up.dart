@@ -14,11 +14,10 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 32, top: 93),
+            margin: EdgeInsets.only(left: 32, top: 64),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -26,13 +25,14 @@ class _SignUpState extends State<SignUp> {
                   "Create",
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 16,),
                 Text("your account",
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 44),
+            margin: EdgeInsets.only(left: 32, right: 32, top: 48, bottom: 28),
             child: Column(
               children: [
                 TextField(
