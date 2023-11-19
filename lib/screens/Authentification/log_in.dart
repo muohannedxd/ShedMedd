@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/screens/authentification/sign_up.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
