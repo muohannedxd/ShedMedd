@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/screens/Authentification/Signup.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Splash.dart';
