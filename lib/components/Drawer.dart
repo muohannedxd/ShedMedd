@@ -4,8 +4,10 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 
 class AppDrawer extends StatefulWidget {
+  final int current;
   const AppDrawer({
     super.key,
+    required this.current
   });
 
   @override
@@ -13,16 +15,15 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  List<bool> current = [true, false, false, false, false, false];
 
-  void setCurrent(index) {
+  /*void setCurrent(index) {
     for (int i = 0; i < current.length; i++) {
       current[i] = false;
     }
     setState(() {
       current[index] = true;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +90,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'Homepage',
                   icon: Icons.home_outlined,
-                  current: current[0],
+                  current: widget.current == 0 ? true : false,
                   action: () {
-                    setCurrent(0);
-                    if (!current[0]) {
+                    //setCurrent(0);
+                    if (widget.current != 0) {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/shop');
                     }
@@ -101,10 +102,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'Discover',
                   icon: Icons.search_outlined,
-                  current: current[1],
+                  current: widget.current == 1 ? true : false,
                   action: () {
-                    setCurrent(1);
-                    if (!current[0]) {
+                    //setCurrent(1);
+                    if (widget.current != 1) {
                       Navigator.pop(context);
                       Navigator.pushNamed(context, '/discover');
                     }
@@ -113,9 +114,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'My profile',
                   icon: Icons.person_outline,
-                  current: current[2],
+                  current: widget.current == 2 ? true : false,
                   action: () {
-                    setCurrent(2);
+                    //setCurrent(2);
                   },
                 ),
                 Padding(
@@ -131,25 +132,25 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'Settings',
                   icon: Icons.settings_outlined,
-                  current: current[3],
+                  current: widget.current == 3 ? true : false,
                   action: () {
-                    setCurrent(3);
+                    //setCurrent(3);
                   },
                 ),
                 SidebarButton(
                   title: 'Support',
                   icon: Icons.email_outlined,
-                  current: current[4],
+                  current: widget.current == 4 ? true : false,
                   action: () {
-                    setCurrent(4);
+                    //setCurrent(4);
                   },
                 ),
                 SidebarButton(
                   title: 'About us',
                   icon: Icons.info_outline,
-                  current: current[5],
+                  current: widget.current == 5 ? true : false,
                   action: () {
-                    setCurrent(5);
+                    //setCurrent(5);
                   },
                 ),
               ],

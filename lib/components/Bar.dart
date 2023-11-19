@@ -15,10 +15,13 @@ AppBar Bar(title) {
     ),
     centerTitle: true,
     leading: Builder(
-      builder: (context) => IconButton(
-        icon: Image.asset('assets/icons/menu.png',
-            color: CustomColors.textPrimary),
-        onPressed: () => Scaffold.of(context).openDrawer(),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.only(left: 22),
+        child: IconButton(
+          icon: Image.asset('assets/icons/menu.png',
+              color: CustomColors.textPrimary),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
       ),
     ),
     actions: [

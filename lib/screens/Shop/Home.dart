@@ -21,7 +21,7 @@ class _ShopState extends State<Shop> {
       behavior: BehaviorOfScroll(),
       child: Scaffold(
         appBar: Bar('ShedMedd'),
-        drawer: AppDrawer(),
+        drawer: AppDrawer(current: 0,),
         backgroundColor: CustomColors.bgColor,
         body: ListView(
           children: [

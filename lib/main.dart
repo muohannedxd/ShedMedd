@@ -4,6 +4,7 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
+import 'package:shedmedd/screens/Shop/SearchResults.dart';
 import 'package:shedmedd/screens/Splash.dart';
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/shop': (context) => Shop(),
         '/discover': (context) => Discover(),
+        '/discover/results': (context) => SearchResults(),
         '/signup': (context) => SignUp(),
       },
       home: const Splash(),
