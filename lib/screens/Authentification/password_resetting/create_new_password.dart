@@ -18,6 +18,69 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     });
   }
 
+void _showConfirmationSlider() {
+  // Show the bottom sheet when the button is pressed
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (builder) {
+      return Container(
+        height: 360.0,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(70.0),
+              topRight: const Radius.circular(70.0),
+            ),
+          ),
+          child: Column(
+            children: [
+              SizedBox(height: 32,),
+              // Add your Image widget here
+              Image.asset(
+                'assets/images/password_successfully_changed.png',
+                width: 110.0, // Adjust the width as needed
+                height: 110.0, // Adjust the height as needed
+                // You can use other properties like fit, alignment, etc.
+              ),
+              SizedBox(height: 20.0), // Adjust spacing as needed
+              Text("Your password has been changed",style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600,),),
+              SizedBox(height: 16.0), // Adjust spacing as needed
+              Text("Welcome back! Discover now!",style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,),),
+              SizedBox(height: 24.0), // Adjust spacing as needed
+              Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color?>(Colors.black),
+                  fixedSize: MaterialStateProperty.all<Size>(Size(315, 60)),
+                  shape: MaterialStateProperty.all<OutlinedBorder?>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          30), // Adjust the radius for sharpness
+                    ),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text(
+                  "Browse home",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                )),
+          ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
   Color CreateNewPasswordButtonColor = Color(0xFF2D201C);
   @override
   Widget build(BuildContext context) {
@@ -72,13 +135,13 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     floatingLabelAlignment: FloatingLabelAlignment.center,
                     hintText: "New password",
                     suffix: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          size: 20,
-                        ),
-                        onPressed: _togglePasswordVisibility,
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        size: 20,
+                      ),
+                      onPressed: _togglePasswordVisibility,
                     ),
                   ),
                 ),
@@ -92,13 +155,13 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     floatingLabelAlignment: FloatingLabelAlignment.center,
                     hintText: "Confirm password",
                     suffix: IconButton(
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          size: 20,
-                        ),
-                        onPressed: _togglePasswordVisibility,
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        size: 20,
+                      ),
+                      onPressed: _togglePasswordVisibility,
                     ),
                   ),
                 ),
@@ -122,7 +185,9 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _showConfirmationSlider();
+                },
                 child: Text(
                   "Confirm",
                   style: TextStyle(
