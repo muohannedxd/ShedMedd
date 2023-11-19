@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/screens/authentification/sign_up.dart';
 
-import 'log_in.dart';
-
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class LogIn extends StatefulWidget {
+  const LogIn({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<LogIn> createState() => _LogInState();
 }
 
-class _SignUpState extends State<SignUp> {
-  Color signUpButtonColor = Color(0xFF2D201C);
+class _LogInState extends State<LogIn> {
+  Color LogInButtonColor = Color(0xFF2D201C);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +22,7 @@ class _SignUpState extends State<SignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Create",
+                  "Log into",
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Text("your account",
@@ -32,15 +31,9 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 44),
+            margin: EdgeInsets.only(left: 32, right: 32, top: 48, bottom: 28),
             child: Column(
               children: [
-                TextField(
-                  decoration: InputDecoration(hintText: "Your name"),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 TextField(
                   decoration: InputDecoration(hintText: "Email address"),
                 ),
@@ -50,14 +43,13 @@ class _SignUpState extends State<SignUp> {
                 TextField(
                   decoration: InputDecoration(hintText: "Password"),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  decoration: InputDecoration(hintText: "Confirm password"),
-                ),
               ],
             ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 24, right: 32),
+            alignment: Alignment.centerRight,
+            child: Text("Forgot password?", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w100),),
           ),
           Container(
             alignment: Alignment.center,
@@ -75,7 +67,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 onPressed: () {},
                 child: Text(
-                  "SIGN UP",
+                  "LOG IN",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -86,47 +78,41 @@ class _SignUpState extends State<SignUp> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                SizedBox(
-                  height: 28,
-                ),
-                Text("Or sign up with",
-                    style: TextStyle(fontSize: 12, color: Colors.grey)),
-                SizedBox(
-                  height: 28,
-                ),
+                SizedBox(height: 28,),
+                Text("Or log in with", style: TextStyle(fontSize: 12, color: Colors.grey )),
+                SizedBox(height: 28,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/google_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
-                        ),
+                    borderRadius: BorderRadius.circular(42),
+                    child: Container(
+                      width: 42, // Set the desired width
+                      height: 42, // Set the desired height
+                      child: 
+                      Image.asset(
+                        "assets/images/google_icon.png" ,
+                        fit: BoxFit.cover, // Adjust the fit as needed
                       ),
                     ),
-                    SizedBox(
-                      width: 20,
-                    ),
+                  ),
+                  SizedBox(width: 20,),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/facebook_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
-                        ),
+                    borderRadius: BorderRadius.circular(42),
+                    child: Container(
+                      width: 42, // Set the desired width
+                      height: 42, // Set the desired height
+                      child: 
+                      Image.asset(
+                        "assets/images/facebook_icon.png" ,
+                        fit: BoxFit.cover, // Adjust the fit as needed
                       ),
                     ),
+                  ),
                   ],
                 ),
-                SizedBox(
-                  height: 32,
-                )
+                SizedBox(height: 32,)
+
               ],
             ),
           ),
@@ -134,23 +120,18 @@ class _SignUpState extends State<SignUp> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Or already have an account?",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 7,
-                ),
+                Text("You don't have an account?", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                SizedBox(width: 7,),
                 GestureDetector(
                   onTap: () {
                     // Navigate to the login page when "Log In" text is tapped
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
+                      MaterialPageRoute(builder: (context) => SignUp()),
                     );
                   },
                   child: Text(
-                    "Log In",
+                    "Sign Up",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -160,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ],
             ),
-          )
+          )    
         ],
       ),
     );
