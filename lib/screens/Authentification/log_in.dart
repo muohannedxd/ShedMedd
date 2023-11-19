@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
 class LogIn extends StatefulWidget {
@@ -13,11 +14,10 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 32, top: 93),
+            margin: EdgeInsets.only(left: 32, top: 64),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -25,6 +25,7 @@ class _LogInState extends State<LogIn> {
                   "Log into",
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: 16,),
                 Text("your account",
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
               ],
@@ -47,9 +48,18 @@ class _LogInState extends State<LogIn> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 24, right: 32),
+            margin: EdgeInsets.only(bottom: 32, right: 32),
             alignment: Alignment.centerRight,
-            child: Text("Forgot password?", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w100),),
+            child: GestureDetector(
+                  onTap: () {
+                    // Navigate to the login page when "Log In" text is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ForgotPassword()),
+                    );
+                  },
+                  child: Text("Forgot password?", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w100, decoration: TextDecoration.underline,),),
+            ),
           ),
           Container(
             alignment: Alignment.center,
