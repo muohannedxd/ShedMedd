@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/config/myBehavior.dart';
-import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
+import '../../config/myBehavior.dart';
+import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
 
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/create_new_password.dart';
-import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:flutterotpfield/flutterotpfield.dart';
 
 class VerificationCode extends StatefulWidget {

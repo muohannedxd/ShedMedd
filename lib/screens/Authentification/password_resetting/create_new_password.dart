@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
-import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
 class CreateNewPassword extends StatefulWidget {
   const CreateNewPassword({super.key});

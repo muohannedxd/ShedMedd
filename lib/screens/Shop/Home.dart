@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/Bar.dart';
-import 'package:shedmedd/components/Drawer.dart';
-import 'package:shedmedd/components/Shop/CategoryChooser.dart';
-import 'package:shedmedd/components/itemCard.dart';
-import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/config/myBehavior.dart';
+import '../../components/Bar.dart';
+import '../../components/Drawer.dart';
+import '../../components/Shop/CategoryChooser.dart';
+import '../../components/itemCard.dart';
+import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
+import '../../config/myBehavior.dart';
+
+import '../../config/bouncingScroll.dart';
 
 class Shop extends StatefulWidget {
   const Shop({super.key});
@@ -55,6 +57,7 @@ class _ShopState extends State<Shop> {
                     ],
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScroll(),
                     scrollDirection: Axis.horizontal,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -96,6 +99,7 @@ class _ShopState extends State<Shop> {
                     ],
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScroll(),
                     scrollDirection: Axis.horizontal,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -137,6 +141,7 @@ class _ShopState extends State<Shop> {
                     ],
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScroll(),
                     scrollDirection: Axis.horizontal,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),

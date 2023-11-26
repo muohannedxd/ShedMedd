@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/Bar.dart';
-import 'package:shedmedd/components/Divider.dart';
-import 'package:shedmedd/components/Drawer.dart';
-import 'package:shedmedd/config/myBehavior.dart';
-import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
+import '../../components/Bar.dart';
+import '../../components/Divider.dart';
+import '../../components/Drawer.dart';
+import '../../config/bouncingScroll.dart';
+import '../../config/myBehavior.dart';
+import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
 
 class Discover extends StatefulWidget {
   const Discover({super.key});
@@ -190,6 +191,7 @@ class _MainCategoryState extends State<MainCategory> {
         // subcategories
         showSubCategory
             ? SingleChildScrollView(
+              physics: BouncingScroll(),
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
