@@ -17,7 +17,7 @@ class _SearchResultsState extends State<SearchResults> {
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
-      child: Scaffold(
+      child: Scaffold(  
         backgroundColor: CustomColors.bgColor,
         body: ListView(
           children: [

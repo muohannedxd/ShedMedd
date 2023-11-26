@@ -89,13 +89,6 @@ class _DiscoverState extends State<Discover> {
                 child: Column(
                   children: [
                     MainCategory(
-                      category: 'Unisex',
-                      bgColor: Color.fromARGB(255, 173, 121, 72),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    MainCategory(
                       category: 'Men',
                       bgColor: Color.fromARGB(255, 159, 164, 143),
                     ),
@@ -142,9 +135,6 @@ class _MainCategoryState extends State<MainCategory> {
   @override
   Widget build(BuildContext context) {
     String imagePath = '';
-    if (widget.category == 'Unisex') {
-      imagePath = 'unisex.jpeg';
-    }
     if (widget.category == 'Men') {
       imagePath = 'man.jpeg';
     }
