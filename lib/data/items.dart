@@ -7,7 +7,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 800,
     'description': 'one of the most requested sportwear ever, enjoy it',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['sportwear.jpeg', 'sportwear2.jpeg', 'sportwear3.jpeg']
   },
   'item2': {
     'id': 2,
@@ -17,7 +17,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 500,
     'description': 'just a teshirt, pink, for womem',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['pink_shirt.jpeg', 'pink_shirt2.jpeg', 'pink_shirt3.jpeg']
   },
   'item3': {
     'id': 3,
@@ -27,7 +27,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 1200,
     'description': 'take the chance',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['watch.jpeg', 'watch2.jpeg', 'watch3.jpeg']
   },
   'item4': {
     'id': 4,
@@ -37,7 +37,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 400,
     'description': 'for your kids',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['spiderman.jpeg', 'spiderman2.jpeg', 'spiderman3.jpeg']
   },
   'item5': {
     'id': 5,
@@ -48,7 +48,7 @@ Map<String, dynamic> clothingItems = {
     'price': 600,
     'description':
         'stylish pantalon to wear in your office or official meetings',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['pantalon.jpeg', 'pantalon2.jpeg', 'pantalon3.jpeg']
   },
   'item6': {
     'id': 6,
@@ -59,6 +59,6 @@ Map<String, dynamic> clothingItems = {
     'price': 450,
     'description':
         'beautiful scarf wearable with anything',
-    'images': ['path1', 'path2', 'path3']
+    'images': ['scarf.jpeg', 'scarf2.jpeg', 'scarf3.jpeg']
   },
 };

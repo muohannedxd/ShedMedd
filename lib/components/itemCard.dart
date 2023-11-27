@@ -23,11 +23,17 @@ class ItemCard extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10)),
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
               width: 136,
               height: 180,
-              child: Center(child: Text(image)),
+              clipBehavior: Clip
+                  .antiAlias, // Add this line to apply clipping with anti-aliasing
+              child: Image.asset(
+                'assets/images/dummy/${image}',
+                fit: BoxFit.cover,
+              ),
             ),
             SizedBox(
               height: 10,
