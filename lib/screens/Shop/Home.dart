@@ -37,7 +37,7 @@ class _ShopState extends State<Shop> {
             // Feature Products
             Padding(
               padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -79,7 +79,7 @@ class _ShopState extends State<Shop> {
             // Recommended
             Padding(
               padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+                  const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -121,7 +121,7 @@ class _ShopState extends State<Shop> {
             // Deals
             Padding(
               padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+                  const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
               child: Column(
                 children: [
                   Row(

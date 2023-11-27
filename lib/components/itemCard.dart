@@ -18,7 +18,7 @@ class ItemCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(10)),
-            width: 120,
+            width: 136,
             height: 180,
             child: Center(child: Text('image')),
           ),

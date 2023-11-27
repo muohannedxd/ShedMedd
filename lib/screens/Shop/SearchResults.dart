@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../components/itemCard.dart';
+import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
@@ -11,28 +13,38 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
+  List<Widget> dummyItems = [
+    ItemCard(),
+    ItemCard(),
+    ItemCard(),
+    ItemCard(),
+    ItemCard(),
+    ItemCard()
+  ];
+
   @override
   Widget build(BuildContext context) {
     final searchKey = ModalRoute.of(context)!.settings.arguments as String;
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
-      child: Scaffold(  
+      child: Scaffold(
         backgroundColor: CustomColors.bgColor,
         body: ListView(
           children: [
             // return button
             Padding(
               padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 20),
+                  left: 30, right: 30, top: 20, bottom: 10),
               child: ReturnButton(searchKey: searchKey),
             ),
 
             // Header
             Padding(
               padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 20),
+                  left: 30, right: 30, top: 10, bottom: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,16 +68,69 @@ class _SearchResultsState extends State<SearchResults> {
                   SizedBox(
                     width: 20,
                   ),
-                  Text(
-                    searchKey,
-                    style: TextStyle(
-                        color: CustomColors.textPrimary,
-                        fontSize: TextSizes.medium,
-                        fontWeight: FontWeight.bold),
-                  )
+                  TextButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(color: CustomColors.grey)),
+                      ),
+                      onPressed: () {
+                        print('tryna filter');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 18.0, right: 10),
+                        child: Row(
+                          children: [
+                            Text('Filter',
+                                style: TextStyle(
+                                    color: CustomColors.textPrimary,
+                                    fontSize: TextSizes.small)),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: CustomColors.textPrimary,
+                            )
+                          ],
+                        ),
+                      )),
                 ],
               ),
             ),
+
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 20, bottom: 10),
+                child: SingleChildScrollView(
+                  physics: BouncingScroll(),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < dummyItems.length; i += 2)
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: ItemCard(),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                if (i + 1 < dummyItems.length)
+                                  Expanded(
+                                    child: ItemCard(),
+                                  ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                    ],
+                  ),
+                )),
 
             SizedBox(
               height: 20,
@@ -95,24 +160,12 @@ class ReturnButton extends StatelessWidget {
               Icons.arrow_back_ios_rounded,
               size: 18,
             )),
-        SizedBox(
-          width: 20,
-        ),
-        TextButton(
-          onPressed: () {
-            print('filtering button');
-          },
-          child: Row(
-            children: [
-              Text(
-                    searchKey,
-                    style: TextStyle(
-                        color: CustomColors.textPrimary,
-                        fontSize: TextSizes.medium,
-                        fontWeight: FontWeight.bold),
-                  )
-            ],
-          ),
+        Text(
+          searchKey,
+          style: TextStyle(
+              color: CustomColors.textPrimary,
+              fontSize: TextSizes.medium,
+              fontWeight: FontWeight.bold),
         )
       ],
     );
