@@ -6,7 +6,8 @@ Map<String, dynamic> clothingItems = {
     'subcategory': 'Outfit',
     'condition': 'Good',
     'price': 800,
-    'description': 'one of the most requested sportwear ever, enjoy it',
+    'description':
+        'one of the most requested sportwear ever, enjoy it, one of the most requested sportwear ever, enjoy it, one of the most requested sportwear ever, enjoy it, one of the most requested sportwear ever, enjoy it, one of the most requested sportwear ever, enjoy it',
     'images': ['sportwear.jpeg', 'sportwear2.jpeg', 'sportwear3.jpeg']
   },
   'item2': {
@@ -16,7 +17,8 @@ Map<String, dynamic> clothingItems = {
     'subcategory': 'Tops',
     'condition': 'Good',
     'price': 500,
-    'description': 'just a teshirt, pink, for womem',
+    'description':
+        'just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women, just a t-shirt, pink, for women',
     'images': ['pink_shirt.jpeg', 'pink_shirt2.jpeg', 'pink_shirt3.jpeg']
   },
   'item3': {
@@ -26,7 +28,8 @@ Map<String, dynamic> clothingItems = {
     'subcategory': 'Other',
     'condition': 'Good',
     'price': 1200,
-    'description': 'take the chance',
+    'description':
+        'take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance, take the chance',
     'images': ['watch.jpeg', 'watch2.jpeg', 'watch3.jpeg']
   },
   'item4': {
@@ -36,7 +39,8 @@ Map<String, dynamic> clothingItems = {
     'subcategory': 'Outfit',
     'condition': 'Good',
     'price': 400,
-    'description': 'for your kids',
+    'description':
+        'for your kids, for your kids, for your kids, for your kids, for your kids',
     'images': ['spiderman.jpeg', 'spiderman2.jpeg', 'spiderman3.jpeg']
   },
   'item5': {
@@ -47,7 +51,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 600,
     'description':
-        'stylish pantalon to wear in your office or official meetings',
+        'stylish pantalon to wear in your office or official meetings, stylish pantalon to wear in your office or official meetings, stylish pantalon to wear in your office or official meetings',
     'images': ['pantalon.jpeg', 'pantalon2.jpeg', 'pantalon3.jpeg']
   },
   'item6': {
@@ -58,7 +62,7 @@ Map<String, dynamic> clothingItems = {
     'condition': 'Good',
     'price': 450,
     'description':
-        'beautiful scarf wearable with anything',
+        'beautiful scarf wearable with anything, beautiful scarf wearable with anything, beautiful scarf wearable with anything, beautiful scarf wearable with anything, beautiful scarf wearable with anything, beautiful scarf wearable with anything',
     'images': ['scarf.jpeg', 'scarf2.jpeg', 'scarf3.jpeg']
   },
 };
