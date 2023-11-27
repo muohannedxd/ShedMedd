@@ -4,6 +4,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import '../../data/items.dart';
 
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});
@@ -13,18 +14,10 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
-  List<Widget> dummyItems = [
-    ItemCard(),
-    ItemCard(),
-    ItemCard(),
-    ItemCard(),
-    ItemCard(),
-    ItemCard()
-  ];
-
   @override
   Widget build(BuildContext context) {
     final searchKey = ModalRoute.of(context)!.settings.arguments as String;
+    Map<String, dynamic> items = clothingItems;
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -57,7 +50,7 @@ class _SearchResultsState extends State<SearchResults> {
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '142 results',
+                        '${items.length} results',
                         style: TextStyle(
                             color: CustomColors.textPrimary,
                             fontSize: TextSizes.medium,
@@ -107,21 +100,25 @@ class _SearchResultsState extends State<SearchResults> {
                   scrollDirection: Axis.vertical,
                   child: Column(
                     children: [
-                      for (int i = 0; i < dummyItems.length; i += 2)
+                      for (int i = 0; i < items.length; i += 2)
                         Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Expanded(
-                                  child: ItemCard(),
+                                  child: ItemCard(
+                                    item: items.values.toList()[i],
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 10,
                                 ),
-                                if (i + 1 < dummyItems.length)
+                                if (i + 1 < items.length)
                                   Expanded(
-                                    child: ItemCard(),
+                                    child: ItemCard(
+                                      item: items.values.toList()[i+1],
+                                    ),
                                   ),
                               ],
                             ),

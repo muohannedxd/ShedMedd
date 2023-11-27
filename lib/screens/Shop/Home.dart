@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/data/items.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
 import '../../components/Shop/CategoryChooser.dart';
@@ -17,27 +18,32 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
+  // dummy data
+  Map<String, dynamic> items = clothingItems;
+
   @override
   Widget build(BuildContext context) {
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
         appBar: Bar('ShedMedd'),
-        drawer: AppDrawer(current: 0,),
+        drawer: AppDrawer(
+          current: 0,
+        ),
         backgroundColor: CustomColors.bgColor,
         body: ListView(
           children: [
             // category chooser
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, top: 20, bottom: 20),
               child: CategoryChooser(),
             ),
-    
+
             // Feature Products
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, top: 20, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -62,24 +68,20 @@ class _ShopState extends State<Shop> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
                     ),
                   )
                 ],
               ),
             ),
-    
+
             // Recommended
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, top: 10, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -104,24 +106,20 @@ class _ShopState extends State<Shop> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-    
+
             // Deals
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, top: 10, bottom: 10),
               child: Column(
                 children: [
                   Row(
@@ -146,20 +144,18 @@ class _ShopState extends State<Shop> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 20,)
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
