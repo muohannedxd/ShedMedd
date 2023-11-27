@@ -16,6 +16,7 @@ class SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<SearchResults> {
   @override
   Widget build(BuildContext context) {
+    
     final searchKey = ModalRoute.of(context)!.settings.arguments as String;
     Map<String, dynamic> items = clothingItems;
 

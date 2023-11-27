@@ -16,7 +16,7 @@ class ItemCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, '/shop/item');
+          Navigator.pushNamed(context, '/shop/item', arguments: item['id']);
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
