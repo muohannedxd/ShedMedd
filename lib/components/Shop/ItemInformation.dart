@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
-
+import 'ItemNamePrice.dart';
 
 class ItemInformation extends StatelessWidget {
   const ItemInformation(
@@ -26,51 +26,7 @@ class ItemInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 200,
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: TextSizes.subtitle,
-                          color: CustomColors.textPrimary),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: 200,
-                    child: Text(
-                      'Condition: ${condition}',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: TextSizes.small,
-                          color: CustomColors.textGrey),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              '${price.toString()} DZD',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: TextSizes.title,
-                  color: CustomColors.textPrimary),
-            )
-          ],
-        ),
+        ItemNamePrice(name: name, condition: condition, price: price),
         SizedBox(
           height: 20,
         ),

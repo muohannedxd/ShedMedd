@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/screens/Shop/DirectMessage.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/ItemHome.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/discover/results': (context) => SearchResults(),
         '/shop/item': (context) => ItemHome(),
         '/signup': (context) => SignUp(),
+        '/message': (context) => DirectMessage(),
       },
       home: const Splash(),
     );

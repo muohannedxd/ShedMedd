@@ -88,7 +88,8 @@ class _ItemHome extends State<ItemHome> {
         bottom: 0,
         left: 0,
         right: 0,
-        child: DirectMessageButton(),
+        child:
+            DirectMessageButton(name: name, condition: condition, price: price),
       ),
     ]);
   }
@@ -97,19 +98,34 @@ class _ItemHome extends State<ItemHome> {
 class DirectMessageButton extends StatelessWidget {
   const DirectMessageButton({
     super.key,
+    required this.name,
+    required this.condition,
+    required this.price,
   });
+
+  final String name;
+  final String condition;
+  final int price;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: CustomColors.buttonPrimary,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24))
-      ),
+          color: CustomColors.buttonPrimary,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24), topRight: Radius.circular(24))),
       width: double.infinity,
       child: TextButton(
         onPressed: () {
-          print('pressed');
+          Navigator.pushNamed(
+            context,
+            '/message',
+            arguments: {
+              'name': name,
+              'condition': condition,
+              'price': price,
+            },
+          );
         },
         child: Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 16),
