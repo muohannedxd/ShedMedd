@@ -21,7 +21,7 @@ class ItemCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ItemHome(itemID: item['id'], isSeller: true,),
+              builder: (context) => ItemHome(itemID: item['id']),
             ),
           );
         },
