@@ -3,12 +3,13 @@ import 'package:shedmedd/data/items.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
-import '../../components/Shop/ShopHome.dart';
+import 'ShopHome.dart';
 import '../../constants/customColors.dart';
 import '../../config/myBehavior.dart';
 
 class Shop extends StatefulWidget {
-  const Shop({super.key});
+  final int currentIndex;
+  const Shop({super.key, required this.currentIndex});
 
   @override
   State<Shop> createState() => _ShopState();
@@ -18,7 +19,13 @@ class _ShopState extends State<Shop> {
   // dummy data
   Map<String, dynamic> items = clothingItems;
   // current Page
-  int currentPageIndex = 0;
+  late int currentPageIndex;
+
+  @override
+  void initState() {
+    currentPageIndex = widget.currentIndex;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

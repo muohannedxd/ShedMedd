@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/shop': (context) => Shop(),
+        '/shop': (context) => Shop(currentIndex: 0,),
         '/discover': (context) => Discover(),
         '/discover/results': (context) => SearchResults(),
         '/shop/item': (context) => ItemHome(),

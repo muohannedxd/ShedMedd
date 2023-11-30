@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/SidebarButton.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
 
 class AppDrawer extends StatefulWidget {
   final int current;
-  const AppDrawer({
-    super.key,
-    required this.current
-  });
+  const AppDrawer({super.key, required this.current});
 
   @override
   State<AppDrawer> createState() => _AppDrawerState();
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-
   /*void setCurrent(index) {
     for (int i = 0; i < current.length; i++) {
       current[i] = false;
@@ -95,7 +92,13 @@ class _AppDrawerState extends State<AppDrawer> {
                     //setCurrent(0);
                     if (widget.current != 0) {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/shop');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Shop(currentIndex: 0),
+                        ),
+                      );
                     }
                   },
                 ),
@@ -107,7 +110,13 @@ class _AppDrawerState extends State<AppDrawer> {
                     //setCurrent(1);
                     if (widget.current != 1) {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/discover');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Shop(currentIndex: 1),
+                        ),
+                      );
                     }
                   },
                 ),

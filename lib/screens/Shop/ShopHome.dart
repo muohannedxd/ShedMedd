@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
-import '../itemCard.dart';
-import 'CategoryChooser.dart';
-
+import '../../components/itemCard.dart';
+import '../../components/Shop/CategoryChooser.dart';
 
 class ShopHome extends StatefulWidget {
   const ShopHome({
@@ -26,15 +25,15 @@ class _ShopHomeState extends State<ShopHome> {
       children: [
         // category chooser
         Padding(
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 20, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
           child: CategoryChooser(),
         ),
 
         // Feature Products
         Padding(
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 20, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 10),
           child: Column(
             children: [
               Row(
@@ -47,9 +46,15 @@ class _ShopHomeState extends State<ShopHome> {
                         fontSize: TextSizes.subtitle,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Show all',
-                    style: TextStyle(color: CustomColors.textGrey),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/discover/results',
+                          arguments: 'Feature Products');
+                    },
+                    child: Text(
+                      'Show all',
+                      style: TextStyle(color: CustomColors.textGrey),
+                    ),
                   )
                 ],
               ),
@@ -71,8 +76,8 @@ class _ShopHomeState extends State<ShopHome> {
 
         // Recommended
         Padding(
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 10, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
           child: Column(
             children: [
               Row(
@@ -85,9 +90,15 @@ class _ShopHomeState extends State<ShopHome> {
                         fontSize: TextSizes.subtitle,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Show all',
-                    style: TextStyle(color: CustomColors.textGrey),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/discover/results',
+                          arguments: 'Recommended');
+                    },
+                    child: Text(
+                      'Show all',
+                      style: TextStyle(color: CustomColors.textGrey),
+                    ),
                   )
                 ],
               ),
@@ -109,8 +120,8 @@ class _ShopHomeState extends State<ShopHome> {
 
         // Deals
         Padding(
-          padding: const EdgeInsets.only(
-              left: 30, right: 30, top: 10, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
           child: Column(
             children: [
               Row(
@@ -123,9 +134,15 @@ class _ShopHomeState extends State<ShopHome> {
                         fontSize: TextSizes.subtitle,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Show all',
-                    style: TextStyle(color: CustomColors.textGrey),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/discover/results',
+                          arguments: 'Feature Products');
+                    },
+                    child: Text(
+                      'Deals',
+                      style: TextStyle(color: CustomColors.textGrey),
+                    ),
                   )
                 ],
               ),
