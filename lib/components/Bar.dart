@@ -26,9 +26,8 @@ AppBar Bar(title) {
     ),
     actions: [
       Padding(
-        padding: const EdgeInsets.only(right: 14),
-        child: Image.asset('assets/icons/notification.png',
-            color: CustomColors.textPrimary),
+        padding: const EdgeInsets.only(right: 22),
+        child: Icon(Icons.mark_chat_unread_outlined, color: CustomColors.textPrimary,),
       )
     ],
   );
