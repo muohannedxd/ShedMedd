@@ -8,7 +8,9 @@ import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
 
 class ItemHome extends StatefulWidget {
-  const ItemHome({super.key});
+  final itemID;
+  final bool isSeller;
+  const ItemHome({super.key, required this.itemID, this.isSeller = false});
 
   @override
   State<ItemHome> createState() => _ItemHome();
@@ -17,7 +19,6 @@ class ItemHome extends StatefulWidget {
 class _ItemHome extends State<ItemHome> {
   @override
   Widget build(BuildContext context) {
-    final itemID = ModalRoute.of(context)!.settings.arguments;
     Map<String, dynamic> currentItem;
 
     String name = '';
@@ -29,7 +30,7 @@ class _ItemHome extends State<ItemHome> {
     List<String> images = [];
 
     clothingItems.forEach((key, item) {
-      if (item['id'] == itemID) {
+      if (item['id'] == widget.itemID) {
         currentItem = item;
         name = currentItem['name'];
         category = item['category'];
@@ -83,14 +84,23 @@ class _ItemHome extends State<ItemHome> {
           left: MediaQuery.of(context).size.width * 0.05,
           child: ReturnButton()),
 
+      widget.isSeller
+          ? Positioned(
+              top: MediaQuery.of(context).size.height * 0.06,
+              right: MediaQuery.of(context).size.width * 0.05,
+              child: SettingsButton())
+          : Visibility(visible: false, child: Text('')),
+
       // go to DM button
-      Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child:
-            DirectMessageButton(name: name, condition: condition, price: price),
-      ),
+      !widget.isSeller
+          ? Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: DirectMessageButton(
+                  name: name, condition: condition, price: price),
+            )
+          : Visibility(visible: false, child: Text('')),
     ]);
   }
 }
@@ -170,5 +180,45 @@ class ReturnButton extends StatelessWidget {
         size: 20,
       ),
     );
+  }
+}
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.small(
+        backgroundColor: CustomColors.white,
+        onPressed: () => print('hh'),
+        child: PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem<String>(
+                value: 'edit',
+                child: ListTile(
+                  leading: Icon(Icons.edit_outlined,
+                      color: CustomColors.textPrimary),
+                  title: Text(
+                    'Edit',
+                    style: TextStyle(color: CustomColors.textPrimary),
+                  ),
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'delete',
+                child: ListTile(
+                  leading: Icon(Icons.delete_outline,
+                      color: CustomColors.textPrimary),
+                  title: Text('Delete',
+                      style: TextStyle(color: CustomColors.textPrimary)),
+                ),
+              ),
+            ];
+          },
+          child: Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary,),
+        ));
   }
 }

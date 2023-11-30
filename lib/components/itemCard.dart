@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 
+import '../screens/Shop/ItemHome.dart';
+
 class ItemCard extends StatelessWidget {
   final dynamic item;
   const ItemCard({super.key, required this.item});
@@ -16,7 +18,12 @@ class ItemCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, '/shop/item', arguments: item['id']);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemHome(itemID: item['id'], isSeller: true,),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

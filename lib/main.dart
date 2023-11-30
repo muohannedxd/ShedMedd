@@ -5,7 +5,6 @@ import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Shop/DirectMessage.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
-import 'package:shedmedd/screens/Shop/ItemHome.dart';
 import 'package:shedmedd/screens/Shop/SearchResults.dart';
 import 'package:shedmedd/screens/Splash.dart';
 
@@ -34,7 +33,6 @@ class MyApp extends StatelessWidget {
         '/shop': (context) => Shop(currentIndex: 0,),
         '/discover': (context) => Discover(),
         '/discover/results': (context) => SearchResults(),
-        '/shop/item': (context) => ItemHome(),
         '/signup': (context) => SignUp(),
         '/message': (context) => DirectMessage(),
       },
