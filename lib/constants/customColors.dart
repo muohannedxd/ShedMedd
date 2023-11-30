@@ -6,7 +6,7 @@ class CustomColors {
   static const Color textPrimary = Color(0xFF1D1F22);
   static const Color textSecondary = Color(0xFF33302E);
   static const Color textGrey = Color(0xFF9B9B9B);
-  static const Color buttonPrimary = Color(0xFF343434);
+  static const Color buttonPrimary = Color(0xFF33302E);
   static const Color buttonSecondary = Color(0xFF2D201C);
   static const Color grey = Color.fromARGB(255, 201, 201, 201);
   static const Color bgColor = Color(0xFFFEFEFE);

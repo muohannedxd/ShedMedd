@@ -104,7 +104,7 @@ class _DiscoverState extends State<Discover> {
                       height: 8,
                     ),
                     MainCategory(
-                      category: 'Children',
+                      category: 'Kids',
                       bgColor: Color.fromARGB(255, 177, 202, 210),
                     )
                   ],
@@ -142,7 +142,7 @@ class _MainCategoryState extends State<MainCategory> {
     if (widget.category == 'Women') {
       imagePath = 'woman.jpeg';
     }
-    if (widget.category == 'Children') {
+    if (widget.category == 'Kids') {
       imagePath = 'child.jpeg';
     }
 
