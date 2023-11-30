@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/verification_code.dart';
-import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});

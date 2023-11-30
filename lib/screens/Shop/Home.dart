@@ -1,161 +1,109 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/Bar.dart';
-import 'package:shedmedd/components/Drawer.dart';
-import 'package:shedmedd/components/Shop/CategoryChooser.dart';
-import 'package:shedmedd/components/itemCard.dart';
-import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/config/myBehavior.dart';
+import 'package:shedmedd/data/items.dart';
+import 'package:shedmedd/screens/Shop/Discover.dart';
+import '../../components/Bar.dart';
+import '../../components/Drawer.dart';
+import 'ShopHome.dart';
+import '../../constants/customColors.dart';
+import '../../config/myBehavior.dart';
 
 class Shop extends StatefulWidget {
-  const Shop({super.key});
+  final int currentIndex;
+  const Shop({super.key, required this.currentIndex});
 
   @override
   State<Shop> createState() => _ShopState();
 }
 
 class _ShopState extends State<Shop> {
+  // dummy data
+  Map<String, dynamic> items = clothingItems;
+  // current Page
+  late int currentPageIndex;
+
+  @override
+  void initState() {
+    currentPageIndex = widget.currentIndex;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // list of pages
+    List<Widget> _pages = <Widget>[ShopHome(items: items), Discover()];
+    List<String> _pageTitles = ['ShedMedd', 'Discover'];
+
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        appBar: Bar('ShedMedd'),
-        drawer: AppDrawer(current: 0,),
+        appBar: Bar(_pageTitles[currentPageIndex]),
+        drawer: AppDrawer(
+          current: currentPageIndex,
+        ),
         backgroundColor: CustomColors.bgColor,
-        body: ListView(
-          children: [
-            // category chooser
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-              child: CategoryChooser(),
-            ),
-    
-            // Feature Products
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Feature Products',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+        body: _pages[currentPageIndex],
+        bottomNavigationBar: Container(
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
-            ),
-    
-            // Recommended
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recommended',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3), // Shadow color
+                  blurRadius: 8, // Shadow blur radius
+                  offset: Offset(2, 2), // Shadow offset
+                ),
+              ],
+              color: CustomColors.bgColor),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentPageIndex,
+            selectedFontSize: 16,
+            selectedItemColor: CustomColors.textPrimary,
+            unselectedFontSize: 12,
+            onTap: (int index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.home, color: CustomColors.textPrimary),
+                icon:
+                    Icon(Icons.home_outlined, color: CustomColors.textPrimary),
+                label: 'Home',
               ),
-            ),
-    
-            // Deals
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Deals',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                          ItemCard(),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.search, color: CustomColors.textPrimary),
+                icon: Icon(Icons.search_outlined,
+                    color: CustomColors.textPrimary),
+                label: 'Discover',
               ),
-            ),
-            SizedBox(height: 20,)
-          ],
+              /*BottomNavigationBarItem(
+                activeIcon: Icon(Icons.add_box_rounded,
+                    color: CustomColors.textPrimary),
+                icon: Icon(Icons.add_box_outlined,
+                    color: CustomColors.textPrimary),
+                label: 'Add',
+              ),
+              BottomNavigationBarItem(
+                activeIcon:
+                    Icon(Icons.email_rounded, color: CustomColors.textPrimary),
+                icon:
+                    Icon(Icons.email_outlined, color: CustomColors.textPrimary),
+                label: 'Inbox',
+              ),
+              BottomNavigationBarItem(
+                activeIcon:
+                    Icon(Icons.person_rounded, color: CustomColors.textPrimary),
+                icon: Icon(Icons.person_outline_rounded,
+                    color: CustomColors.textPrimary),
+                label: 'Profile',
+              ),*/
+            ],
+          ),
         ),
       ),
     );

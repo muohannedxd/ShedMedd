@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/screens/Shop/DirectMessage.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/SearchResults.dart';
@@ -29,10 +30,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/shop': (context) => Shop(),
+        '/shop': (context) => Shop(currentIndex: 0,),
         '/discover': (context) => Discover(),
         '/discover/results': (context) => SearchResults(),
         '/signup': (context) => SignUp(),
+        '/message': (context) => DirectMessage(),
       },
       home: const Splash(),
     );

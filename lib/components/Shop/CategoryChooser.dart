@@ -123,7 +123,7 @@ class _CategoryChooserState extends State<CategoryChooser> {
               height: 10,
             ),
             Text(
-              'Children',
+              'Kids',
               style: TextStyle(
                   color: chosen[2] == true
                       ? CustomColors.textPrimary

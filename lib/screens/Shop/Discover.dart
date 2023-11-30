@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/Bar.dart';
-import 'package:shedmedd/components/Divider.dart';
-import 'package:shedmedd/components/Drawer.dart';
-import 'package:shedmedd/config/myBehavior.dart';
-import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
+import '../../components/Divider.dart';
+import '../../config/bouncingScroll.dart';
+import '../../config/myBehavior.dart';
+import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
 
 class Discover extends StatefulWidget {
   const Discover({super.key});
@@ -15,112 +14,103 @@ class Discover extends StatefulWidget {
 
 class _DiscoverState extends State<Discover> {
   String search = "";
+  List<bool> showSubCategory = [false, false, false];
+
+  void toggleSubcategories(int index) {
+    setState(() {
+      for (int i = 0; i < showSubCategory.length; i++) {
+        if (i != index) showSubCategory[i] = false;
+      }
+      showSubCategory[index] = !showSubCategory[index];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        appBar: Bar('Discover'),
-        drawer: AppDrawer(
-          current: 1,
-        ),
         backgroundColor: CustomColors.bgColor,
-        body: ListView(
-          children: [
-            // category chooser
-            Padding(
+        body: Column(children: [
+          Padding(
               padding: const EdgeInsets.only(
                   left: 30, right: 30, top: 20, bottom: 20),
-              child: SearchAnchor(
-                  builder: (BuildContext context, SearchController controller) {
-                return SearchBar(
-                  //constraints: BoxConstraints(
-                  //    minWidth: 200, maxWidth: 220, minHeight: 56),
-                  hintText: 'Search',
-                  hintStyle: MaterialStateProperty.all(TextStyle(
-                      color: CustomColors.textGrey,
-                      fontWeight: FontWeight.w600,
-                      fontSize: TextSizes.small)),
-                  backgroundColor: MaterialStateProperty.all(Color(0XFFFAFAFA)),
-                  shadowColor:
-                      MaterialStateProperty.all(CustomColors.textPrimary),
-                  elevation: MaterialStateProperty.all(2),
-                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(40))),
-                  controller: controller,
-                  padding: const MaterialStatePropertyAll<EdgeInsets>(
-                      EdgeInsets.symmetric(horizontal: 20.0)),
-                  onTap: () {
-                    controller.openView();
-                  },
-                  onChanged: (_) {
-                    controller.openView();
-                    setState(() {
-                      search = _;
-                    });
-                    //print(search);
-                  },
-                  leading: const Icon(
-                    Icons.search,
+              child: SearchBar(
+                //constraints: BoxConstraints(
+                //    minWidth: 200, maxWidth: 220, minHeight: 56),
+                hintText: 'Search',
+                hintStyle: MaterialStateProperty.all(TextStyle(
                     color: CustomColors.textGrey,
-                  ),
-                );
-              }, suggestionsBuilder:
-                      (BuildContext context, SearchController controller) {
-                return List<ListTile>.generate(5, (int index) {
-                  final String item = 'item $index';
-                  return ListTile(
-                    title: Text(item),
-                    onTap: () {
-                      setState(() {
-                        controller.closeView(item);
-                      });
-                    },
-                  );
-                });
-              }),
+                    fontWeight: FontWeight.w600,
+                    fontSize: TextSizes.small)),
+                backgroundColor: MaterialStateProperty.all(Color(0XFFFAFAFA)),
+                shadowColor:
+                    MaterialStateProperty.all(CustomColors.textPrimary),
+                elevation: MaterialStateProperty.all(2),
+                shape: MaterialStateProperty.all(ContinuousRectangleBorder(
+                    borderRadius: BorderRadius.circular(40))),
+                //controller: controller,
+                padding: const MaterialStatePropertyAll<EdgeInsets>(
+                    EdgeInsets.symmetric(horizontal: 20.0)),
+                onChanged: (_) {
+                  setState(() {
+                    search = _;
+                  });
+                  //print(search);
+                },
+                leading: const Icon(
+                  Icons.search,
+                  color: CustomColors.textGrey,
+                ),
+              )),
+          Expanded(
+            child: ListView(
+              children: [
+                // Categories
+                Padding(
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: Column(
+                      children: [
+                        MainCategory(
+                          onToggle: () {
+                            toggleSubcategories(0);
+                          },
+                          showSubcategories: showSubCategory[0],
+                          category: 'Men',
+                          bgColor: Color.fromARGB(255, 159, 164, 143),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        MainCategory(
+                          onToggle: () {
+                            toggleSubcategories(1);
+                          },
+                          showSubcategories: showSubCategory[1],
+                          category: 'Women',
+                          bgColor: Color.fromARGB(255, 205, 200, 199),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        MainCategory(
+                          onToggle: () {
+                            toggleSubcategories(2);
+                          },
+                          showSubcategories: showSubCategory[2],
+                          category: 'Kids',
+                          bgColor: Color.fromARGB(255, 177, 202, 210),
+                        )
+                      ],
+                    )),
+
+                SizedBox(
+                  height: 20,
+                )
+              ],
             ),
-
-            // Categories
-            Padding(
-                padding: const EdgeInsets.only(
-                    left: 30, right: 30),
-                child: Column(
-                  children: [
-                    MainCategory(
-                      category: 'Unisex',
-                      bgColor: Color.fromARGB(255, 173, 121, 72),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    MainCategory(
-                      category: 'Men',
-                      bgColor: Color.fromARGB(255, 159, 164, 143),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    MainCategory(
-                      category: 'Women',
-                      bgColor: Color.fromARGB(255, 205, 200, 199),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    MainCategory(
-                      category: 'Children',
-                      bgColor: Color.fromARGB(255, 177, 202, 210),
-                    )
-                  ],
-                )),
-
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }
@@ -129,29 +119,31 @@ class _DiscoverState extends State<Discover> {
 class MainCategory extends StatefulWidget {
   final String category;
   final Color bgColor;
+  final Function onToggle;
+  final bool showSubcategories;
+
   const MainCategory(
-      {super.key, required this.category, required this.bgColor});
+      {super.key,
+      required this.category,
+      required this.bgColor,
+      required this.onToggle,
+      required this.showSubcategories});
 
   @override
   State<MainCategory> createState() => _MainCategoryState();
 }
 
 class _MainCategoryState extends State<MainCategory> {
-  bool showSubCategory = false;
-
   @override
   Widget build(BuildContext context) {
     String imagePath = '';
-    if (widget.category == 'Unisex') {
-      imagePath = 'unisex.jpeg';
-    }
     if (widget.category == 'Men') {
       imagePath = 'man.jpeg';
     }
     if (widget.category == 'Women') {
       imagePath = 'woman.jpeg';
     }
-    if (widget.category == 'Children') {
+    if (widget.category == 'Kids') {
       imagePath = 'child.jpeg';
     }
 
@@ -160,7 +152,7 @@ class _MainCategoryState extends State<MainCategory> {
         GestureDetector(
           onTap: () {
             setState(() {
-              showSubCategory = !showSubCategory;
+              widget.onToggle();
             });
           },
           child: Container(
@@ -198,8 +190,9 @@ class _MainCategoryState extends State<MainCategory> {
         ),
 
         // subcategories
-        showSubCategory
+        widget.showSubcategories
             ? SingleChildScrollView(
+                physics: BouncingScroll(),
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
