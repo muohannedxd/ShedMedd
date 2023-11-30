@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/data/items.dart';
+import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
-import '../../components/Shop/CategoryChooser.dart';
-import '../../components/itemCard.dart';
+import '../../components/Shop/ShopHome.dart';
 import '../../constants/customColors.dart';
-import '../../constants/textSizes.dart';
 import '../../config/myBehavior.dart';
-
-import '../../config/bouncingScroll.dart';
 
 class Shop extends StatefulWidget {
   const Shop({super.key});
@@ -20,143 +17,86 @@ class Shop extends StatefulWidget {
 class _ShopState extends State<Shop> {
   // dummy data
   Map<String, dynamic> items = clothingItems;
+  // current Page
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    // list of pages
+    List<Widget> _pages = <Widget>[ShopHome(items: items), Discover()];
+    List<String> _pageTitles = ['ShedMedd', 'Discover'];
+
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        appBar: Bar('ShedMedd'),
+        appBar: Bar(_pageTitles[currentPageIndex]),
         drawer: AppDrawer(
-          current: 0,
+          current: currentPageIndex,
         ),
         backgroundColor: CustomColors.bgColor,
-        body: ListView(
-          children: [
-            // category chooser
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 20),
-              child: CategoryChooser(),
-            ),
-
-            // Feature Products
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Feature Products',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    physics: BouncingScroll(),
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    ),
-                  )
-                ],
+        body: _pages[currentPageIndex],
+        bottomNavigationBar: Container(
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
-            ),
-
-            // Recommended
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 10, bottom: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recommended',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    physics: BouncingScroll(),
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    ),
-                  ),
-                ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3), // Shadow color
+                  blurRadius: 8, // Shadow blur radius
+                  offset: Offset(2, 2), // Shadow offset
+                ),
+              ],
+              color: CustomColors.bgColor),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentPageIndex,
+            selectedFontSize: 16,
+            selectedItemColor: CustomColors.textPrimary,
+            unselectedFontSize: 12,
+            onTap: (int index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.home, color: CustomColors.textPrimary),
+                icon:
+                    Icon(Icons.home_outlined, color: CustomColors.textPrimary),
+                label: 'Home',
               ),
-            ),
-
-            // Deals
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 10, bottom: 10),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Deals',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Show all',
-                        style: TextStyle(color: CustomColors.textGrey),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    physics: BouncingScroll(),
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    ),
-                  ),
-                ],
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.search, color: CustomColors.textPrimary),
+                icon: Icon(Icons.search_outlined,
+                    color: CustomColors.textPrimary),
+                label: 'Discover',
               ),
-            ),
-            SizedBox(
-              height: 20,
-            )
-          ],
+              /*BottomNavigationBarItem(
+                activeIcon: Icon(Icons.add_box_rounded,
+                    color: CustomColors.textPrimary),
+                icon: Icon(Icons.add_box_outlined,
+                    color: CustomColors.textPrimary),
+                label: 'Add',
+              ),
+              BottomNavigationBarItem(
+                activeIcon:
+                    Icon(Icons.email_rounded, color: CustomColors.textPrimary),
+                icon:
+                    Icon(Icons.email_outlined, color: CustomColors.textPrimary),
+                label: 'Inbox',
+              ),
+              BottomNavigationBarItem(
+                activeIcon:
+                    Icon(Icons.person_rounded, color: CustomColors.textPrimary),
+                icon: Icon(Icons.person_outline_rounded,
+                    color: CustomColors.textPrimary),
+                label: 'Profile',
+              ),*/
+            ],
+          ),
         ),
       ),
     );

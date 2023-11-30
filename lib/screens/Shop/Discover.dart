@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../components/Bar.dart';
 import '../../components/Divider.dart';
-import '../../components/Drawer.dart';
 import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
@@ -22,20 +20,15 @@ class _DiscoverState extends State<Discover> {
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        appBar: Bar('Discover'),
-        drawer: AppDrawer(
-          current: 1,
-        ),
         backgroundColor: CustomColors.bgColor,
         body: ListView(
           children: [
             // category chooser
+            Text(search),
             Padding(
               padding: const EdgeInsets.only(
                   left: 30, right: 30, top: 20, bottom: 20),
-              child: SearchAnchor(
-                  builder: (BuildContext context, SearchController controller) {
-                return SearchBar(
+              child: SearchBar(
                   //constraints: BoxConstraints(
                   //    minWidth: 200, maxWidth: 220, minHeight: 56),
                   hintText: 'Search',
@@ -49,14 +42,10 @@ class _DiscoverState extends State<Discover> {
                   elevation: MaterialStateProperty.all(2),
                   shape: MaterialStateProperty.all(ContinuousRectangleBorder(
                       borderRadius: BorderRadius.circular(40))),
-                  controller: controller,
+                  //controller: controller,
                   padding: const MaterialStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 20.0)),
-                  onTap: () {
-                    controller.openView();
-                  },
                   onChanged: (_) {
-                    controller.openView();
                     setState(() {
                       search = _;
                     });
@@ -66,21 +55,8 @@ class _DiscoverState extends State<Discover> {
                     Icons.search,
                     color: CustomColors.textGrey,
                   ),
-                );
-              }, suggestionsBuilder:
-                      (BuildContext context, SearchController controller) {
-                return List<ListTile>.generate(5, (int index) {
-                  final String item = 'item $index';
-                  return ListTile(
-                    title: Text(item),
-                    onTap: () {
-                      setState(() {
-                        controller.closeView(item);
-                      });
-                    },
-                  );
-                });
-              }),
+                )
+              
             ),
 
             // Categories
