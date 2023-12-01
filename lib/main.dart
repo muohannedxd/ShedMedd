@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/post_item': (context) => PostAnItem(),
         '/profile': (context) => const Profile(),
         '/rateApp': (context) => RateAppPage(),
-        '/chatInbox': (context) => ChatInbox(),
+        '/inbox': (context) => ChatInbox(),
       },
       home: const Splash(),
     );

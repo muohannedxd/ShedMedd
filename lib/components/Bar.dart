@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 
+import '../screens/Shop/Home.dart';
+
 AppBar Bar(title, subpage) {
   return AppBar(
     elevation: 0,
@@ -27,7 +29,21 @@ AppBar Bar(title, subpage) {
     actions: [
       !subpage ? Padding(
         padding: const EdgeInsets.only(right: 22),
-        child: Icon(Icons.mark_chat_unread_outlined, color: CustomColors.textPrimary,),
+        child: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Shop(currentIndex: 3),
+                        ),
+                      );
+              },
+              icon: Icon(Icons.mark_chat_unread_outlined, color: CustomColors.textPrimary,));
+          }
+        ),
       ) : Visibility(visible: false, child: Text(''))
     ],
   );
