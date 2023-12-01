@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/SidebarButton.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Settings/Aboutus.dart';
 import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
@@ -200,6 +201,24 @@ class _AppDrawerState extends State<AppDrawer> {
                         MaterialPageRoute(
                           builder: (context) =>
                               AboutUs(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                SidebarButton(
+                  title: 'Signup',
+                  icon: Icons.login_rounded,
+                  current: widget.current == 8 ? true : false,
+                  action: () {
+                    //setCurrent(5);
+                    if (widget.current != 8) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SignUp(),
                         ),
                       );
                     }
