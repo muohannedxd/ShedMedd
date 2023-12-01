@@ -64,29 +64,33 @@ class _SearchResultsState extends State<SearchResults> {
   // condition
   List<DropdownMenuItem> conditions = [
     DropdownMenuItem(
-      child: Text('Excellent'),
-      value: 'Excellent',
+      child: Text('New with tags'),
+      value: 'New with tags',
+    ),
+    DropdownMenuItem(
+      child: Text('New without tags'),
+      value: 'New without tags',
+    ),
+    DropdownMenuItem(
+      child: Text('Very good'),
+      value: 'Very good',
     ),
     DropdownMenuItem(
       child: Text('Good'),
       value: 'Good',
     ),
     DropdownMenuItem(
-      child: Text('Fair'),
-      value: 'Fair',
-    ),
-    DropdownMenuItem(
-      child: Text('Poor'),
-      value: 'Poor',
+      child: Text('Satisfactory'),
+      value: 'Satisfactory',
     ),
   ];
-  String selectedCondition = 'Excellent';
+  String selectedCondition = 'Very good';
 
   void resetFilters() {
     _selectedRange = RangeValues(0, 10000);
     selectedCategory = 'Men';
     selectedSubcategory = 'Tops';
-    selectedCondition = 'Excellent';
+    selectedCondition = 'Very good';
     setState(() {});
   }
 

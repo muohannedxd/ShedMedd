@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:shedmedd/screens/Post_item/condition.dart';
-import '../../components/Divider.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 
@@ -270,33 +269,34 @@ class SubCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 40, right: 40, bottom: 19, top: 19),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              page,
-              style: TextStyle(fontSize: 16, color: Color(0xFF33302E)),
-            ),
-            GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Condition(),
-                    ),
-                  );
-                },
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Color(0xFF33302E),
-                  size: 14,
-                ))
-          ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Condition(),
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 40, right: 40, bottom: 19, top: 19),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                page,
+                style: TextStyle(fontSize: 16, color: Color(0xFF33302E)),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Color(0xFF33302E),
+                size: 14,
+              )
+            ],
+          ),
         ),
       ),
     );

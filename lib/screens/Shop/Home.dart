@@ -3,6 +3,7 @@ import 'package:shedmedd/data/items.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
+import '../Post_item/post_an_new_item.dart';
 import 'ShopHome.dart';
 import '../../constants/customColors.dart';
 import '../../config/myBehavior.dart';
@@ -30,8 +31,8 @@ class _ShopState extends State<Shop> {
   @override
   Widget build(BuildContext context) {
     // list of pages
-    List<Widget> _pages = <Widget>[ShopHome(items: items), Discover()];
-    List<String> _pageTitles = ['ShedMedd', 'Discover'];
+    List<Widget> _pages = <Widget>[ShopHome(items: items), Discover(), PostAnItem()];
+    List<String> _pageTitles = ['ShedMedd', 'Discover', 'Add'];
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -81,14 +82,14 @@ class _ShopState extends State<Shop> {
                     color: CustomColors.textPrimary),
                 label: 'Discover',
               ),
-              /*BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 activeIcon: Icon(Icons.add_box_rounded,
                     color: CustomColors.textPrimary),
                 icon: Icon(Icons.add_box_outlined,
                     color: CustomColors.textPrimary),
                 label: 'Add',
               ),
-              BottomNavigationBarItem(
+              /*BottomNavigationBarItem(
                 activeIcon:
                     Icon(Icons.email_rounded, color: CustomColors.textPrimary),
                 icon:
