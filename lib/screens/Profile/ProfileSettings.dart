@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/constants/customColors.dart';
 
+import '../Shop/Home.dart';
+
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({Key? key}) : super(key: key);
@@ -200,7 +202,10 @@ void _saveChanges(BuildContext context) {
     // Implement your save changes logic here
 
     // Navigate to the profile page after saving changes
-    Navigator.pushReplacementNamed(context, '/profile');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Shop(currentIndex: 4)),
+    );
   }
 
 }
