@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/constants/textSizes.dart';
 
 class TermsOfUse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Terms of Use',
-          style: TextStyle(
-            fontSize: TextSizes.subtitle,
-            color: CustomColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: BarWithReturn(context, 'Terms of Use'),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

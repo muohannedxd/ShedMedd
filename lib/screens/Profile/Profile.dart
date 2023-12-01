@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/Bar.dart';
-import 'package:shedmedd/components/Drawer.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
@@ -17,13 +15,11 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Bar('Profile', context),
-      
+    return Scaffold(      
       drawer: Drawer(),
       backgroundColor: CustomColors.bgColor,
       body: ListView(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(28),
         children: [
           // First Section: Profile Information
           Column(
@@ -36,7 +32,7 @@ class _ProfileState extends State<Profile> {
                   // Profile Picture
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/profile_picture.jpg'),
+                    backgroundImage: AssetImage('assets/images/profile_picture.png'),
                   ),
                   // Add padding between the image and the name
                   SizedBox(width: 20),
@@ -53,7 +49,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Text(
-                        'minoucha@gmail.com',
+                        'johndoe@gmail.com',
                         style: TextStyle(
                           color: CustomColors.textPrimary,
                           fontSize: TextSizes.subtitle - 4,

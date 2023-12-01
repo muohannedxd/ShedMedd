@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/data/items.dart';
+import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
+import 'package:shedmedd/screens/Profile/Profile.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
@@ -34,10 +36,12 @@ class _ShopState extends State<Shop> {
     List<Widget> _pages = <Widget>[
       ShopHome(items: items),
       Discover(),
-      PostAnItem()
+      PostAnItem(),
+      ChatInbox(),
+      Profile(),
     ];
-    List<String> _pageTitles = ['ShedMedd', 'Discover', 'Sell an item'];
-    List<bool> _isSubpage = [false, false, true];
+    List<String> _pageTitles = ['ShedMedd', 'Discover', 'Sell an Item', 'Inbox', 'Profile'];
+    List<bool> _isSubpage = [false, false, true, true, false];
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -94,7 +98,7 @@ class _ShopState extends State<Shop> {
                     color: CustomColors.textPrimary),
                 label: 'Add',
               ),
-              /*BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 activeIcon:
                     Icon(Icons.email_rounded, color: CustomColors.textPrimary),
                 icon:
@@ -107,7 +111,7 @@ class _ShopState extends State<Shop> {
                 icon: Icon(Icons.person_outline_rounded,
                     color: CustomColors.textPrimary),
                 label: 'Profile',
-              ),*/
+              ),
             ],
           ),
         ),

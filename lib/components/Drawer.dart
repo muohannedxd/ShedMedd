@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/SidebarButton.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/screens/Settings/Aboutus.dart';
+import 'package:shedmedd/screens/Settings/settings.dart';
+import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -123,9 +126,19 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'My profile',
                   icon: Icons.person_outline,
-                  current: widget.current == 2 ? true : false,
+                  current: widget.current == 4 ? true : false,
                   action: () {
                     //setCurrent(2);
+                    if (widget.current != 4) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Shop(currentIndex: 4),
+                        ),
+                      );
+                    }
                   },
                 ),
                 Padding(
@@ -141,25 +154,55 @@ class _AppDrawerState extends State<AppDrawer> {
                 SidebarButton(
                   title: 'Settings',
                   icon: Icons.settings_outlined,
-                  current: widget.current == 3 ? true : false,
+                  current: widget.current == 5 ? true : false,
                   action: () {
                     //setCurrent(3);
+                    if (widget.current != 5) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Settings(),
+                        ),
+                      );
+                    }
                   },
                 ),
                 SidebarButton(
                   title: 'Support',
                   icon: Icons.email_outlined,
-                  current: widget.current == 4 ? true : false,
+                  current: widget.current == 6 ? true : false,
                   action: () {
                     //setCurrent(4);
+                    if (widget.current != 6) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TermsOfUse(),
+                        ),
+                      );
+                    }
                   },
                 ),
                 SidebarButton(
                   title: 'About us',
                   icon: Icons.info_outline,
-                  current: widget.current == 5 ? true : false,
+                  current: widget.current == 7 ? true : false,
                   action: () {
                     //setCurrent(5);
+                    if (widget.current != 7) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AboutUs(),
+                        ),
+                      );
+                    }
                   },
                 ),
               ],

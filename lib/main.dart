@@ -9,7 +9,6 @@ import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/SearchResults.dart';
 import 'package:shedmedd/screens/Splash.dart';
 import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
-import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
 
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
         '/rateApp': (context) => RateAppPage(),
         '/chatInbox': (context) => ChatInbox(),
       },
-      home: Settings(),
+      home: const Splash(),
     );
   }
 }
