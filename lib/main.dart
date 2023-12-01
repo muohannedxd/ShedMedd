@@ -8,6 +8,10 @@ import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/SearchResults.dart';
 import 'package:shedmedd/screens/Splash.dart';
+import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
+import 'package:shedmedd/screens/Settings/settings.dart';
+import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
+import 'package:shedmedd/screens/Profile/Profile.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
@@ -37,8 +41,11 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUp(),
         '/message': (context) => DirectMessage(),
         '/post_item': (context) => PostAnItem(),
+        '/profile': (context) => const Profile(),
+        '/rateApp': (context) => RateAppPage(),
+        '/chatInbox': (context) => ChatInbox(),
       },
-      home: const Splash(),
+      home: Settings(),
     );
   }
 }
