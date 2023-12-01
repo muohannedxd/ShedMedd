@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:shedmedd/screens/Post_item/condition.dart';
 import '../../constants/customColors.dart';
-import '../../constants/textSizes.dart';
 
 class PostAnItem extends StatefulWidget {
   const PostAnItem({super.key});
@@ -30,36 +29,7 @@ class _PostAnItemState extends State<PostAnItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundForPostItem,
-      appBar: AppBar(
-        toolbarHeight: 118,
-        elevation: 0,
-        backgroundColor: CustomColors.bgColor,
-        title: Container(
-          child: Text(
-            "Sell an item",
-            style: TextStyle(
-              fontSize: TextSizes.subtitle,
-              color: CustomColors.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        centerTitle: true,
-        leadingWidth: 90,
-        leading: Builder(
-          builder: (context) => Container(
-            margin: EdgeInsets.only(left: 0),
-            child: IconButton(
-              icon: Icon(
-                Icons.close,
-                size: 32,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-        ),
-        actions: [],
-      ),
+      
       body: Container(
         child: ListView(
           children: [

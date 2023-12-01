@@ -31,13 +31,18 @@ class _ShopState extends State<Shop> {
   @override
   Widget build(BuildContext context) {
     // list of pages
-    List<Widget> _pages = <Widget>[ShopHome(items: items), Discover(), PostAnItem()];
-    List<String> _pageTitles = ['ShedMedd', 'Discover', 'Add'];
+    List<Widget> _pages = <Widget>[
+      ShopHome(items: items),
+      Discover(),
+      PostAnItem()
+    ];
+    List<String> _pageTitles = ['ShedMedd', 'Discover', 'Sell an item'];
+    List<bool> _isSubpage = [false, false, true];
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        appBar: Bar(_pageTitles[currentPageIndex]),
+        appBar: Bar(_pageTitles[currentPageIndex], _isSubpage[currentPageIndex]),
         drawer: AppDrawer(
           current: currentPageIndex,
         ),
