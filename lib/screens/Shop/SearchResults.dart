@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/button.dart';
+import 'package:shedmedd/config/searchArguments.dart';
 import '../../components/itemCard.dart';
 import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
@@ -102,7 +103,12 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   Widget build(BuildContext context) {
-    final searchKey = ModalRoute.of(context)!.settings.arguments as String;
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as SearchArguments;
+
+    final searchKey = arguments.search;
+    final isSeller = arguments.seller;
+
     Map<String, dynamic> items = clothingItems;
 
     return ScrollConfiguration(
@@ -200,6 +206,7 @@ class _SearchResultsState extends State<SearchResults> {
                                 Expanded(
                                   child: ItemCard(
                                     item: items.values.toList()[i],
+                                    isSeller: isSeller,
                                   ),
                                 ),
                                 SizedBox(
@@ -209,6 +216,7 @@ class _SearchResultsState extends State<SearchResults> {
                                   Expanded(
                                     child: ItemCard(
                                       item: items.values.toList()[i + 1],
+                                      isSeller: isSeller,
                                     ),
                                   ),
                               ],

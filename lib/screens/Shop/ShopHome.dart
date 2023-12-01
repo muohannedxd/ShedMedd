@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/config/searchArguments.dart';
 
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
@@ -49,7 +50,7 @@ class _ShopHomeState extends State<ShopHome> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: 'Feature Products');
+                          arguments: SearchArguments('Feature Products', false));
                     },
                     child: Text(
                       'Show all',
@@ -93,7 +94,7 @@ class _ShopHomeState extends State<ShopHome> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: 'Recommended');
+                          arguments: SearchArguments('Recommended', false));
                     },
                     child: Text(
                       'Show all',
@@ -137,7 +138,7 @@ class _ShopHomeState extends State<ShopHome> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: 'Feature Products');
+                          arguments: SearchArguments('Deals', false));
                     },
                     child: Text(
                       'Deals',

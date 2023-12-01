@@ -170,8 +170,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                 ),
                 SidebarButton(
-                  title: 'Support',
-                  icon: Icons.email_outlined,
+                  title: 'Terms of Use',
+                  icon: Icons.notes_rounded,
                   current: widget.current == 6 ? true : false,
                   action: () {
                     //setCurrent(4);
@@ -189,7 +189,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'About us',
-                  icon: Icons.info_outline,
+                  icon: Icons.person_search_outlined,
                   current: widget.current == 7 ? true : false,
                   action: () {
                     //setCurrent(5);

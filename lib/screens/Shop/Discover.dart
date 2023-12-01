@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/config/searchArguments.dart';
 import '../../components/Divider.dart';
 import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
@@ -255,7 +256,7 @@ class SubCategory extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/discover/results',
-                  arguments: '${category} ${subcategory}');
+                  arguments: SearchArguments('${category} ${subcategory}', false));
             },
             child: Row(
               children: [

@@ -6,7 +6,9 @@ import '../screens/Shop/ItemHome.dart';
 
 class ItemCard extends StatelessWidget {
   final dynamic item;
-  const ItemCard({super.key, required this.item});
+  final bool isSeller;
+
+  const ItemCard({super.key, required this.item, this.isSeller = false});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ItemCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ItemHome(itemID: item['id']),
+              builder: (context) => ItemHome(itemID: item['id'], isSeller: isSeller,),
             ),
           );
         },

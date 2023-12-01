@@ -3,6 +3,8 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 
+import '../../config/searchArguments.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(      
+    return Scaffold(
       drawer: Drawer(),
       backgroundColor: CustomColors.bgColor,
       body: ListView(
@@ -32,7 +34,8 @@ class _ProfileState extends State<Profile> {
                   // Profile Picture
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/images/profile_picture.png'),
+                    backgroundImage:
+                        AssetImage('assets/images/profile_picture.png'),
                   ),
                   // Add padding between the image and the name
                   SizedBox(width: 20),
@@ -82,7 +85,8 @@ class _ProfileState extends State<Profile> {
                             // Handle settings icon press
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ProfileSettings()),
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileSettings()),
                             );
                           },
                         ),
@@ -119,7 +123,8 @@ class _ProfileState extends State<Profile> {
               children: [
                 // My Products
                 _buildOptionItem(Icons.shopping_bag, 'My Products', () {
-                  // Handle My Products press
+                  Navigator.pushNamed(context, '/discover/results',
+                      arguments: SearchArguments('My Products', true));
                 }),
                 Divider(),
                 // Rate This App
@@ -152,7 +157,7 @@ class _ProfileState extends State<Profile> {
               text,
               style: TextStyle(
                 color: CustomColors.textPrimary,
-                fontSize: TextSizes.subtitle,
+                fontSize: TextSizes.medium,
               ),
             ),
           ],
@@ -161,49 +166,53 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-void _showLogoutConfirmationDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white, // Set background color to white
-        title: Text(
-          'Logout',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+  void _showLogoutConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // Set background color to white
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        content: Text(
-          'Are you sure you want to log out?',
-          style: TextStyle(
-            fontSize: 18,
+          content: Text(
+            'Are you sure you want to log out?',
+            style: TextStyle(
+              fontSize: TextSizes.medium,
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: Text('Cancel', style: TextStyle(
-            fontSize: 18,
-          ),),
-          ),
-          TextButton(
-            onPressed: () {
-              // Perform logout logic here
-              // ...
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: Text('Log Out' ,style: TextStyle(
-            fontSize: 18,
-          ),),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: TextSizes.medium,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform logout logic here
+                // ...
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: TextSizes.medium,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
