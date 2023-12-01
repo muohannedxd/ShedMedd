@@ -8,7 +8,8 @@ class CustomColors {
   static const Color textGrey = Color(0xFF9B9B9B);
   static const Color buttonPrimary = Color(0xFF33302E);
   static const Color buttonSecondary = Color(0xFF2D201C);
-  static const Color grey = Color.fromARGB(255, 201, 201, 201);
+  static const Color grey = Color(0xFFE5E5E5);
   static const Color bgColor = Color(0xFFFEFEFE);
   static const Color hoverColor = Color(0xFF777E90);
+  static const Color backgroundForPostItem = Color(0xFFD9D9D9);
 }
