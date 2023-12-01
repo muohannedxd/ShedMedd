@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
+import 'package:shedmedd/screens/Profile/Profile.dart';
+import 'package:shedmedd/screens/Shop/Discover.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
+import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
+import 'package:shedmedd/screens/Settings/settings.dart';
+
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: CustomColors.bgColor, // Set the status bar color to white
+    statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
+  ));
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'ShedMedd',
+      theme: ThemeData(
+        fontFamily: 'ProductSans',
+      ),
+      initialRoute: '/',
+      routes: {
+        '/shop': (context) => Shop(),
+        '/discover': (context) => Discover(),
+        '/signup': (context) => SignUp(),
+        '/profile': (context) => const Profile(),
+        '/rateApp': (context) => RateAppPage(),
+        '/chatInbox': (context) => ChatInbox(),
+
+      },
+      home: Settings(),
+    );
+  }
+}
