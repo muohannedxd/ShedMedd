@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/customColors.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -20,7 +21,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800]!.withOpacity(0.8),
+      backgroundColor: CustomColors.buttonPrimary.withOpacity(0.8),
       body: Center(
         child: Image.asset(
           'assets/icons/logo_white_large.png',

@@ -63,7 +63,7 @@ class _ShopState extends State<Shop> {
           decoration: BoxDecoration(
             border: Border.all(
               color: CustomColors.grey,
-              width: 2.0,
+              width: 2.4,
             ),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24.5),
