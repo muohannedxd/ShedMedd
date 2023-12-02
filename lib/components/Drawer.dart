@@ -32,56 +32,75 @@ class _AppDrawerState extends State<AppDrawer> {
                 Center(
                   child: Padding(
                       padding: const EdgeInsets.only(top: 50, bottom: 50),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            child: CircleAvatar(
-                              backgroundColor: CustomColors.grey,
-                              child: Text('MK'),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Shop(currentIndex: 4),
                             ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 120,
-                                  child: Text(
-                                    'Mohanned kadache',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: TextSizes.regular,
-                                        color: CustomColors.textPrimary),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: 120,
-                                  child: Text(
-                                    'mohanned@gmail.com',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: TextSizes.small,
-                                        color: CustomColors.textPrimary),
-                                  ),
-                                )
-                              ],
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              child: CircleAvatar(
+                                backgroundColor: CustomColors.grey,
+                                child: Text('MK'),
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    child: Text(
+                                      'Mohanned kadache',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: TextSizes.regular,
+                                          color: CustomColors.textPrimary),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 120,
+                                    child: Text(
+                                      'mohanned@gmail.com',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: TextSizes.small,
+                                          color: CustomColors.textPrimary),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       )),
                 ),
                 SidebarButton(
                   title: 'Homepage',
-                  icon: widget.current == 0 ? Image.asset('assets/icons/home_filled.png', width: 20,) : Image.asset('assets/icons/home.png', width: 20,),
+                  icon: widget.current == 0
+                      ? Image.asset(
+                          'assets/icons/home_filled.png',
+                          width: 20,
+                        )
+                      : Image.asset(
+                          'assets/icons/home.png',
+                          width: 20,
+                        ),
                   current: widget.current == 0 ? true : false,
                   action: () {
                     //setCurrent(0);
@@ -90,8 +109,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              Shop(currentIndex: 0),
+                          builder: (context) => Shop(currentIndex: 0),
                         ),
                       );
                     }
@@ -99,7 +117,15 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Discover',
-                  icon: widget.current == 1 ? Image.asset('assets/icons/search_filled.png', width: 20,) : Image.asset('assets/icons/search.png', width: 20,),
+                  icon: widget.current == 1
+                      ? Image.asset(
+                          'assets/icons/search_filled.png',
+                          width: 20,
+                        )
+                      : Image.asset(
+                          'assets/icons/search.png',
+                          width: 20,
+                        ),
                   current: widget.current == 1 ? true : false,
                   action: () {
                     //setCurrent(1);
@@ -108,8 +134,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              Shop(currentIndex: 1),
+                          builder: (context) => Shop(currentIndex: 1),
                         ),
                       );
                     }
@@ -117,7 +142,15 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'My profile',
-                  icon: widget.current == 4 ? Image.asset('assets/icons/profile_filled.png', width: 20,) : Image.asset('assets/icons/profile.png', width: 20,),
+                  icon: widget.current == 4
+                      ? Image.asset(
+                          'assets/icons/profile_filled.png',
+                          width: 20,
+                        )
+                      : Image.asset(
+                          'assets/icons/profile.png',
+                          width: 20,
+                        ),
                   current: widget.current == 4 ? true : false,
                   action: () {
                     //setCurrent(2);
@@ -126,8 +159,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              Shop(currentIndex: 4),
+                          builder: (context) => Shop(currentIndex: 4),
                         ),
                       );
                     }
@@ -145,7 +177,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Settings',
-                  icon: Image.asset('assets/icons/settings.png', width: 20,),
+                  icon: Image.asset(
+                    'assets/icons/settings.png',
+                    width: 20,
+                  ),
                   current: widget.current == 5 ? true : false,
                   action: () {
                     //setCurrent(3);
@@ -154,8 +189,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              Settings(),
+                          builder: (context) => Settings(),
                         ),
                       );
                     }
@@ -163,7 +197,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Terms of Use',
-                  icon: Image.asset('assets/icons/termsofuse.png', width: 20,),
+                  icon: Image.asset(
+                    'assets/icons/termsofuse.png',
+                    width: 20,
+                  ),
                   current: widget.current == 6 ? true : false,
                   action: () {
                     //setCurrent(4);
@@ -172,8 +209,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              TermsOfUse(),
+                          builder: (context) => TermsOfUse(),
                         ),
                       );
                     }
@@ -181,7 +217,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'About us',
-                  icon: Image.asset('assets/icons/aboutus.png', width: 20,),
+                  icon: Image.asset(
+                    'assets/icons/aboutus.png',
+                    width: 20,
+                  ),
                   current: widget.current == 7 ? true : false,
                   action: () {
                     //setCurrent(5);
@@ -190,8 +229,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              AboutUs(),
+                          builder: (context) => AboutUs(),
                         ),
                       );
                     }
@@ -199,7 +237,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Sign Up',
-                  icon: Image.asset('assets/icons/signup.png', width: 20,),
+                  icon: Image.asset(
+                    'assets/icons/signup.png',
+                    width: 20,
+                  ),
                   current: widget.current == 8 ? true : false,
                   action: () {
                     //setCurrent(5);
@@ -208,8 +249,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              SignUp(),
+                          builder: (context) => SignUp(),
                         ),
                       );
                     }
