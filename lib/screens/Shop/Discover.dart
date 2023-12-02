@@ -59,10 +59,7 @@ class _DiscoverState extends State<Discover> {
                   });
                   //print(search);
                 },
-                leading: const Icon(
-                  Icons.search,
-                  color: CustomColors.textGrey,
-                ),
+                leading: Image.asset('assets/icons/search_filled.png', width: 22, color: CustomColors.textPrimary.withOpacity(0.4),)
               )),
           Expanded(
             child: ListView(

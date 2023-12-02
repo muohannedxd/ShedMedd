@@ -1,6 +1,8 @@
 // ChatInbox.dart
 import 'package:flutter/material.dart';
 
+import '../../constants/customColors.dart';
+
 class ChatInbox extends StatefulWidget {
   @override
   _ChatInboxState createState() => _ChatInboxState();
@@ -49,7 +51,7 @@ class _ChatInboxState extends State<ChatInbox> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.search),
+                      icon: Image.asset('assets/icons/search_filled.png', width: 22, color: CustomColors.textPrimary,),
                       onPressed: () {
                         // Handle search action
                       },

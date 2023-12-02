@@ -5,7 +5,7 @@ import 'package:shedmedd/constants/textSizes.dart';
 class SidebarButton extends StatelessWidget {
   final Function action;
   final String title;
-  final IconData icon;
+  final Image icon;
   final bool current;
 
   const SidebarButton(
@@ -33,10 +33,7 @@ class SidebarButton extends StatelessWidget {
                   const EdgeInsets.only(left: 20, right: 20, top: 7, bottom: 7),
               child: Row(
                 children: [
-                  Icon(icon,
-                      color: current == true
-                          ? CustomColors.textPrimary
-                          : CustomColors.textGrey),
+                  icon,
                   SizedBox(
                     width: 20,
                   ),

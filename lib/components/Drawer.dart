@@ -17,15 +17,6 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  /*void setCurrent(index) {
-    for (int i = 0; i < current.length; i++) {
-      current[i] = false;
-    }
-    setState(() {
-      current[index] = true;
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,7 +81,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Homepage',
-                  icon: Icons.home_outlined,
+                  icon: widget.current == 0 ? Image.asset('assets/icons/home_filled.png', width: 20,) : Image.asset('assets/icons/home.png', width: 20,),
                   current: widget.current == 0 ? true : false,
                   action: () {
                     //setCurrent(0);
@@ -108,7 +99,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Discover',
-                  icon: Icons.search_outlined,
+                  icon: widget.current == 1 ? Image.asset('assets/icons/search_filled.png', width: 20,) : Image.asset('assets/icons/search.png', width: 20,),
                   current: widget.current == 1 ? true : false,
                   action: () {
                     //setCurrent(1);
@@ -126,7 +117,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'My profile',
-                  icon: Icons.person_outline,
+                  icon: widget.current == 4 ? Image.asset('assets/icons/profile_filled.png', width: 20,) : Image.asset('assets/icons/profile.png', width: 20,),
                   current: widget.current == 4 ? true : false,
                   action: () {
                     //setCurrent(2);
@@ -154,7 +145,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Settings',
-                  icon: Icons.settings_outlined,
+                  icon: Image.asset('assets/icons/settings.png', width: 20,),
                   current: widget.current == 5 ? true : false,
                   action: () {
                     //setCurrent(3);
@@ -172,7 +163,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'Terms of Use',
-                  icon: Icons.notes_rounded,
+                  icon: Image.asset('assets/icons/termsofuse.png', width: 20,),
                   current: widget.current == 6 ? true : false,
                   action: () {
                     //setCurrent(4);
@@ -190,7 +181,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 SidebarButton(
                   title: 'About us',
-                  icon: Icons.person_search_outlined,
+                  icon: Image.asset('assets/icons/aboutus.png', width: 20,),
                   current: widget.current == 7 ? true : false,
                   action: () {
                     //setCurrent(5);
@@ -207,8 +198,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                 ),
                 SidebarButton(
-                  title: 'Signup',
-                  icon: Icons.login_rounded,
+                  title: 'Sign Up',
+                  icon: Image.asset('assets/icons/signup.png', width: 20,),
                   current: widget.current == 8 ? true : false,
                   action: () {
                     //setCurrent(5);

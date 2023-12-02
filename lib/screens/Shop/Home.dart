@@ -81,9 +81,9 @@ class _ShopState extends State<Shop> {
                 backgroundColor: CustomColors.bgColor,
                 type: BottomNavigationBarType.fixed,
                 currentIndex: currentPageIndex,
-                selectedFontSize: 16,
                 selectedItemColor: CustomColors.textPrimary,
-                unselectedFontSize: 12,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
                 onTap: (int index) {
                   setState(() {
                     currentPageIndex = index;
@@ -91,38 +91,56 @@ class _ShopState extends State<Shop> {
                 },
                 items: [
                   BottomNavigationBarItem(
-                    activeIcon:
-                        Icon(Icons.home, color: CustomColors.textPrimary),
-                    icon: Icon(Icons.home_outlined,
-                        color: CustomColors.textPrimary),
+                    activeIcon: Image.asset(
+                      'assets/icons/home_filled.png',
+                      width: 22,
+                    ),
+                    icon: Image.asset(
+                      'assets/icons/home.png',
+                      width: 20,
+                    ),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    activeIcon:
-                        Icon(Icons.search, color: CustomColors.textPrimary),
-                    icon: Icon(Icons.search_outlined,
-                        color: CustomColors.textPrimary),
+                    activeIcon: Image.asset('assets/icons/search_filled.png',
+                        width: 26),
+                    icon: Image.asset(
+                      'assets/icons/search.png',
+                      width: 24,
+                    ),
                     label: 'Discover',
                   ),
                   BottomNavigationBarItem(
-                    activeIcon: Icon(Icons.add_box_rounded,
-                        color: CustomColors.textPrimary),
-                    icon: Icon(Icons.add_box_outlined,
-                        color: CustomColors.textPrimary),
+                    activeIcon: Image.asset(
+                      'assets/icons/post_filled.png',
+                      width: 22,
+                    ),
+                    icon: Image.asset(
+                      'assets/icons/post.png',
+                      width: 20,
+                    ),
                     label: 'Add',
                   ),
                   BottomNavigationBarItem(
-                    activeIcon: Icon(Icons.email_rounded,
-                        color: CustomColors.textPrimary),
-                    icon: Icon(Icons.email_outlined,
-                        color: CustomColors.textPrimary),
+                    activeIcon: Image.asset(
+                      'assets/icons/inbox_filled.png',
+                      width: 24,
+                    ),
+                    icon: Image.asset(
+                      'assets/icons/inbox.png',
+                      width: 22,
+                    ),
                     label: 'Inbox',
                   ),
                   BottomNavigationBarItem(
-                    activeIcon: Icon(Icons.person_rounded,
-                        color: CustomColors.textPrimary),
-                    icon: Icon(Icons.person_outline_rounded,
-                        color: CustomColors.textPrimary),
+                    activeIcon: Image.asset(
+                      'assets/icons/profile_filled.png',
+                      width: 22,
+                    ),
+                    icon: Image.asset(
+                      'assets/icons/profile.png',
+                      width: 20,
+                    ),
                     label: 'Profile',
                   ),
                 ],

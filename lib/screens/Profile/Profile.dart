@@ -77,10 +77,7 @@ class _ProfileState extends State<Profile> {
                       child: Transform.rotate(
                         angle: isHovered ? 0.5 : 0,
                         child: IconButton(
-                          icon: Icon(
-                            Icons.settings,
-                            size: isHovered ? 35 : 30,
-                          ),
+                          icon: Image.asset('assets/icons/edit_profile.png', width: 24,),
                           onPressed: () {
                             // Handle settings icon press
                             Navigator.push(
@@ -122,18 +119,18 @@ class _ProfileState extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // My Products
-                _buildOptionItem(Icons.shopping_bag, 'My Products', () {
+                _buildOptionItem('shopping_bag.png', 'My Products', () {
                   Navigator.pushNamed(context, '/discover/results',
                       arguments: SearchArguments('My Products', true));
                 }),
                 Divider(),
                 // Rate This App
-                _buildOptionItem(Icons.star, 'Rate This App', () {
+                _buildOptionItem('star.png', 'Rate This App', () {
                   Navigator.pushNamed(context, '/rateApp');
                 }),
                 Divider(),
                 // Log Out
-                _buildOptionItem(Icons.exit_to_app, 'Log Out', () {
+                _buildOptionItem('logout.png', 'Log Out', () {
                   _showLogoutConfirmationDialog();
                 }),
               ],
@@ -144,14 +141,18 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _buildOptionItem(IconData icon, String text, VoidCallback onTap) {
+  Widget _buildOptionItem(String icon, String text, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: [
-            Icon(icon, color: CustomColors.textPrimary),
+            Image.asset(
+              'assets/icons/${icon}',
+              width: 20,
+              color: CustomColors.textPrimary,
+            ),
             SizedBox(width: 10),
             Text(
               text,

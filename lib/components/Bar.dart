@@ -41,7 +41,7 @@ AppBar Bar(title, subpage) {
                         ),
                       );
               },
-              icon: Icon(Icons.mark_chat_unread_outlined, color: CustomColors.textPrimary,));
+              icon: Image.asset('assets/icons/dm.png', width: 22,));
           }
         ),
       ) : Visibility(visible: false, child: Text(''))

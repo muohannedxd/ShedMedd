@@ -25,7 +25,7 @@ AppBar BarWithReturn(BuildContext context, String title,
       builder: (context) => Padding(
         padding: const EdgeInsets.only(left: 22),
         child: IconButton(
-          icon: Icon(Icons.arrow_back, color: CustomColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: CustomColors.textPrimary),
           onPressed: () {
             if (returnPage != null) {
               bool popped = false;

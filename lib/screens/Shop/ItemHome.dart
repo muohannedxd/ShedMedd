@@ -142,10 +142,7 @@ class DirectMessageButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.shopping_bag_rounded,
-                  color: CustomColors.white,
-                ),
+                Image.asset('assets/icons/dm.png', width: 20, color: CustomColors.white),
                 SizedBox(
                   width: 12,
                 ),
