@@ -29,7 +29,9 @@ class Seller extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 200,
+                constraints: BoxConstraints(
+                  maxWidth: 180
+                ),
                 child: Text(
                   'Mohanned kadache',
                   style: TextStyle(
