@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 
+import '../screens/Shop/Home.dart';
+
 AppBar BarWithReturn(BuildContext context, String title,
-    {String? returnPage, bool isNotification = false, VoidCallback? onNotificationPressed}) {
+    {String? returnPage,
+    bool isNotification = false,
+    VoidCallback? onNotificationPressed}) {
   // Set a default callback if onNotificationPressed is not provided
   onNotificationPressed ??= () {
     Navigator.pushNamed(context, '/chatInbox');
@@ -25,9 +29,19 @@ AppBar BarWithReturn(BuildContext context, String title,
       builder: (context) => Padding(
         padding: const EdgeInsets.only(left: 22),
         child: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded, color: CustomColors.textPrimary),
+          icon: Icon(Icons.arrow_back_ios_rounded,
+              color: CustomColors.textPrimary),
           onPressed: () {
-            if (returnPage != null) {
+            if (returnPage == 'shop') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Shop(currentIndex: 0),
+                ),
+              );
+              return;
+            }
+            else if (returnPage != null) {
               bool popped = false;
               while (!popped) {
                 Navigator.pop(context);
