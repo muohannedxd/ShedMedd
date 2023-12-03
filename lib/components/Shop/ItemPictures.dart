@@ -29,6 +29,7 @@ class Pictures extends StatelessWidget {
           clipBehavior: Clip
               .antiAlias, // Add this line to apply clipping with anti-aliasing
           child: InstaImageViewer(
+            backgroundIsTransparent: true,
             child: Image.asset(
               'assets/images/dummy/${image}',
               fit: BoxFit.cover,

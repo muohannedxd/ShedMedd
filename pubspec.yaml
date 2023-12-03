@@ -38,8 +38,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutterotpfield: ^0.0.3
-  image_picker: ^1.0.4
   insta_image_viewer: ^1.0.2
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:

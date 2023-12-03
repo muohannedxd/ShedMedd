@@ -29,7 +29,6 @@ class _PostAnItemState extends State<PostAnItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundForPostItem,
-      
       body: Container(
         child: ListView(
           children: [
