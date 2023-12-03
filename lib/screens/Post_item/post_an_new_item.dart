@@ -29,7 +29,6 @@ class _PostAnItemState extends State<PostAnItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.backgroundForPostItem,
-      
       body: Container(
         child: ListView(
           children: [
@@ -200,31 +199,34 @@ class _PostAnItemState extends State<PostAnItem> {
               child: Container(
                 margin:
                     EdgeInsets.only(left: 21, right: 21, bottom: 16, top: 47),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add your upload logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    onPrimary: Colors.white,
-                    textStyle: TextStyle(color: Colors.white),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 16), // Adjust padding as needed
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Colors.transparent),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your upload logic here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(color: Colors.white),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16), // Adjust padding as needed
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.transparent),
+                      ),
+                      elevation: 0, // No elevation
                     ),
-                    elevation: 0, // No elevation
-                  ),
-                  child: Container(
-                    width: 333,
-                    height: 38,
-                    alignment: Alignment.center,
-                    child: Text("Upload"),
+                    child: Container(
+                      width: 333,
+                      height: 38,
+                      alignment: Alignment.center,
+                      child: Text("Upload"),
+                    ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

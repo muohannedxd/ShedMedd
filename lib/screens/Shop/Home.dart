@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/data/items.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
@@ -23,6 +24,7 @@ class _ShopState extends State<Shop> {
   Map<String, dynamic> items = clothingItems;
   // current Page
   late int currentPageIndex;
+  bool isShownBottomBar = true;
 
   @override
   void initState() {
@@ -53,97 +55,103 @@ class _ShopState extends State<Shop> {
       behavior: BehaviorOfScroll(),
       child: Scaffold(
         appBar:
-            Bar(_pageTitles[currentPageIndex], _isSubpage[currentPageIndex]),
+            isShownBottomBar ? Bar(_pageTitles[currentPageIndex], _isSubpage[currentPageIndex]) : BarWithReturn(context, 'Sell an Item', returnPage: 'shop'),
         drawer: AppDrawer(
           current: currentPageIndex,
         ),
         backgroundColor: CustomColors.bgColor,
         body: _pages[currentPageIndex],
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.grey,
-              width: 2.4,
+        bottomNavigationBar: Visibility(
+          visible: isShownBottomBar,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: CustomColors.grey,
+                width: 2.4,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24.5),
+                topRight: Radius.circular(24.5),
+              ),
             ),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24.5),
-              topRight: Radius.circular(24.5),
-            ),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24.0),
-              topRight: Radius.circular(24.0),
-            ),
-            child: SizedBox(
-              height: 80,
-              child: BottomNavigationBar(
-                backgroundColor: CustomColors.bgColor,
-                type: BottomNavigationBarType.fixed,
-                currentIndex: currentPageIndex,
-                selectedItemColor: CustomColors.textPrimary,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                onTap: (int index) {
-                  setState(() {
-                    currentPageIndex = index;
-                  });
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    activeIcon: Image.asset(
-                      'assets/icons/home_filled.png',
-                      width: 22,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24.0),
+                topRight: Radius.circular(24.0),
+              ),
+              child: SizedBox(
+                height: 80,
+                child: BottomNavigationBar(
+                  backgroundColor: CustomColors.bgColor,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: currentPageIndex,
+                  selectedItemColor: CustomColors.textPrimary,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  onTap: (int index) {
+                    setState(() {
+                      if (index == 2) {
+                        isShownBottomBar = false;
+                      }
+                      currentPageIndex = index;
+                    });
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                      activeIcon: Image.asset(
+                        'assets/icons/home_filled.png',
+                        width: 22,
+                      ),
+                      icon: Image.asset(
+                        'assets/icons/home.png',
+                        width: 20,
+                      ),
+                      label: 'Home',
                     ),
-                    icon: Image.asset(
-                      'assets/icons/home.png',
-                      width: 20,
+                    BottomNavigationBarItem(
+                      activeIcon: Image.asset('assets/icons/search_filled.png',
+                          width: 26),
+                      icon: Image.asset(
+                        'assets/icons/search.png',
+                        width: 24,
+                      ),
+                      label: 'Discover',
                     ),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    activeIcon: Image.asset('assets/icons/search_filled.png',
-                        width: 26),
-                    icon: Image.asset(
-                      'assets/icons/search.png',
-                      width: 24,
+                    BottomNavigationBarItem(
+                      activeIcon: Image.asset(
+                        'assets/icons/post_filled.png',
+                        width: 22,
+                      ),
+                      icon: Image.asset(
+                        'assets/icons/post.png',
+                        width: 20,
+                      ),
+                      label: 'Add',
                     ),
-                    label: 'Discover',
-                  ),
-                  BottomNavigationBarItem(
-                    activeIcon: Image.asset(
-                      'assets/icons/post_filled.png',
-                      width: 22,
+                    BottomNavigationBarItem(
+                      activeIcon: Image.asset(
+                        'assets/icons/inbox_filled.png',
+                        width: 24,
+                      ),
+                      icon: Image.asset(
+                        'assets/icons/inbox.png',
+                        width: 22,
+                      ),
+                      label: 'Inbox',
                     ),
-                    icon: Image.asset(
-                      'assets/icons/post.png',
-                      width: 20,
+                    BottomNavigationBarItem(
+                      activeIcon: Image.asset(
+                        'assets/icons/profile_filled.png',
+                        width: 22,
+                      ),
+                      icon: Image.asset(
+                        'assets/icons/profile.png',
+                        width: 20,
+                      ),
+                      label: 'Profile',
                     ),
-                    label: 'Add',
-                  ),
-                  BottomNavigationBarItem(
-                    activeIcon: Image.asset(
-                      'assets/icons/inbox_filled.png',
-                      width: 24,
-                    ),
-                    icon: Image.asset(
-                      'assets/icons/inbox.png',
-                      width: 22,
-                    ),
-                    label: 'Inbox',
-                  ),
-                  BottomNavigationBarItem(
-                    activeIcon: Image.asset(
-                      'assets/icons/profile_filled.png',
-                      width: 22,
-                    ),
-                    icon: Image.asset(
-                      'assets/icons/profile.png',
-                      width: 20,
-                    ),
-                    label: 'Profile',
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
