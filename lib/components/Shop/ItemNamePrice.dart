@@ -26,7 +26,9 @@ class ItemNamePrice extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 200,
+                constraints: BoxConstraints(
+                  maxWidth: 180
+                ),
                 child: Text(
                   name,
                   style: TextStyle(
@@ -39,7 +41,9 @@ class ItemNamePrice extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                width: 200,
+                constraints: BoxConstraints(
+                  maxWidth: 180
+                ),
                 child: Text(
                   'Condition: ${condition}',
                   style: TextStyle(
@@ -51,9 +55,7 @@ class ItemNamePrice extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          width: 20,
-        ),
+
         Text(
           '${price.toString()} DZD',
           style: TextStyle(
