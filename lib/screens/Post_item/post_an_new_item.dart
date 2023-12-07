@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:shedmedd/controllers/itemsController.dart';
 import 'package:shedmedd/screens/Post_item/condition.dart';
 import '../../constants/customColors.dart';
+import '../Shop/Home.dart';
 
 class PostAnItem extends StatefulWidget {
   const PostAnItem({super.key});
@@ -27,6 +30,32 @@ class _PostAnItemState extends State<PostAnItem> {
 
   @override
   Widget build(BuildContext context) {
+    final ItemsController itemsController = Get.put(ItemsController());
+
+    void addNewItem() {
+      // Add your upload logic here
+      // dummy added item
+      Map<String, dynamic> newItem = {
+        'id': 0,
+        'name': 'New Item',
+        'category': 'Women',
+        'subcategory': 'Shirt',
+        'condition': 'Good',
+        'price': 380,
+        'description': 'This is a new pink item',
+        'images': ['pink_shirt3.jpeg', 'pink_shirt2.jpeg'],
+      };
+
+      itemsController.addItem(newItem);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Shop(currentIndex: 0),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: CustomColors.backgroundForPostItem,
       body: Container(
@@ -202,9 +231,7 @@ class _PostAnItemState extends State<PostAnItem> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Add your upload logic here
-                    },
+                    onPressed: addNewItem,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,
                       onPrimary: Colors.white,
@@ -218,7 +245,7 @@ class _PostAnItemState extends State<PostAnItem> {
                       elevation: 0, // No elevation
                     ),
                     child: Container(
-                      width: 333,
+                      width: double.infinity,
                       height: 38,
                       alignment: Alignment.center,
                       child: Text("Upload"),
@@ -246,7 +273,7 @@ class SubCategory extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Condition(),
+            builder: (context) => ConditionChooser(),
           ),
         );
       },

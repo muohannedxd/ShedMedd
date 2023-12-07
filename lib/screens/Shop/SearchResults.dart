@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/config/searchArguments.dart';
 import '../../components/itemCard.dart';
@@ -6,7 +7,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
-import '../../data/items.dart';
+import '../../controllers/itemsController.dart';
 
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});
@@ -16,6 +17,8 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
+  final ItemsController itemsController = Get.put(ItemsController());
+
   // price
   RangeValues _selectedRange = RangeValues(0, 10000);
 
@@ -109,7 +112,7 @@ class _SearchResultsState extends State<SearchResults> {
     final searchKey = arguments.search;
     final isSeller = arguments.seller;
 
-    Map<String, dynamic> items = clothingItems;
+    Map<String, dynamic> items = itemsController.items;
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -193,40 +196,42 @@ class _SearchResultsState extends State<SearchResults> {
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 20, bottom: 10),
                 child: SingleChildScrollView(
-                  physics: BouncingScroll(),
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < items.length; i += 2)
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    physics: BouncingScroll(),
+                    scrollDirection: Axis.vertical,
+                    child: Obx(
+                      () => Column(
+                        children: [
+                          for (int i = 0; i < items.length; i += 2)
+                            Column(
                               children: [
-                                Expanded(
-                                  child: ItemCard(
-                                    item: items.values.toList()[i],
-                                    isSeller: isSeller,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                if (i + 1 < items.length)
-                                  Expanded(
-                                    child: ItemCard(
-                                      item: items.values.toList()[i + 1],
-                                      isSeller: isSeller,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: ItemCard(
+                                        item: items.values.toList()[i],
+                                        isSeller: isSeller,
+                                      ),
                                     ),
-                                  ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    if (i + 1 < items.length)
+                                      Expanded(
+                                        child: ItemCard(
+                                          item: items.values.toList()[i + 1],
+                                          isSeller: isSeller,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
                               ],
                             ),
-                            SizedBox(height: 20),
-                          ],
-                        ),
-                    ],
-                  ),
-                )),
+                        ],
+                      ),
+                    ))),
 
             SizedBox(
               height: 20,
