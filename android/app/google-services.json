@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137323427960",
+    "project_id": "shedmedd",
+    "storage_bucket": "shedmedd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137323427960:android:d2c564bca07d5bcbae958d",
+        "android_client_info": {
+          "package_name": "com.example.shedmedd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxBn9e-DL-kDTO7R9fhJ4-gqWcUNqZQRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
