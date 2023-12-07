@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-
+import 'package:shedmedd/controllers/itemsController.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../components/itemCard.dart';
 import '../../components/Shop/CategoryChooser.dart';
 
-class ShopHome extends StatefulWidget {
-  const ShopHome({
+class ShopHome extends StatelessWidget {
+  ShopHome({
     super.key,
-    required this.items,
+    required this.controller,
   });
 
-  final Map<String, dynamic> items;
+  //final Map<String, dynamic> items;
+  final ItemsController controller;
 
-  @override
-  State<ShopHome> createState() => _ShopHomeState();
-}
-
-class _ShopHomeState extends State<ShopHome> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -50,7 +47,8 @@ class _ShopHomeState extends State<ShopHome> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('Feature Products', false));
+                          arguments:
+                              SearchArguments('Feature Products', false));
                     },
                     child: Text(
                       'Show all',
@@ -63,13 +61,14 @@ class _ShopHomeState extends State<ShopHome> {
                 physics: BouncingScroll(),
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: widget.items.values
-                          .map((item) => ItemCard(item: item))
-                          .toList()),
-                ),
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Obx(
+                      () => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: controller.items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
+                    )),
               )
             ],
           ),
@@ -107,13 +106,14 @@ class _ShopHomeState extends State<ShopHome> {
                 physics: BouncingScroll(),
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: widget.items.values
-                          .map((item) => ItemCard(item: item))
-                          .toList()),
-                ),
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Obx(
+                      () => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: controller.items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
+                    )),
               ),
             ],
           ),
@@ -151,13 +151,14 @@ class _ShopHomeState extends State<ShopHome> {
                 physics: BouncingScroll(),
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: widget.items.values
-                          .map((item) => ItemCard(item: item))
-                          .toList()),
-                ),
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Obx(
+                      () => Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: controller.items.values
+                              .map((item) => ItemCard(item: item))
+                              .toList()),
+                    )),
               ),
             ],
           ),

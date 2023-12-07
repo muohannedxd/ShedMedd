@@ -40,6 +40,7 @@ dependencies:
   flutterotpfield: ^0.0.3
   insta_image_viewer: ^1.0.2
   image_picker: ^1.0.4
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

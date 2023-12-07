@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../constants/customColors.dart';
 
-class Condition extends StatelessWidget {
-  const Condition({super.key});
+class ConditionChooser extends StatelessWidget {
+  const ConditionChooser({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class Condition extends StatelessWidget {
                     width:
                         78), // Adjust the spacing between icon and text as needed
                 Text(
-                  'Condition', // Add the desired text here
+                  'ConditionChooser', // Add the desired text here
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -48,8 +48,8 @@ class Condition extends StatelessWidget {
             thickness: 1,
             color: CustomColors.backgroundForPostItem,
           ),
-          ConditionDescription(
-              condition: "New with tags",
+          ConditionChooserDescription(
+              ConditionChooser: "New with tags",
               description: "A brand-new, unused item with tags.",
               checked: false),
           Divider(
@@ -57,8 +57,8 @@ class Condition extends StatelessWidget {
             thickness: 1,
             color: CustomColors.backgroundForPostItem,
           ),
-          ConditionDescription(
-              condition: "New without tags",
+          ConditionChooserDescription(
+              ConditionChooser: "New without tags",
               description: "A brand-new, unused item.",
               checked: false),
           Divider(
@@ -66,8 +66,8 @@ class Condition extends StatelessWidget {
             thickness: 1,
             color: CustomColors.backgroundForPostItem,
           ),
-          ConditionDescription(
-              condition: "Very good",
+          ConditionChooserDescription(
+              ConditionChooser: "Very good",
               description:
                   "A lightly used item, may have slight imperfections.",
               checked: false),
@@ -76,8 +76,8 @@ class Condition extends StatelessWidget {
             thickness: 1,
             color: CustomColors.backgroundForPostItem,
           ),
-          ConditionDescription(
-              condition: "Good",
+          ConditionChooserDescription(
+              ConditionChooser: "Good",
               description:
                   "A used items that may show imperfections and signs of wear.",
               checked: false),
@@ -86,8 +86,8 @@ class Condition extends StatelessWidget {
             thickness: 1,
             color: CustomColors.backgroundForPostItem,
           ),
-          ConditionDescription(
-              condition: "Satisfactory",
+          ConditionChooserDescription(
+              ConditionChooser: "Satisfactory",
               description:
                   "A frequently used item with imperfections and signs of wear.",
               checked: false),
@@ -102,21 +102,21 @@ class Condition extends StatelessWidget {
   }
 }
 
-class ConditionDescription extends StatefulWidget {
-  final String condition;
+class ConditionChooserDescription extends StatefulWidget {
+  final String ConditionChooser;
   final String description;
   bool checked;
-  ConditionDescription(
+  ConditionChooserDescription(
       {super.key,
-      required this.condition,
+      required this.ConditionChooser,
       required this.description,
       required this.checked});
 
   @override
-  State<ConditionDescription> createState() => _ConditionDescriptionState();
+  State<ConditionChooserDescription> createState() => _ConditionChooserDescriptionState();
 }
 
-class _ConditionDescriptionState extends State<ConditionDescription> {
+class _ConditionChooserDescriptionState extends State<ConditionChooserDescription> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -137,7 +137,7 @@ class _ConditionDescriptionState extends State<ConditionDescription> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.condition,
+                    widget.ConditionChooser,
                     style: TextStyle(fontSize: 16, color: Color(0xFF33302E)),
                   ),
                   Text(widget.description, style: TextStyle(fontSize: 16, color: Color(0xFF33302E))),

@@ -1,46 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/data/items.dart';
+import 'package:shedmedd/controllers/itemsController.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
 
-class ItemHome extends StatefulWidget {
+class ItemHome extends StatelessWidget {
   final itemID;
   final bool isSeller;
-  const ItemHome({super.key, required this.itemID, this.isSeller = false});
 
-  @override
-  State<ItemHome> createState() => _ItemHome();
-}
+  ItemHome({super.key, required this.itemID, this.isSeller = false});
 
-class _ItemHome extends State<ItemHome> {
+  final ItemsController itemsController = Get.put(ItemsController());
+
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> currentItem;
-
-    String name = '';
-    String category = '';
-    String subcategory = '';
-    String condition = '';
-    var price = 0;
-    String description = '';
-    List<String> images = [];
-
-    clothingItems.forEach((key, item) {
-      if (item['id'] == widget.itemID) {
-        currentItem = item;
-        name = currentItem['name'];
-        category = item['category'];
-        subcategory = currentItem['subcategory'];
-        condition = currentItem['condition'];
-        price = currentItem['price'];
-        description = currentItem['description'];
-        images = currentItem['images'];
-      }
-    });
+    dynamic currentItem = itemsController.getItem(itemID);
 
     return Stack(children: [
       Scaffold(
@@ -54,7 +32,7 @@ class _ItemHome extends State<ItemHome> {
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 10, right: 10, top: 10, bottom: 10),
-                      child: Pictures(images: images),
+                      child: Pictures(images: currentItem['images']),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -65,12 +43,12 @@ class _ItemHome extends State<ItemHome> {
                       padding: const EdgeInsets.only(
                           left: 30, right: 30, top: 20, bottom: 20),
                       child: ItemInformation(
-                          name: name,
-                          category: category,
-                          subcategory: subcategory,
-                          condition: condition,
-                          price: price,
-                          description: description),
+                          name: currentItem['name'],
+                          category: currentItem['category'],
+                          subcategory: currentItem['subcategory'],
+                          condition: currentItem['condition'],
+                          price: currentItem['price'],
+                          description: currentItem['description']),
                     ),
                   ],
                 ),
@@ -84,7 +62,7 @@ class _ItemHome extends State<ItemHome> {
           left: MediaQuery.of(context).size.width * 0.05,
           child: ReturnButton()),
 
-      widget.isSeller
+      isSeller
           ? Positioned(
               top: MediaQuery.of(context).size.height * 0.06,
               right: MediaQuery.of(context).size.width * 0.05,
@@ -92,13 +70,13 @@ class _ItemHome extends State<ItemHome> {
           : Visibility(visible: false, child: Text('')),
 
       // go to DM button
-      !widget.isSeller
+      !isSeller
           ? Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: DirectMessageButton(
-                  name: name, condition: condition, price: price),
+                  name: currentItem['name'], condition: currentItem['condition'], price: currentItem['price']),
             )
           : Visibility(visible: false, child: Text('')),
     ]);
@@ -142,7 +120,8 @@ class DirectMessageButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/icons/dm.png', width: 20, color: CustomColors.white),
+                Image.asset('assets/icons/dm.png',
+                    width: 20, color: CustomColors.white),
                 SizedBox(
                   width: 12,
                 ),
@@ -215,7 +194,10 @@ class SettingsButton extends StatelessWidget {
               ),
             ];
           },
-          child: Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary,),
+          child: Icon(
+            Icons.more_vert_rounded,
+            color: CustomColors.textPrimary,
+          ),
         ));
   }
 }
