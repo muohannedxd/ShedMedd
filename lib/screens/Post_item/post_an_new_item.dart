@@ -215,7 +215,7 @@ class _PostAnItemState extends State<PostAnItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "*Price",
+                      "Price",
                       style: TextStyle(fontSize: 14, color: Color(0xFF626262)),
                     ),
                     SizedBox(height: 8),
