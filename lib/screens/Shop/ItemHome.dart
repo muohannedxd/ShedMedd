@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/controllers/itemsController.dart';
+import 'package:shedmedd/controller/items/itemsController.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';

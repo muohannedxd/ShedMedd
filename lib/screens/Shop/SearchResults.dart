@@ -7,7 +7,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
-import '../../controllers/itemsController.dart';
+import '../../controller/items/itemsController.dart';
 
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/controllers/itemsController.dart';
+import 'package:shedmedd/controller/items/itemsController.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
