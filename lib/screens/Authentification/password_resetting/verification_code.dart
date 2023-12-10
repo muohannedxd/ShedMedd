@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/create_new_password.dart';
 import 'package:flutterotpfield/flutterotpfield.dart';
+
+import '../../../components/back_header_widget.dart';
 
 class VerificationCode extends StatefulWidget {
   const VerificationCode({super.key});
@@ -16,20 +19,7 @@ class _VerificationCodeState extends State<VerificationCode> {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(left: 24, top: 32),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-              ),
-              onPressed: () {
-                // Navigate back when the button is pressed
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          BackHeaderWidget(title: ''),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(
@@ -43,13 +33,19 @@ class _VerificationCodeState extends State<VerificationCode> {
                   height: 20,
                 ),
                 Text(
-                    "Please enter the verification code we sent to your email address",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "ProductSans/FontsFree-Net-ProductSans-Light", height: 1.5),
-                    )
+                  "Please enter the verification code we sent to your email address",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "ProductSans/FontsFree-Net-ProductSans-Light",
+                      height: 1.5),
+                )
               ],
             ),
           ),
-          SizedBox(height: 58,),
+          SizedBox(
+            height: 58,
+          ),
           Center(
             child: FlutterOtpField(
               inputFieldLength: 4,
@@ -67,30 +63,32 @@ class _VerificationCodeState extends State<VerificationCode> {
                       fontSize: 14,
                       fontWeight: FontWeight.w500),
                   enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Color(0xff969696), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xff969696), width: 1.0),
                       borderRadius: BorderRadius.circular(30)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Color(0xff969696), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xff969696), width: 1.0),
                       borderRadius: BorderRadius.circular(30))),
               onValueChange: (String value) {
                 print("otp changed $value");
               },
               onCompleted: (String value) {
                 print("otp  $value");
-                Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateNewPassword()));
+                Get.to(CreateNewPassword());
               },
-          
             ),
-            ),
-            SizedBox(height:48),
-            Container(
+          ),
+          SizedBox(height: 48),
+          Container(
               margin: EdgeInsets.only(left: 32),
-              child: Text("Resend in 00:10", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w200, fontFamily: "ProductSans/FontsFree-Net-ProductSans-Light"),))
+              child: Text(
+                "Resend in 00:10",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w200,
+                    fontFamily: "ProductSans/FontsFree-Net-ProductSans-Light"),
+              ))
         ],
       ),
     );

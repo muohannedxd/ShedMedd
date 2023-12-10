@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shedmedd/screens/Shop/ShopHome.dart';
+
+import '../../../components/back_header_widget.dart';
 
 class CreateNewPassword extends StatefulWidget {
   const CreateNewPassword({super.key});
@@ -16,68 +20,83 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     });
   }
 
-void _showConfirmationSlider() {
-  // Show the bottom sheet when the button is pressed
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (builder) {
-      return Container(
-        height: 360.0,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(70.0),
-              topRight: const Radius.circular(70.0),
-            ),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 32,),
-              // Add your Image widget here
-              Image.asset(
-                'assets/images/password_successfully_changed.png',
-                width: 110.0, // Adjust the width as needed
-                height: 110.0, // Adjust the height as needed
-                // You can use other properties like fit, alignment, etc.
+  void _showConfirmationSlider() {
+    // Show the bottom sheet when the button is pressed
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 360.0,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(70.0),
+                topRight: const Radius.circular(70.0),
               ),
-              SizedBox(height: 20.0), // Adjust spacing as needed
-              Text("Your password has been changed",style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600,),),
-              SizedBox(height: 16.0), // Adjust spacing as needed
-              Text("Welcome back! Discover now!",style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,),),
-              SizedBox(height: 24.0), // Adjust spacing as needed
-              Container(
-            alignment: Alignment.center,
-            child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color?>(Colors.black),
-                  fixedSize: MaterialStateProperty.all<Size>(Size(315, 60)),
-                  shape: MaterialStateProperty.all<OutlinedBorder?>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          30), // Adjust the radius for sharpness
-                    ),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 32,
+                ),
+                // Add your Image widget here
+                Image.asset(
+                  'assets/images/password_successfully_changed.png',
+                  width: 110.0, // Adjust the width as needed
+                  height: 110.0, // Adjust the height as needed
+                  // You can use other properties like fit, alignment, etc.
+                ),
+                SizedBox(height: 20.0), // Adjust spacing as needed
+                Text(
+                  "Your password has been changed",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                onPressed: () {},
-                child: Text(
-                  "Browse home",
+                SizedBox(height: 16.0), // Adjust spacing as needed
+                Text(
+                  "Welcome back! Discover now!",
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
                   ),
-                )),
+                ),
+                SizedBox(height: 24.0), // Adjust spacing as needed
+                Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color?>(Colors.black),
+                        fixedSize:
+                            MaterialStateProperty.all<Size>(Size(315, 60)),
+                        shape: MaterialStateProperty.all<OutlinedBorder?>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                30), // Adjust the radius for sharpness
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                      },
+                      child: Text(
+                        "Browse home",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      )),
+                ),
+              ],
+            ),
           ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   Color CreateNewPasswordButtonColor = Color(0xFF2D201C);
   @override
@@ -85,20 +104,7 @@ void _showConfirmationSlider() {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(left: 24, top: 32),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-              ),
-              onPressed: () {
-                // Navigate back when the button is pressed
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          BackHeaderWidget(title: ''),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(

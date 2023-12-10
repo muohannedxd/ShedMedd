@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/verification_code.dart';
+
+import '../../../components/back_header_widget.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -15,20 +18,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(left: 24, top: 32),
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-              ),
-              onPressed: () {
-                // Navigate back when the button is pressed
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          BackHeaderWidget(title: ''),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(
@@ -65,10 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   ),
                   onSubmitted: (String value) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => VerificationCode()));
+                    Get.to( VerificationCode());
                   },
                 ),
               ],

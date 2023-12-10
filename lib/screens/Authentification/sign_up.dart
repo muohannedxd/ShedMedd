@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'log_in.dart';
 
@@ -144,10 +145,7 @@ class _SignUpState extends State<SignUp> {
                 GestureDetector(
                   onTap: () {
                     // Navigate to the login page when "Log In" text is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
-                    );
+                    Get.to(LogIn());
                   },
                   child: Text(
                     "Log In",
