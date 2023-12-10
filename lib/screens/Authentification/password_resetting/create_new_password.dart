@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shedmedd/screens/Shop/ShopHome.dart';
 
 import '../../../components/back_header_widget.dart';
 

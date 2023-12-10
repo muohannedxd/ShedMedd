@@ -1,15 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shedmedd/controllers/itemsController.dart';
 import '../../constants/customColors.dart';
 import '../Shop/Home.dart';
-import 'package:shedmedd/screens/Profile/Profile.dart';
-import 'package:shedmedd/controllers/itemsController.dart';
-import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 import '../../controller/post_item/conditon_controller.dart';
 import 'category_page.dart';
