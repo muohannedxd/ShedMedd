@@ -1,14 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shedmedd/controllers/itemsController.dart';
-import 'package:shedmedd/screens/Post_item/condition.dart';
 import '../../constants/customColors.dart';
 import '../Shop/Home.dart';
+import 'package:shedmedd/screens/Profile/Profile.dart';
+import 'package:shedmedd/controllers/itemsController.dart';
+import '../../constants/customColors.dart';
+import '../../controller/post_item/category_controller.dart';
+import '../../controller/post_item/conditon_controller.dart';
+import 'category_page.dart';
+import 'condition_page.dart';
 
 class PostAnItem extends StatefulWidget {
-  const PostAnItem({super.key});
+  PostAnItem({super.key});
 
   @override
   State<PostAnItem> createState() => _PostAnItemState();
@@ -27,6 +35,11 @@ class _PostAnItemState extends State<PostAnItem> {
       });
     }
   }
+
+  final CategoryController categoryController =
+      Get.put(CategoryController(), permanent: true);
+  final ConditionController conditionController =
+      Get.put(ConditionController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -180,13 +193,21 @@ class _PostAnItemState extends State<PostAnItem> {
                 ),
               ),
             ),
-            SubCategory(page: "Category", itemsNumber: 40),
+            CategoryAndCondition(
+                page: "Category",
+                categoryOrCondition: false,
+                catogoryController: categoryController,
+                conditionController: conditionController),
             Divider(
               height: 0,
               thickness: 1,
               color: CustomColors.backgroundForPostItem,
             ),
-            SubCategory(page: 'Condition', itemsNumber: 42),
+            CategoryAndCondition(
+                page: 'Condition',
+                categoryOrCondition: true,
+                catogoryController: categoryController,
+                conditionController: conditionController),
             SizedBox(
               height: 32,
             ),
@@ -261,21 +282,27 @@ class _PostAnItemState extends State<PostAnItem> {
   }
 }
 
-class SubCategory extends StatelessWidget {
+class CategoryAndCondition extends StatelessWidget {
   final String page;
-  final int itemsNumber;
-  const SubCategory({super.key, required this.page, required this.itemsNumber});
+  final bool categoryOrCondition;
+  final CategoryController catogoryController;
+  final ConditionController conditionController;
+  const CategoryAndCondition(
+      {super.key,
+      required this.page,
+      required this.categoryOrCondition,
+      required this.catogoryController,
+      required this.conditionController});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConditionChooser(),
-          ),
-        );
+        if (categoryOrCondition == true) {
+          Get.to(ConditionPage());
+        } else {
+          Get.to(CategoryPage());
+        }
       },
       child: Container(
         color: Colors.white,
@@ -289,6 +316,24 @@ class SubCategory extends StatelessWidget {
                 page,
                 style: TextStyle(fontSize: 16, color: Color(0xFF33302E)),
               ),
+              page == "Category"
+                  ? Text(
+                      (catogoryController.category == "" ||
+                              catogoryController.subCategory == "")
+                          ? ""
+                          : "${catogoryController.category} && ${catogoryController.subCategory}",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 152, 150, 149)),
+                    )
+                  : Text(
+                      (conditionController.condition == "")
+                          ? ""
+                          : "${conditionController.condition}",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 152, 150, 149)),
+                    ),
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: Color(0xFF33302E),

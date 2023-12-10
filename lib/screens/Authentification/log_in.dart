@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
@@ -25,7 +26,9 @@ class _LogInState extends State<LogIn> {
                   "Log into",
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 Text("your account",
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
               ],
@@ -51,14 +54,18 @@ class _LogInState extends State<LogIn> {
             margin: EdgeInsets.only(bottom: 32, right: 32),
             alignment: Alignment.centerRight,
             child: GestureDetector(
-                  onTap: () {
-                    // Navigate to the login page when "Log In" text is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ForgotPassword()),
-                    );
-                  },
-                  child: Text("Forgot password?", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w100, decoration: TextDecoration.underline,),),
+              onTap: () {
+                // Navigate to the login page when "Log In" text is tapped
+                Get.to(ForgotPassword());
+              },
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w100,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
           ),
           Container(
@@ -88,41 +95,47 @@ class _LogInState extends State<LogIn> {
             alignment: Alignment.center,
             child: Column(
               children: [
-                SizedBox(height: 28,),
-                Text("Or log in with", style: TextStyle(fontSize: 12, color: Colors.grey )),
-                SizedBox(height: 28,),
+                SizedBox(
+                  height: 28,
+                ),
+                Text("Or log in with",
+                    style: TextStyle(fontSize: 12, color: Colors.grey)),
+                SizedBox(
+                  height: 28,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ClipRRect(
-                    borderRadius: BorderRadius.circular(42),
-                    child: Container(
-                      width: 42, // Set the desired width
-                      height: 42, // Set the desired height
-                      child: 
-                      Image.asset(
-                        "assets/images/google_icon.png" ,
-                        fit: BoxFit.cover, // Adjust the fit as needed
+                      borderRadius: BorderRadius.circular(42),
+                      child: Container(
+                        width: 42, // Set the desired width
+                        height: 42, // Set the desired height
+                        child: Image.asset(
+                          "assets/images/google_icon.png",
+                          fit: BoxFit.cover, // Adjust the fit as needed
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 20,),
+                    SizedBox(
+                      width: 20,
+                    ),
                     ClipRRect(
-                    borderRadius: BorderRadius.circular(42),
-                    child: Container(
-                      width: 42, // Set the desired width
-                      height: 42, // Set the desired height
-                      child: 
-                      Image.asset(
-                        "assets/images/facebook_icon.png" ,
-                        fit: BoxFit.cover, // Adjust the fit as needed
+                      borderRadius: BorderRadius.circular(42),
+                      child: Container(
+                        width: 42, // Set the desired width
+                        height: 42, // Set the desired height
+                        child: Image.asset(
+                          "assets/images/facebook_icon.png",
+                          fit: BoxFit.cover, // Adjust the fit as needed
+                        ),
                       ),
                     ),
-                  ),
                   ],
                 ),
-                SizedBox(height: 32,)
-
+                SizedBox(
+                  height: 32,
+                )
               ],
             ),
           ),
@@ -130,15 +143,17 @@ class _LogInState extends State<LogIn> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("You don't have an account?", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-                SizedBox(width: 7,),
+                Text(
+                  "You don't have an account?",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 7,
+                ),
                 GestureDetector(
                   onTap: () {
                     // Navigate to the login page when "Log In" text is tapped
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUp()),
-                    );
+                    Get.to(SignUp());
                   },
                   child: Text(
                     "Sign Up",
@@ -151,7 +166,7 @@ class _LogInState extends State<LogIn> {
                 ),
               ],
             ),
-          )    
+          )
         ],
       ),
     );
