@@ -20,8 +20,6 @@ class Shop extends StatefulWidget {
 
 class _ShopState extends State<Shop> {
   
-  // dummy data
-  //Map<String, dynamic> items = clothingItems;
   // current Page
   late int currentPageIndex;
   bool isShownBottomBar = true;

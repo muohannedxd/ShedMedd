@@ -7,15 +7,21 @@ class ItemsDatabase {
 
   // get all items
   Future<List<DocumentSnapshot>> getAllItems() async {
-    await Future.delayed(Duration(seconds: 1));
+    //await Future.delayed(Duration(seconds: 1));
     QuerySnapshot snapshot = await items.get();
     return snapshot.docs;
   }
 
   // get one item
   Future<DocumentSnapshot> getOneItem(String id) async {
-    await Future.delayed(Duration(milliseconds: 500));
+    //await Future.delayed(Duration(milliseconds: 500));
     DocumentSnapshot snapshot = await items.doc(id).get();
     return snapshot;
+  }
+
+  // get all items of a certain category
+  Future<List<DocumentSnapshot>> getCategoryItems(String category) async {
+    QuerySnapshot snapshot = await items.where('category', isEqualTo: category).get();
+    return snapshot.docs;
   }
 }

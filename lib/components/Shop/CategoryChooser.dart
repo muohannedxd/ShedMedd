@@ -1,136 +1,124 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/controller/items/categoryChooserController.dart';
 
-class CategoryChooser extends StatefulWidget {
-  const CategoryChooser({
-    super.key,
-  });
+class CategoryChooser extends StatelessWidget {
+  CategoryChooser({super.key, required this.controller});
 
-  @override
-  State<CategoryChooser> createState() => _CategoryChooserState();
-}
-
-class _CategoryChooserState extends State<CategoryChooser> {
-  List<bool> chosen = [true, false, false];
-
-  void setChosen(index) {
-    for (int i = 0; i < chosen.length; i++) {
-      chosen[i] = false;
-    }
-    setState(() {
-      chosen[index] = true;
-    });
-  }
+  final CategoryChooserController controller;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Column(
-          children: [
-            Container(
+        Obx(() => Column(
+              children: [
+                Container(
+                    width: 50,
+                    height: 50,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.updateCategoryChooser('Women');
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: controller.category.value == "Women"
+                            ? CustomColors.textSecondary
+                            : CustomColors.grey.withOpacity(0.3),
+                        child: Icon(Icons.female_outlined,
+                            size: 36,
+                            color: controller.category.value == "Women"
+                                ? CustomColors.white
+                                : CustomColors.textPrimary.withOpacity(0.3)),
+                      ),
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Women',
+                  style: TextStyle(
+                      color: controller.category.value == "Women"
+                          ? CustomColors.textPrimary
+                          : CustomColors.textPrimary.withOpacity(0.3)),
+                )
+              ],
+            )),
+        SizedBox(
+          width: 40,
+        ),
+        Obx(() => Column(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.updateCategoryChooser('Men');
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: controller.category.value == "Men"
+                          ? CustomColors.textSecondary
+                          : CustomColors.grey.withOpacity(0.3),
+                      child: Icon(Icons.male_outlined,
+                          size: 36,
+                          color: controller.category.value == "Men"
+                              ? CustomColors.white
+                              : CustomColors.textPrimary.withOpacity(0.3)),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Men',
+                  style: TextStyle(
+                      color: controller.category.value == "Men"
+                          ? CustomColors.textPrimary
+                          : CustomColors.textPrimary.withOpacity(0.3)),
+                )
+              ],
+            )),
+        SizedBox(
+          width: 40,
+        ),
+        Obx(
+          () => Column(
+            children: [
+              Container(
                 width: 50,
                 height: 50,
                 child: GestureDetector(
                   onTap: () {
-                    setChosen(0);
+                    controller.updateCategoryChooser('Kids');
                   },
                   child: CircleAvatar(
-                    backgroundColor: chosen[0] == true
+                    backgroundColor: controller.category.value == "Kids"
                         ? CustomColors.textSecondary
                         : CustomColors.grey.withOpacity(0.3),
-                    child: Icon(Icons.female_outlined,
+                    child: Icon(Icons.child_care_outlined,
                         size: 36,
-                        color: chosen[0] == true
+                        color: controller.category.value == "Kids"
                             ? CustomColors.white
                             : CustomColors.textPrimary.withOpacity(0.3)),
                   ),
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Women',
-              style: TextStyle(
-                  color: chosen[0] == true
-                      ? CustomColors.textPrimary
-                      : CustomColors.textPrimary.withOpacity(0.3)),
-            )
-          ],
-        ),
-        SizedBox(
-          width: 40,
-        ),
-        Column(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              child: GestureDetector(
-                onTap: () {
-                  setChosen(1);
-                },
-                child: CircleAvatar(
-                  backgroundColor: chosen[1] == true
-                      ? CustomColors.textSecondary
-                      : CustomColors.grey.withOpacity(0.3),
-                  child: Icon(Icons.male_outlined,
-                      size: 36,
-                      color: chosen[1] == true
-                          ? CustomColors.white
-                          : CustomColors.textPrimary.withOpacity(0.3)),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Men',
-              style: TextStyle(
-                  color: chosen[1] == true
-                      ? CustomColors.textPrimary
-                      : CustomColors.textPrimary.withOpacity(0.3)),
-            )
-          ],
-        ),
-        SizedBox(
-          width: 40,
-        ),
-        Column(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              child: GestureDetector(
-                onTap: () {
-                  setChosen(2);
-                },
-                child: CircleAvatar(
-                  backgroundColor: chosen[2] == true
-                      ? CustomColors.textSecondary
-                      : CustomColors.grey.withOpacity(0.3),
-                  child: Icon(Icons.child_care_outlined,
-                      size: 36,
-                      color: chosen[2] == true
-                          ? CustomColors.white
-                          : CustomColors.textPrimary.withOpacity(0.3)),
-                ),
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Kids',
-              style: TextStyle(
-                  color: chosen[2] == true
-                      ? CustomColors.textPrimary
-                      : CustomColors.textPrimary.withOpacity(0.3)),
-            )
-          ],
-        ),
+              Text(
+                'Kids',
+                style: TextStyle(
+                    color: controller.category.value == "Kids"
+                        ? CustomColors.textPrimary
+                        : CustomColors.textPrimary.withOpacity(0.3)),
+              )
+            ],
+          ),
+        )
       ],
     );
   }
