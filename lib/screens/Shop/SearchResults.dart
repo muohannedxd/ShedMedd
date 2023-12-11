@@ -1,13 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
+import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
+import 'package:shedmedd/database/itemsDB.dart';
 import '../../components/itemCard.dart';
 import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
-import '../../controller/items/itemsController.dart';
 
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});
@@ -17,7 +18,6 @@ class SearchResults extends StatefulWidget {
 }
 
 class _SearchResultsState extends State<SearchResults> {
-  final ItemsController itemsController = Get.put(ItemsController());
 
   // price
   RangeValues _selectedRange = RangeValues(0, 10000);
@@ -112,133 +112,156 @@ class _SearchResultsState extends State<SearchResults> {
     final searchKey = arguments.search;
     final isSeller = arguments.seller;
 
-    Map<String, dynamic> items = itemsController.items;
+    Future<List<DocumentSnapshot>> items = ItemsDatabase().getAllItems();
+
+    //Map<String, dynamic> items = itemsController.items;
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-        endDrawer: FilterDrawer(),
-        backgroundColor: CustomColors.bgColor,
-        body: ListView(
-          children: [
-            // return button
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 10),
-              child: ReturnButton(searchKey: searchKey),
-            ),
+          endDrawer: FilterDrawer(),
+          backgroundColor: CustomColors.bgColor,
+          body: FutureBuilder(
+              future: items,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('an error occured'),
+                  );
+                } else if (snapshot.hasData) {
+                  List<DocumentSnapshot<Object?>>? itemsList = snapshot.data;
 
-            // Header
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  return ListView(
                     children: [
-                      Text(
-                        'Found',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.medium,
-                            fontWeight: FontWeight.bold),
+                      // return button
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, right: 30, top: 20, bottom: 10),
+                        child: ReturnButton(searchKey: searchKey),
                       ),
-                      Text(
-                        '${items.length} results',
-                        style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.medium,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Builder(builder: (context) {
-                    return GestureDetector(
-                        onTap: () {
-                          Scaffold.of(context).openEndDrawer();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: CustomColors.grey),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 18, right: 10, top: 6, bottom: 6),
-                            child: Row(
+
+                      // Header
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, right: 30, top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Filter',
-                                    style: TextStyle(
-                                        color: CustomColors.textPrimary,
-                                        fontSize: TextSizes.small)),
-                                SizedBox(
-                                  width: 6,
+                                Text(
+                                  'Found',
+                                  style: TextStyle(
+                                      color: CustomColors.textPrimary,
+                                      fontSize: TextSizes.medium,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  color: CustomColors.textPrimary,
-                                )
+                                Text(
+                                  '${itemsList?.length} results',
+                                  style: TextStyle(
+                                      color: CustomColors.textPrimary,
+                                      fontSize: TextSizes.medium,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
-                          ),
-                        ));
-                  }),
-                ],
-              ),
-            ),
-
-            Padding(
-                padding: const EdgeInsets.only(
-                    left: 30, right: 30, top: 20, bottom: 10),
-                child: SingleChildScrollView(
-                    physics: BouncingScroll(),
-                    scrollDirection: Axis.vertical,
-                    child: Obx(
-                      () => Column(
-                        children: [
-                          for (int i = 0; i < items.length; i += 2)
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                      child: ItemCard(
-                                        item: items.values.toList()[i],
-                                        isSeller: isSeller,
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Builder(builder: (context) {
+                              return GestureDetector(
+                                  onTap: () {
+                                    Scaffold.of(context).openEndDrawer();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border:
+                                          Border.all(color: CustomColors.grey),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 18,
+                                          right: 10,
+                                          top: 6,
+                                          bottom: 6),
+                                      child: Row(
+                                        children: [
+                                          Text('Filter',
+                                              style: TextStyle(
+                                                  color:
+                                                      CustomColors.textPrimary,
+                                                  fontSize: TextSizes.small)),
+                                          SizedBox(
+                                            width: 6,
+                                          ),
+                                          Icon(
+                                            Icons.arrow_drop_down_outlined,
+                                            color: CustomColors.textPrimary,
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    if (i + 1 < items.length)
-                                      Expanded(
-                                        child: ItemCard(
-                                          item: items.values.toList()[i + 1],
-                                          isSeller: isSeller,
-                                        ),
+                                  ));
+                            }),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 20, bottom: 10),
+                          child: SingleChildScrollView(
+                              physics: BouncingScroll(),
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                  children: [
+                                    for (int i = 0;
+                                        i < itemsList!.length;
+                                        i += 2)
+                                      Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(
+                                                child: ItemCard(
+                                                  item: itemsList[i],
+                                                  isSeller: isSeller,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              if (i + 1 < itemsList.length)
+                                                Expanded(
+                                                  child: ItemCard(
+                                                    item: itemsList[i + 1],
+                                                    isSeller: isSeller,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 20),
+                                        ],
                                       ),
                                   ],
                                 ),
-                                SizedBox(height: 20),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ))),
+                              )),
 
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
-      ),
+                      SizedBox(
+                        height: 20,
+                      )
+                    ],
+                  );
+                } else {
+                  return Center(
+                    child: CustomCircularProgress(),
+                  );
+                }
+              })),
     );
   }
 

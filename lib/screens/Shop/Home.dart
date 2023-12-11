@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shedmedd/components/BarWithReturn.dart';
-import 'package:shedmedd/controller/items/itemsController.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
@@ -22,10 +20,6 @@ class Shop extends StatefulWidget {
 
 class _ShopState extends State<Shop> {
   
-  final ItemsController itemsController = Get.put(ItemsController());
-
-  // dummy data
-  //Map<String, dynamic> items = clothingItems;
   // current Page
   late int currentPageIndex;
   bool isShownBottomBar = true;
@@ -40,7 +34,7 @@ class _ShopState extends State<Shop> {
   Widget build(BuildContext context) {
     // list of pages
     List<Widget> _pages = <Widget>[
-      ShopHome(controller: itemsController),
+      ShopHome(),
       Discover(),
       PostAnItem(),
       ChatInbox(),
