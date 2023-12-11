@@ -12,10 +12,10 @@ class DirectMessage extends StatefulWidget {
 }
 
 class _DirectMessage extends State<DirectMessage> {
-
   String name = '';
   String condition = '';
   int price = 0;
+  String sellerName = '';
   bool isShownSendingButton = false;
   String message = '';
   // dummy messages
@@ -29,6 +29,7 @@ class _DirectMessage extends State<DirectMessage> {
     name = arguments['name'] as String;
     condition = arguments['condition'] as String;
     price = arguments['price'] as int;
+    sellerName = arguments['sellerName'] as String;
 
     return ScrollConfiguration(
       behavior: ScrollBehavior(),
@@ -39,7 +40,7 @@ class _DirectMessage extends State<DirectMessage> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 20, bottom: 10),
-                child: ReturnButton(searchKey: 'Mohanned Kadache'),
+                child: ReturnButton(searchKey: '$sellerName'),
               ),
               Divider(),
               Padding(

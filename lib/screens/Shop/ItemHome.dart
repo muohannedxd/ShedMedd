@@ -8,6 +8,7 @@ import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
+import '../../database/usersDB.dart';
 
 class ItemHome extends StatelessWidget {
   final String itemID;
@@ -30,7 +31,6 @@ class ItemHome extends StatelessWidget {
               );
             } else if (snapshot.hasData) {
               DocumentSnapshot<Object?>? item = snapshot.data;
-
               return Stack(children: [
                 Center(
                     child: ScrollConfiguration(
@@ -45,7 +45,7 @@ class ItemHome extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 30, right: 30, top: 10, bottom: 10),
-                        child: Seller(),
+                        child: Seller(sellerID: item?['user_id']),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -84,7 +84,8 @@ class ItemHome extends StatelessWidget {
                         child: DirectMessageButton(
                             name: item?['name'],
                             condition: item?['condition'],
-                            price: item?['price']),
+                            price: item?['price'],
+                            sellerID: item?['user_id']),
                       )
                     : Visibility(visible: false, child: Text('')),
               ]);
@@ -104,54 +105,70 @@ class DirectMessageButton extends StatelessWidget {
     required this.name,
     required this.condition,
     required this.price,
+    required this.sellerID,
   });
 
   final String name;
   final String condition;
   final int price;
+  final String sellerID;
 
   @override
   Widget build(BuildContext context) {
+    Future<DocumentSnapshot> seller = UsersDatabase().getOneUser(sellerID);
+
     return Container(
-      decoration: BoxDecoration(
-          color: CustomColors.buttonPrimary,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24), topRight: Radius.circular(24))),
-      width: double.infinity,
-      child: TextButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            '/message',
-            arguments: {
-              'name': name,
-              'condition': condition,
-              'price': price,
-            },
-          );
-        },
-        child: Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/icons/dm.png',
-                    width: 20, color: CustomColors.white),
-                SizedBox(
-                  width: 12,
-                ),
-                Text(
-                  'Message the Seller',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.white,
-                    fontSize: TextSizes.subtitle,
-                  ),
-                ),
-              ],
-            )),
-      ),
-    );
+        decoration: BoxDecoration(
+            color: CustomColors.buttonPrimary,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+        width: double.infinity,
+        child: FutureBuilder(
+          future: seller,
+          builder: (context, snapshot) {
+            DocumentSnapshot<Object?>? user = snapshot.data;
+            if (snapshot.hasData) {
+              return TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/message',
+                    arguments: {
+                      'name': name,
+                      'condition': condition,
+                      'price': price,
+                      'sellerName': user?['name']
+                    },
+                  );
+                },
+                child: Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/icons/dm.png',
+                            width: 20, color: CustomColors.white),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          'Message the Seller',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: CustomColors.white,
+                            fontSize: TextSizes.subtitle,
+                          ),
+                        ),
+                      ],
+                    )),
+              );
+            } else {
+              return Center(
+                child: Text('an error occured'),
+              );
+            }
+          },
+        ));
   }
 }
 

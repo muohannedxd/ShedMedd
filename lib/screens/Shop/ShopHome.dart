@@ -173,7 +173,7 @@ class ShopHome extends StatelessWidget {
                           arguments: SearchArguments('Deals', false));
                     },
                     child: Text(
-                      'Deals',
+                      'View all',
                       style: TextStyle(color: CustomColors.textGrey),
                     ),
                   )
