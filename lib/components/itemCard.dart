@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
@@ -5,12 +6,13 @@ import 'package:shedmedd/constants/textSizes.dart';
 import '../screens/Shop/ItemHome.dart';
 
 class ItemCard extends StatelessWidget {
-  final dynamic item;
+  final DocumentSnapshot<Object?> item;
   final bool isSeller;
   const ItemCard({super.key, required this.item, this.isSeller = false});
 
   @override
   Widget build(BuildContext context) {
+    String itemId = item.id;
     String name = item['name'];
     var price = item['price'];
     String image = item['images'][0];
@@ -22,7 +24,10 @@ class ItemCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ItemHome(itemID: item['id'], isSeller: isSeller ,),
+              builder: (context) => ItemHome(
+                itemID: itemId,
+                isSeller: isSeller,
+              ),
             ),
           );
         },

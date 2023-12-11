@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:shedmedd/controller/items/itemsController.dart';
 import '../../constants/customColors.dart';
 import '../Shop/Home.dart';
 import '../../controller/post_item/category_controller.dart';
@@ -38,12 +37,11 @@ class _PostAnItemState extends State<PostAnItem> {
 
   @override
   Widget build(BuildContext context) {
-    final ItemsController itemsController = Get.put(ItemsController());
 
     void addNewItem() {
       // Add your upload logic here
       // dummy added item
-      Map<String, dynamic> newItem = {
+      /*Map<String, dynamic> newItem = {
         'id': 0,
         'name': 'New Item',
         'category': 'Women',
@@ -52,9 +50,7 @@ class _PostAnItemState extends State<PostAnItem> {
         'price': 380,
         'description': 'This is a new pink item',
         'images': ['pink_shirt3.jpeg', 'pink_shirt2.jpeg'],
-      };
-
-      itemsController.addItem(newItem);
+      };*/
 
       Navigator.push(
         context,

@@ -35,7 +35,7 @@ Map<String, dynamic> clothingItems = {
   'item4': {
     'id': 4,
     'name': 'Spiderman dress',
-    'category': 'Children',
+    'category': 'Kids',
     'subcategory': 'Outfit',
     'condition': 'Good',
     'price': 400,

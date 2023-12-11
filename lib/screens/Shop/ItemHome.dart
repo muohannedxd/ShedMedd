@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/controller/items/itemsController.dart';
+import 'package:shedmedd/database/itemsDB.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
@@ -9,77 +10,91 @@ import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
 
 class ItemHome extends StatelessWidget {
-  final itemID;
+  final String itemID;
   final bool isSeller;
 
   ItemHome({super.key, required this.itemID, this.isSeller = false});
 
-  final ItemsController itemsController = Get.put(ItemsController());
-
   @override
   Widget build(BuildContext context) {
-    dynamic currentItem = itemsController.getItem(itemID);
+    //dynamic currentItem = itemsController.getItem(1);
+    Future<DocumentSnapshot> currentItem = ItemsDatabase().getOneItem(itemID);
 
-    return Stack(children: [
-      Scaffold(
-        body: Center(
-          child: ScrollConfiguration(
-              behavior: BehaviorOfScroll(),
-              child: Scaffold(
-                backgroundColor: CustomColors.bgColor,
-                body: ListView(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 10),
-                      child: Pictures(images: currentItem['images']),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, right: 30, top: 10, bottom: 10),
-                      child: Seller(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, right: 30, top: 20, bottom: 20),
-                      child: ItemInformation(
-                          name: currentItem['name'],
-                          category: currentItem['category'],
-                          subcategory: currentItem['subcategory'],
-                          condition: currentItem['condition'],
-                          price: currentItem['price'],
-                          description: currentItem['description']),
-                    ),
-                  ],
-                ),
-              )),
-        ),
-      ),
+    return Scaffold(
+      body: FutureBuilder(
+          future: currentItem,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('an error occured'),
+              );
+            } else if (snapshot.hasData) {
+              DocumentSnapshot<Object?>? item = snapshot.data;
 
-      // return button
-      Positioned(
-          top: MediaQuery.of(context).size.height * 0.06,
-          left: MediaQuery.of(context).size.width * 0.05,
-          child: ReturnButton()),
+              return Stack(children: [
+                Center(
+                    child: ScrollConfiguration(
+                  behavior: BehaviorOfScroll(),
+                  child: ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 10, bottom: 10),
+                        child: Pictures(images: item?['images']),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, right: 30, top: 10, bottom: 10),
+                        child: Seller(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 30, right: 30, top: 20, bottom: 20),
+                        child: ItemInformation(
+                            name: item?['name'],
+                            category: item?['category'],
+                            subcategory: item?['subcategory'],
+                            condition: item?['condition'],
+                            price: item?['price'],
+                            description: item?['description']),
+                      ),
+                    ],
+                  ),
+                )),
 
-      isSeller
-          ? Positioned(
-              top: MediaQuery.of(context).size.height * 0.06,
-              right: MediaQuery.of(context).size.width * 0.05,
-              child: SettingsButton())
-          : Visibility(visible: false, child: Text('')),
+                // return button
+                Positioned(
+                    top: MediaQuery.of(context).size.height * 0.06,
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    child: ReturnButton()),
 
-      // go to DM button
-      !isSeller
-          ? Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: DirectMessageButton(
-                  name: currentItem['name'], condition: currentItem['condition'], price: currentItem['price']),
-            )
-          : Visibility(visible: false, child: Text('')),
-    ]);
+                isSeller
+                    ? Positioned(
+                        top: MediaQuery.of(context).size.height * 0.06,
+                        right: MediaQuery.of(context).size.width * 0.05,
+                        child: SettingsButton())
+                    : Visibility(visible: false, child: Text('')),
+
+                // go to DM button
+                !isSeller
+                    ? Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: DirectMessageButton(
+                            name: item?['name'],
+                            condition: item?['condition'],
+                            price: item?['price']),
+                      )
+                    : Visibility(visible: false, child: Text('')),
+              ]);
+            } else {
+              return Center(
+                child: CustomCircularProgress(),
+              );
+            }
+          }),
+    );
   }
 }
 

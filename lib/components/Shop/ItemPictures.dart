@@ -10,7 +10,7 @@ class Pictures extends StatelessWidget {
     required this.images,
   });
 
-  final List<String> images;
+  final List<dynamic> images;
 
   @override
   Widget build(BuildContext context) {

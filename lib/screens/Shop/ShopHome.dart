@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/controller/items/itemsController.dart';
+import 'package:shedmedd/database/itemsDB.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
@@ -11,14 +12,15 @@ import '../../components/Shop/CategoryChooser.dart';
 class ShopHome extends StatelessWidget {
   ShopHome({
     super.key,
-    required this.controller,
   });
 
   //final Map<String, dynamic> items;
-  final ItemsController controller;
 
   @override
   Widget build(BuildContext context) {
+    
+    Future<List<DocumentSnapshot>> items = ItemsDatabase().getAllItems();
+
     return ListView(
       children: [
         // category chooser
@@ -62,13 +64,28 @@ class ShopHome extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Obx(
-                      () => Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: controller.items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    )),
+                    child: FutureBuilder(
+                        future: items,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<DocumentSnapshot<Object?>>? itemsList =
+                                snapshot.data;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: itemsList!
+                                  .map((document) => ItemCard(item: document))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('An error occured'),
+                            );
+                          } else {
+                            return Center(
+                              child: CustomCircularProgress(),
+                            );
+                          }
+                        })),
               )
             ],
           ),
@@ -107,13 +124,28 @@ class ShopHome extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Obx(
-                      () => Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: controller.items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    )),
+                    child: FutureBuilder(
+                        future: items,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<DocumentSnapshot<Object?>>? itemsList =
+                                snapshot.data;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: itemsList!
+                                  .map((document) => ItemCard(item: document))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('An error occured'),
+                            );
+                          } else {
+                            return Center(
+                              child: CustomCircularProgress(),
+                            );
+                          }
+                        })),
               ),
             ],
           ),
@@ -152,13 +184,28 @@ class ShopHome extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Obx(
-                      () => Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: controller.items.values
-                              .map((item) => ItemCard(item: item))
-                              .toList()),
-                    )),
+                    child: FutureBuilder(
+                        future: items,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<DocumentSnapshot<Object?>>? itemsList =
+                                snapshot.data;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: itemsList!
+                                  .map((document) => ItemCard(item: document))
+                                  .toList(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('An error occured'),
+                            );
+                          } else {
+                            return Center(
+                              child: CustomCircularProgress(),
+                            );
+                          }
+                        })),
               ),
             ],
           ),
