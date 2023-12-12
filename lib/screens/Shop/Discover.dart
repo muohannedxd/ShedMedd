@@ -37,30 +37,33 @@ class _DiscoverState extends State<Discover> {
               padding: const EdgeInsets.only(
                   left: 30, right: 30, top: 20, bottom: 20),
               child: SearchBar(
-                //constraints: BoxConstraints(
-                //    minWidth: 200, maxWidth: 220, minHeight: 56),
-                hintText: 'Search',
-                hintStyle: MaterialStateProperty.all(TextStyle(
-                    color: CustomColors.textGrey,
-                    fontWeight: FontWeight.w600,
-                    fontSize: TextSizes.small)),
-                backgroundColor: MaterialStateProperty.all(Color(0XFFFAFAFA)),
-                shadowColor:
-                    MaterialStateProperty.all(CustomColors.textPrimary),
-                elevation: MaterialStateProperty.all(2),
-                shape: MaterialStateProperty.all(ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.circular(40))),
-                //controller: controller,
-                padding: const MaterialStatePropertyAll<EdgeInsets>(
-                    EdgeInsets.symmetric(horizontal: 20.0)),
-                onChanged: (_) {
-                  setState(() {
-                    search = _;
-                  });
-                  //print(search);
-                },
-                leading: Image.asset('assets/icons/search_filled.png', width: 22, color: CustomColors.textPrimary.withOpacity(0.4),)
-              )),
+                  //constraints: BoxConstraints(
+                  //    minWidth: 200, maxWidth: 220, minHeight: 56),
+                  hintText: 'Search',
+                  hintStyle: MaterialStateProperty.all(TextStyle(
+                      color: CustomColors.textGrey,
+                      fontWeight: FontWeight.w600,
+                      fontSize: TextSizes.small)),
+                  backgroundColor: MaterialStateProperty.all(Color(0XFFFAFAFA)),
+                  shadowColor:
+                      MaterialStateProperty.all(CustomColors.textPrimary),
+                  elevation: MaterialStateProperty.all(2),
+                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(40))),
+                  //controller: controller,
+                  padding: const MaterialStatePropertyAll<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 20.0)),
+                  onChanged: (_) {
+                    setState(() {
+                      search = _;
+                    });
+                    //print(search);
+                  },
+                  leading: Image.asset(
+                    'assets/icons/search_filled.png',
+                    width: 22,
+                    color: CustomColors.textPrimary.withOpacity(0.4),
+                  ))),
           Expanded(
             child: ListView(
               children: [
@@ -195,29 +198,34 @@ class _MainCategoryState extends State<MainCategory> {
                 child: Column(
                   children: [
                     SubCategory(
-                        category: widget.category,
-                        subcategory: 'Tops',
-                        itemsNumber: 40),
+                      category: widget.category,
+                      subcategory: 'Tops',
+                      //itemsNumber: 40
+                    ),
                     DividerWidget(),
                     SubCategory(
-                        category: widget.category,
-                        subcategory: 'Pants',
-                        itemsNumber: 42),
+                      category: widget.category,
+                      subcategory: 'Pants',
+                      //itemsNumber: 42
+                    ),
                     DividerWidget(),
                     SubCategory(
-                        category: widget.category,
-                        subcategory: 'Shoes',
-                        itemsNumber: 40),
+                      category: widget.category,
+                      subcategory: 'Shoes',
+                      //itemsNumber: 40
+                    ),
                     DividerWidget(),
                     SubCategory(
-                        category: widget.category,
-                        subcategory: 'Outfits',
-                        itemsNumber: 12),
+                      category: widget.category,
+                      subcategory: 'Outfits',
+                      //itemsNumber: 12
+                    ),
                     DividerWidget(),
                     SubCategory(
-                        category: widget.category,
-                        subcategory: 'Others',
-                        itemsNumber: 122),
+                      category: widget.category,
+                      subcategory: 'Others',
+                      //itemsNumber: 122
+                    ),
                     DividerWidget(),
                   ],
                 ),
@@ -231,12 +239,13 @@ class _MainCategoryState extends State<MainCategory> {
 class SubCategory extends StatelessWidget {
   final String category;
   final String subcategory;
-  final int itemsNumber;
-  const SubCategory(
-      {super.key,
-      required this.category,
-      required this.subcategory,
-      required this.itemsNumber});
+  //final int itemsNumber;
+  const SubCategory({
+    super.key,
+    required this.category,
+    required this.subcategory,
+    //required this.itemsNumber
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -253,12 +262,13 @@ class SubCategory extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/discover/results',
-                  arguments: SearchArguments('${category} ${subcategory}', false));
+                  arguments:
+                      SearchArguments('${category} ${subcategory}', false));
             },
             child: Row(
               children: [
                 Text(
-                  itemsNumber.toString() + ' items',
+                  'Browse all',
                   style: TextStyle(color: CustomColors.textGrey),
                 ),
                 SizedBox(
