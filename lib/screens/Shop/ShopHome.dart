@@ -21,6 +21,18 @@ class ShopHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /**
+     * number of shown item in each category
+     */
+    final int showCount = 10;
+
+    /**
+     * To display data when widget first loads 
+     */
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      chooserController.updateCategoryChooser(chooserController.category.value);
+    });
+
     return ListView(
       children: [
         // category chooser
@@ -74,6 +86,7 @@ class ShopHome extends StatelessWidget {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: itemsList!
+                                      .take(showCount)
                                       .map((document) =>
                                           ItemCard(item: document))
                                       .toList(),
@@ -135,6 +148,7 @@ class ShopHome extends StatelessWidget {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: itemsList!
+                                  .take(showCount)
                                   .map((document) => ItemCard(item: document))
                                   .toList(),
                             );
@@ -195,6 +209,7 @@ class ShopHome extends StatelessWidget {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: itemsList!
+                                  .take(showCount)
                                   .map((document) => ItemCard(item: document))
                                   .toList(),
                             );
