@@ -78,7 +78,7 @@ class ShopHome extends StatelessWidget {
                     () => Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: FutureBuilder(
-                            future: chooserController.categoryItems.value,
+                            future: chooserController.items.value,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 List<DocumentSnapshot<Object?>>? itemsList =
@@ -140,7 +140,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.categoryItems.value,
+                        future: chooserController.items.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
@@ -201,7 +201,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.categoryItems.value,
+                        future: chooserController.items.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
