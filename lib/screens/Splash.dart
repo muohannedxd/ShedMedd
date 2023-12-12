@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
+import '../config/animatedPageRouteBuilder.dart';
 import '../constants/customColors.dart';
 
 class Splash extends StatefulWidget {
@@ -12,26 +13,15 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-  super.initState();
-  Future.delayed(Duration(seconds: 2), () {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration(seconds: 1),
-        pageBuilder: (_, __, ___) => Shop(currentIndex: 0),
-        transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1.0, 0.0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          );
-        },
-      ),
-    );
-  });
-}
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        AnimatedPageRouteBuilder(Shop(currentIndex: 0)),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
