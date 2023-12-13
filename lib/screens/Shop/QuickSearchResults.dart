@@ -127,7 +127,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       'minPrice': _selectedRange.start,
       'maxPrice': _selectedRange.end
     };
-    Future<List<DocumentSnapshot>> filteredItems = ItemsDatabase().getFilteredItems(filters);
+    Future<List<DocumentSnapshot>> filteredItems =
+        ItemsDatabase().getFilteredItems(filters);
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -454,29 +455,17 @@ class _QuickSearchResults extends State<QuickSearchResults> {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Button(
-                    action: resetFilters,
-                    title: 'Reset',
-                    xPadding: 20,
-                    background: CustomColors.bgColor,
-                    textColor: CustomColors.textPrimary,
-                    borderColor: CustomColors.grey,
-                  ),
-                  Builder(builder: (context) {
-                    return Button(
-                      action: () {
-                        Scaffold.of(context).closeEndDrawer();
-                      },
-                      title: 'Apply',
-                      xPadding: 20,
-                      background: CustomColors.buttonPrimary,
-                    );
-                  }),
-                ],
-              ),
+              Container(
+                width: double.infinity,
+                child: Button(
+                  action: resetFilters,
+                  title: 'Reset',
+                  xPadding: 20,
+                  background: CustomColors.bgColor,
+                  textColor: CustomColors.textPrimary,
+                  borderColor: CustomColors.grey,
+                ),
+              )
             ],
           ),
         ),
