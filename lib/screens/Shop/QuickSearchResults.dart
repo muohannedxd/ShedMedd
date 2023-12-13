@@ -10,20 +10,24 @@ import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 
-class SearchResults extends StatefulWidget {
-  const SearchResults({super.key});
+class QuickSearchResults extends StatefulWidget {
+  const QuickSearchResults({super.key});
 
   @override
-  State<SearchResults> createState() => _SearchResultsState();
+  State<QuickSearchResults> createState() => _QuickSearchResults();
 }
 
-class _SearchResultsState extends State<SearchResults> {
-
+class _QuickSearchResults extends State<QuickSearchResults> {
   // price
   RangeValues _selectedRange = RangeValues(0, 10000);
+  //final ItemsController itemsController = Get.put(ItemsController());
 
   // category
   List<DropdownMenuItem> categories = [
+    DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
     DropdownMenuItem(
       child: Text('Men'),
       value: 'Men',
@@ -40,8 +44,11 @@ class _SearchResultsState extends State<SearchResults> {
   String selectedCategory = 'Men';
 
   // sub category
-  // category
   List<DropdownMenuItem> subcategories = [
+    DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
     DropdownMenuItem(
       child: Text('Tops'),
       value: 'Tops',
@@ -68,6 +75,10 @@ class _SearchResultsState extends State<SearchResults> {
   // condition
   List<DropdownMenuItem> conditions = [
     DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
+    DropdownMenuItem(
       child: Text('New with tags'),
       value: 'New with tags',
     ),
@@ -88,19 +99,13 @@ class _SearchResultsState extends State<SearchResults> {
       value: 'Satisfactory',
     ),
   ];
-  String selectedCondition = 'Very good';
+  String selectedCondition = 'All';
 
   void resetFilters() {
     _selectedRange = RangeValues(0, 10000);
     selectedCategory = 'Men';
     selectedSubcategory = 'Tops';
-    selectedCondition = 'Very good';
-    setState(() {});
-  }
-
-  void applyFilters() {
-    print(
-        'submitting:\nPrice Between: ${_selectedRange.start.toStringAsFixed(0)} DZD - ${_selectedRange.end.toStringAsFixed(0)} DZD\nCategory: $selectedCategory\nSub Category: $selectedSubcategory\nCondition: $selectedCondition');
+    selectedCondition = 'All';
     setState(() {});
   }
 
@@ -110,11 +115,19 @@ class _SearchResultsState extends State<SearchResults> {
         ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
     final searchKey = arguments.search;
+    selectedCategory = searchKey.split(' ').first;
+    selectedSubcategory = searchKey.split(' ').last;
     final isSeller = arguments.seller;
 
-    Future<List<DocumentSnapshot>> items = ItemsDatabase().getAllItems();
-
     //Map<String, dynamic> items = itemsController.items;
+    Map<String, dynamic> filters = {
+      'category': selectedCategory,
+      'subcategory': selectedSubcategory,
+      'condition': selectedCondition,
+      'minPrice': _selectedRange.start,
+      'maxPrice': _selectedRange.end
+    };
+    Future<List<DocumentSnapshot>> filteredItems = ItemsDatabase().getFilteredItems(filters);
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
@@ -122,7 +135,7 @@ class _SearchResultsState extends State<SearchResults> {
           endDrawer: FilterDrawer(),
           backgroundColor: CustomColors.bgColor,
           body: FutureBuilder(
-              future: items,
+              future: filteredItems,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(
@@ -213,43 +226,41 @@ class _SearchResultsState extends State<SearchResults> {
                           padding: const EdgeInsets.only(
                               left: 30, right: 30, top: 20, bottom: 10),
                           child: SingleChildScrollView(
-                              physics: BouncingScroll(),
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                  children: [
-                                    for (int i = 0;
-                                        i < itemsList!.length;
-                                        i += 2)
-                                      Column(
+                            physics: BouncingScroll(),
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              children: [
+                                for (int i = 0; i < itemsList!.length; i += 2)
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Expanded(
-                                                child: ItemCard(
-                                                  item: itemsList[i],
-                                                  isSeller: isSeller,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              if (i + 1 < itemsList.length)
-                                                Expanded(
-                                                  child: ItemCard(
-                                                    item: itemsList[i + 1],
-                                                    isSeller: isSeller,
-                                                  ),
-                                                ),
-                                            ],
+                                          Expanded(
+                                            child: ItemCard(
+                                              item: itemsList[i],
+                                              isSeller: isSeller,
+                                            ),
                                           ),
-                                          SizedBox(height: 20),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          if (i + 1 < itemsList.length)
+                                            Expanded(
+                                              child: ItemCard(
+                                                item: itemsList[i + 1],
+                                                isSeller: isSeller,
+                                              ),
+                                            ),
                                         ],
                                       ),
-                                  ],
-                                ),
-                              )),
+                                      SizedBox(height: 20),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          )),
 
                       SizedBox(
                         height: 20,
@@ -298,7 +309,7 @@ class _SearchResultsState extends State<SearchResults> {
                 ],
               ),
               SizedBox(height: 20),
-              Divider(),
+              Divider(thickness: 1),
               SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,11 +375,7 @@ class _SearchResultsState extends State<SearchResults> {
                       child: DropdownButton(
                         value: selectedCategory,
                         items: categories,
-                        onChanged: (ValueChanged) {
-                          setState(() {
-                            selectedCategory = ValueChanged;
-                          });
-                        },
+                        onChanged: null, // cannot change here
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -400,11 +407,7 @@ class _SearchResultsState extends State<SearchResults> {
                       child: DropdownButton(
                         value: selectedSubcategory,
                         items: subcategories,
-                        onChanged: (ValueChanged) {
-                          setState(() {
-                            selectedSubcategory = ValueChanged;
-                          });
-                        },
+                        onChanged: null, // cannot change here
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -466,7 +469,6 @@ class _SearchResultsState extends State<SearchResults> {
                     return Button(
                       action: () {
                         Scaffold.of(context).closeEndDrawer();
-                        applyFilters();
                       },
                       title: 'Apply',
                       xPadding: 20,

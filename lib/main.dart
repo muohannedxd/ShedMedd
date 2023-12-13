@@ -9,7 +9,7 @@ import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
 import 'package:shedmedd/screens/Shop/DirectMessage.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
-import 'package:shedmedd/screens/Shop/SearchResults.dart';
+import 'package:shedmedd/screens/Shop/QuickSearchResults.dart';
 import 'package:shedmedd/screens/Splash.dart';
 import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
               currentIndex: 0,
             ),
         '/discover': (context) => Discover(),
-        '/discover/results': (context) => SearchResults(),
+        '/discover/results': (context) => QuickSearchResults(),
         '/signup': (context) => SignUp(),
         '/message': (context) => DirectMessage(),
         '/post_item': (context) => PostAnItem(),

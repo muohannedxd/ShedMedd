@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/controller/items/categoryChooserController.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../components/itemCard.dart';
 import '../../components/Shop/CategoryChooser.dart';
+import '../../controller/items/itemsController.dart';
 
 class ShopHome extends StatelessWidget {
   ShopHome({
@@ -16,8 +16,8 @@ class ShopHome extends StatelessWidget {
   });
 
   //final Map<String, dynamic> items;
-  final CategoryChooserController chooserController =
-      Get.put(CategoryChooserController());
+  final ItemsController itemsController =
+      Get.put(ItemsController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ShopHome extends StatelessWidget {
      * To display data when widget first loads 
      */
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      chooserController.updateCategoryChooser(chooserController.category.value);
+      itemsController.updateCategoryChooser(itemsController.category.value);
     });
 
     return ListView(
@@ -39,7 +39,7 @@ class ShopHome extends StatelessWidget {
         Padding(
           padding:
               const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child: CategoryChooser(controller: chooserController),
+          child: CategoryChooser(controller: itemsController),
         ),
 
         // Feature Products
@@ -78,7 +78,7 @@ class ShopHome extends StatelessWidget {
                     () => Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: FutureBuilder(
-                            future: chooserController.items.value,
+                            future: itemsController.categoriedItems.value,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 List<DocumentSnapshot<Object?>>? itemsList =
@@ -140,7 +140,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.items.value,
+                        future: itemsController.categoriedItems.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
@@ -201,7 +201,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.items.value,
+                        future: itemsController.categoriedItems.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
