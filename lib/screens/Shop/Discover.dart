@@ -263,7 +263,7 @@ class SubCategory extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, '/discover/results',
                   arguments:
-                      SearchArguments('${category} ${subcategory}', false));
+                      SearchArguments('${category} ${subcategory}', false, false));
             },
             child: Row(
               children: [

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/firebase_options.dart';
+import 'package:shedmedd/database/firebase_options.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
 import 'package:shedmedd/screens/Shop/DirectMessage.dart';

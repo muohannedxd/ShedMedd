@@ -62,7 +62,7 @@ class ShopHome extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
                           arguments:
-                              SearchArguments('Feature Products', false));
+                              SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'Show all',
@@ -125,7 +125,7 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('Recommended', false));
+                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'Show all',
@@ -186,7 +186,7 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('Deals', false));
+                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'View all',

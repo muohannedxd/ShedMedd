@@ -41,7 +41,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       value: 'Kids',
     ),
   ];
-  String selectedCategory = 'Men';
+  String selectedCategory = 'All';
 
   // sub category
   List<DropdownMenuItem> subcategories = [
@@ -70,7 +70,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       value: 'Others',
     ),
   ];
-  String selectedSubcategory = 'Tops';
+  String selectedSubcategory = 'All';
 
   // condition
   List<DropdownMenuItem> conditions = [
@@ -103,8 +103,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
   void resetFilters() {
     _selectedRange = RangeValues(0, 10000);
-    selectedCategory = 'Men';
-    selectedSubcategory = 'Tops';
+    selectedCategory = 'All';
+    selectedSubcategory = 'All';
     selectedCondition = 'All';
     setState(() {});
   }
@@ -115,8 +115,11 @@ class _QuickSearchResults extends State<QuickSearchResults> {
         ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
     final searchKey = arguments.search;
-    selectedCategory = searchKey.split(' ').first;
-    selectedSubcategory = searchKey.split(' ').last;
+    final searchBar = arguments.searchBar;
+    if (!searchBar) {
+      selectedCategory = searchKey.split(' ').first;
+      selectedSubcategory = searchKey.split(' ').last;
+    }
     final isSeller = arguments.seller;
 
     //Map<String, dynamic> items = itemsController.items;
@@ -133,7 +136,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-          endDrawer: FilterDrawer(),
+          endDrawer: FilterDrawer(searchBar),
           backgroundColor: CustomColors.bgColor,
           body: FutureBuilder(
               future: filteredItems,
@@ -277,7 +280,24 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     );
   }
 
-  SafeArea FilterDrawer() {
+  SafeArea FilterDrawer(bool isSearchBar) {
+    /*Function? changeCategory = (newValue) {
+      selectedCategory = newValue;
+      setState(() {
+        
+      });
+    };
+    Function? changeSubcategory = (newValue) {
+      selectedSubcategory = newValue;
+      setState(() {
+        
+      });
+    };
+    if (!isSearchBar) {
+      changeCategory = null;
+      changeSubcategory = null;
+    }*/
+
     return SafeArea(
       child: Drawer(
         backgroundColor: CustomColors.bgColor,
@@ -373,10 +393,16 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                         border: Border.all(color: CustomColors.grey)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: DropdownButton(
+                      child: DropdownButton<dynamic>(
                         value: selectedCategory,
                         items: categories,
-                        onChanged: null, // cannot change here
+                        onChanged: !isSearchBar
+                            ? null
+                            : (ValueChanged) {
+                                setState(() {
+                                  selectedCategory = ValueChanged;
+                                });
+                              },
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -405,10 +431,16 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                         border: Border.all(color: CustomColors.grey)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: DropdownButton(
+                      child: DropdownButton<dynamic>(
                         value: selectedSubcategory,
                         items: subcategories,
-                        onChanged: null, // cannot change here
+                        onChanged: !isSearchBar
+                            ? null
+                            : (ValueChanged) {
+                                setState(() {
+                                  selectedSubcategory = ValueChanged;
+                                });
+                              },
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -455,17 +487,29 @@ class _QuickSearchResults extends State<QuickSearchResults> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                width: double.infinity,
-                child: Button(
-                  action: resetFilters,
-                  title: 'Reset',
-                  xPadding: 20,
-                  background: CustomColors.bgColor,
-                  textColor: CustomColors.textPrimary,
-                  borderColor: CustomColors.grey,
-                ),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Button(
+                    action: resetFilters,
+                    title: 'Reset',
+                    xPadding: 20,
+                    background: CustomColors.bgColor,
+                    textColor: CustomColors.textPrimary,
+                    borderColor: CustomColors.grey,
+                  ),
+                  Builder(builder: (context) {
+                    return Button(
+                      action: () {
+                        Scaffold.of(context).closeEndDrawer();
+                      },
+                      title: 'Apply',
+                      xPadding: 20,
+                      background: CustomColors.buttonPrimary,
+                    );
+                  }),
+                ],
+              ),
             ],
           ),
         ),
