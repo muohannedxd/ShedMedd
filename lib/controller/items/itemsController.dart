@@ -20,12 +20,16 @@ class ItemsController extends GetxController {
   }
 
   void filterItems(
-      {String category = 'All',
-      String subcategory = 'All',
-      String condition = 'All',
-      double minPrice = 0,
-      double maxPrice = 10000}) {
+      {
+        String name = 'All',
+        String category = 'All',
+        String subcategory = 'All',
+        String condition = 'All',
+        double minPrice = 0,
+        double maxPrice = 10000
+      }) {
     Map<String, dynamic> filters = {
+      'name': name,
       'category': category,
       'subcategory': subcategory,
       'condition': condition,

@@ -516,18 +516,26 @@ class ReturnButton extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 18,
-            )),
-        Text(
-          searchKey,
-          style: TextStyle(
-              color: CustomColors.textPrimary,
-              fontSize: TextSizes.medium,
-              fontWeight: FontWeight.bold),
-        )
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 18,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
+              searchKey,
+              style: TextStyle(
+                color: CustomColors.textPrimary,
+                fontSize: TextSizes.medium,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.visible,
+            ),
+          ),
+        ),
       ],
     );
   }

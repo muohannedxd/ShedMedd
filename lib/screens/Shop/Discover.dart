@@ -14,7 +14,7 @@ class Discover extends StatefulWidget {
 }
 
 class _DiscoverState extends State<Discover> {
-  String search = "";
+  String searchController = '';
   List<bool> showSubCategory = [false, false, false];
 
   void toggleSubcategories(int index) {
@@ -24,6 +24,19 @@ class _DiscoverState extends State<Discover> {
       }
       showSubCategory[index] = !showSubCategory[index];
     });
+  }
+
+  void submitSearch(String search) {
+    setState(() {
+      searchController = search;
+    });
+    if (!searchController.isEmpty) {
+      Navigator.pushNamed(
+        context,
+        '/discover/results',
+        arguments: SearchArguments('$searchController', false, true),
+      );
+    }
   }
 
   @override
@@ -37,8 +50,7 @@ class _DiscoverState extends State<Discover> {
               padding: const EdgeInsets.only(
                   left: 30, right: 30, top: 20, bottom: 20),
               child: SearchBar(
-                  //constraints: BoxConstraints(
-                  //    minWidth: 200, maxWidth: 220, minHeight: 56),
+                  onSubmitted: (value) => submitSearch(value),
                   hintText: 'Search',
                   hintStyle: MaterialStateProperty.all(TextStyle(
                       color: CustomColors.textGrey,
@@ -53,12 +65,6 @@ class _DiscoverState extends State<Discover> {
                   //controller: controller,
                   padding: const MaterialStatePropertyAll<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 20.0)),
-                  onChanged: (_) {
-                    setState(() {
-                      search = _;
-                    });
-                    //print(search);
-                  },
                   leading: Image.asset(
                     'assets/icons/search_filled.png',
                     width: 22,
@@ -262,8 +268,8 @@ class SubCategory extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/discover/results',
-                  arguments:
-                      SearchArguments('${category} ${subcategory}', false, false));
+                  arguments: SearchArguments(
+                      '${category} ${subcategory}', false, false));
             },
             child: Row(
               children: [

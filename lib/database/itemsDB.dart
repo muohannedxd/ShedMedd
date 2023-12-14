@@ -31,7 +31,11 @@ class ItemsDatabase {
       Map<String, dynamic> appliedFilters) async {
     Map<String, dynamic> filters = appliedFilters;
     Query filteredQuery = items;
-
+    
+    String namePattern = ".*{filters['name']}.*";
+    if (filters['name'] != 'All') {
+      filteredQuery.where('name', whereIn: [namePattern]);
+    }
     if (filters['category'] != 'All') {
       filteredQuery =
           filteredQuery.where('category', isEqualTo: filters['category']);
