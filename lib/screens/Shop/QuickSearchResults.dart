@@ -281,23 +281,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
   }
 
   SafeArea FilterDrawer(bool isSearchBar) {
-    /*Function? changeCategory = (newValue) {
-      selectedCategory = newValue;
-      setState(() {
-        
-      });
-    };
-    Function? changeSubcategory = (newValue) {
-      selectedSubcategory = newValue;
-      setState(() {
-        
-      });
-    };
-    if (!isSearchBar) {
-      changeCategory = null;
-      changeSubcategory = null;
-    }*/
-
     return SafeArea(
       child: Drawer(
         backgroundColor: CustomColors.bgColor,
