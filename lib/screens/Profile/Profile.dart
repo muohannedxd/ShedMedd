@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
                 // My Products
                 _buildOptionItem('shopping_bag.png', 'My Products', () {
                   Navigator.pushNamed(context, '/discover/results',
-                      arguments: SearchArguments('My Products', true));
+                      arguments: SearchArguments('My Products', true, true));
                 }),
                 Divider(),
                 // Rate This App

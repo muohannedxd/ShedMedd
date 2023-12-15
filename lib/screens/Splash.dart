@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
+import '../config/animatedPageRouteBuilder.dart';
 import '../constants/customColors.dart';
 
 class Splash extends StatefulWidget {
@@ -12,21 +14,24 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/shop');
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        AnimatedPageRouteBuilder(Shop(currentIndex: 0)),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.buttonPrimary.withOpacity(0.8),
+      backgroundColor: CustomColors.bgColor,
       body: Center(
         child: Image.asset(
-          'assets/icons/logo_white_large.png',
-          width: 140,
-          height: 140,
+          'assets/icons/logo_large.png',
+          width: 160,
+          height: 160,
+          color: CustomColors.textPrimary.withOpacity(0.86),
         ),
       ),
     );

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/controller/items/categoryChooserController.dart';
+import 'package:shedmedd/controller/items/itemsController.dart';
 
 class CategoryChooser extends StatelessWidget {
   CategoryChooser({super.key, required this.controller});
 
-  final CategoryChooserController controller;
+  final ItemsController controller;
 
   @override
   Widget build(BuildContext context) {

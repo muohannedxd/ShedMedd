@@ -55,7 +55,7 @@ class Seller extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
+                    user?['location'] != '' ? Container(
                       width: 200,
                       child: Text(
                         user?['location'],
@@ -64,7 +64,7 @@ class Seller extends StatelessWidget {
                             fontSize: TextSizes.small,
                             color: CustomColors.textPrimary),
                       ),
-                    )
+                    ) : Visibility(visible: false, child: Text(''))
                   ],
                 ),
               ),
