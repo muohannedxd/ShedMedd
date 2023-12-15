@@ -72,6 +72,10 @@ class UsersDatabase {
           'email': emailAddress,
           'password': hashedPassword,
           'isSeller': false,
+          'location': '',
+          'phone':'',
+          'profile_pic':'',
+          'rate':''
         };
 
         // Add user data to the database
