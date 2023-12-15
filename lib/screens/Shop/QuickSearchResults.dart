@@ -10,20 +10,24 @@ import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 
-class SearchResults extends StatefulWidget {
-  const SearchResults({super.key});
+class QuickSearchResults extends StatefulWidget {
+  const QuickSearchResults({super.key});
 
   @override
-  State<SearchResults> createState() => _SearchResultsState();
+  State<QuickSearchResults> createState() => _QuickSearchResults();
 }
 
-class _SearchResultsState extends State<SearchResults> {
-
+class _QuickSearchResults extends State<QuickSearchResults> {
   // price
   RangeValues _selectedRange = RangeValues(0, 10000);
+  //final ItemsController itemsController = Get.put(ItemsController());
 
   // category
   List<DropdownMenuItem> categories = [
+    DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
     DropdownMenuItem(
       child: Text('Men'),
       value: 'Men',
@@ -37,11 +41,14 @@ class _SearchResultsState extends State<SearchResults> {
       value: 'Kids',
     ),
   ];
-  String selectedCategory = 'Men';
+  String selectedCategory = 'All';
 
   // sub category
-  // category
   List<DropdownMenuItem> subcategories = [
+    DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
     DropdownMenuItem(
       child: Text('Tops'),
       value: 'Tops',
@@ -63,10 +70,14 @@ class _SearchResultsState extends State<SearchResults> {
       value: 'Others',
     ),
   ];
-  String selectedSubcategory = 'Tops';
+  String selectedSubcategory = 'All';
 
   // condition
   List<DropdownMenuItem> conditions = [
+    DropdownMenuItem(
+      child: Text('All'),
+      value: 'All',
+    ),
     DropdownMenuItem(
       child: Text('New with tags'),
       value: 'New with tags',
@@ -88,19 +99,13 @@ class _SearchResultsState extends State<SearchResults> {
       value: 'Satisfactory',
     ),
   ];
-  String selectedCondition = 'Very good';
+  String selectedCondition = 'All';
 
   void resetFilters() {
     _selectedRange = RangeValues(0, 10000);
-    selectedCategory = 'Men';
-    selectedSubcategory = 'Tops';
-    selectedCondition = 'Very good';
-    setState(() {});
-  }
-
-  void applyFilters() {
-    print(
-        'submitting:\nPrice Between: ${_selectedRange.start.toStringAsFixed(0)} DZD - ${_selectedRange.end.toStringAsFixed(0)} DZD\nCategory: $selectedCategory\nSub Category: $selectedSubcategory\nCondition: $selectedCondition');
+    selectedCategory = 'All';
+    selectedSubcategory = 'All';
+    selectedCondition = 'All';
     setState(() {});
   }
 
@@ -109,20 +114,38 @@ class _SearchResultsState extends State<SearchResults> {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
-    final searchKey = arguments.search;
+    var searchKey = arguments.search;
+    final searchBar = arguments.searchBar;
+    if (!searchBar) {
+      selectedCategory = searchKey.split(' ').first;
+      selectedSubcategory = searchKey.split(' ').last;
+    }
     final isSeller = arguments.seller;
 
-    Future<List<DocumentSnapshot>> items = ItemsDatabase().getAllItems();
-
     //Map<String, dynamic> items = itemsController.items;
+    Map<String, dynamic> filters = {
+      'name': searchKey,
+      'category': selectedCategory,
+      'subcategory': selectedSubcategory,
+      'condition': selectedCondition,
+      'minPrice': _selectedRange.start,
+      'maxPrice': _selectedRange.end
+    };
+    Future<List<DocumentSnapshot>> filteredItems;
+
+    if (searchBar) {
+      filteredItems = ItemsDatabase().getSpecificItems(filters);
+    } else {
+      filteredItems = ItemsDatabase().getFilteredItems(filters);
+    }
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),
       child: Scaffold(
-          endDrawer: FilterDrawer(),
+          endDrawer: FilterDrawer(searchBar),
           backgroundColor: CustomColors.bgColor,
           body: FutureBuilder(
-              future: items,
+              future: filteredItems,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(
@@ -213,43 +236,41 @@ class _SearchResultsState extends State<SearchResults> {
                           padding: const EdgeInsets.only(
                               left: 30, right: 30, top: 20, bottom: 10),
                           child: SingleChildScrollView(
-                              physics: BouncingScroll(),
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                  children: [
-                                    for (int i = 0;
-                                        i < itemsList!.length;
-                                        i += 2)
-                                      Column(
+                            physics: BouncingScroll(),
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              children: [
+                                for (int i = 0; i < itemsList!.length; i += 2)
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Expanded(
-                                                child: ItemCard(
-                                                  item: itemsList[i],
-                                                  isSeller: isSeller,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              if (i + 1 < itemsList.length)
-                                                Expanded(
-                                                  child: ItemCard(
-                                                    item: itemsList[i + 1],
-                                                    isSeller: isSeller,
-                                                  ),
-                                                ),
-                                            ],
+                                          Expanded(
+                                            child: ItemCard(
+                                              item: itemsList[i],
+                                              isSeller: isSeller,
+                                            ),
                                           ),
-                                          SizedBox(height: 20),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          if (i + 1 < itemsList.length)
+                                            Expanded(
+                                              child: ItemCard(
+                                                item: itemsList[i + 1],
+                                                isSeller: isSeller,
+                                              ),
+                                            ),
                                         ],
                                       ),
-                                  ],
-                                ),
-                              )),
+                                      SizedBox(height: 20),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          )),
 
                       SizedBox(
                         height: 20,
@@ -265,7 +286,7 @@ class _SearchResultsState extends State<SearchResults> {
     );
   }
 
-  SafeArea FilterDrawer() {
+  SafeArea FilterDrawer(bool isSearchBar) {
     return SafeArea(
       child: Drawer(
         backgroundColor: CustomColors.bgColor,
@@ -298,7 +319,7 @@ class _SearchResultsState extends State<SearchResults> {
                 ],
               ),
               SizedBox(height: 20),
-              Divider(),
+              Divider(thickness: 1),
               SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,14 +382,16 @@ class _SearchResultsState extends State<SearchResults> {
                         border: Border.all(color: CustomColors.grey)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: DropdownButton(
+                      child: DropdownButton<dynamic>(
                         value: selectedCategory,
                         items: categories,
-                        onChanged: (ValueChanged) {
-                          setState(() {
-                            selectedCategory = ValueChanged;
-                          });
-                        },
+                        onChanged: !isSearchBar
+                            ? null
+                            : (ValueChanged) {
+                                setState(() {
+                                  selectedCategory = ValueChanged;
+                                });
+                              },
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -397,14 +420,16 @@ class _SearchResultsState extends State<SearchResults> {
                         border: Border.all(color: CustomColors.grey)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: DropdownButton(
+                      child: DropdownButton<dynamic>(
                         value: selectedSubcategory,
                         items: subcategories,
-                        onChanged: (ValueChanged) {
-                          setState(() {
-                            selectedSubcategory = ValueChanged;
-                          });
-                        },
+                        onChanged: !isSearchBar
+                            ? null
+                            : (ValueChanged) {
+                                setState(() {
+                                  selectedSubcategory = ValueChanged;
+                                });
+                              },
                         isExpanded: true,
                         underline: Container(),
                       ),
@@ -466,7 +491,6 @@ class _SearchResultsState extends State<SearchResults> {
                     return Button(
                       action: () {
                         Scaffold.of(context).closeEndDrawer();
-                        applyFilters();
                       },
                       title: 'Apply',
                       xPadding: 20,
@@ -498,18 +522,26 @@ class ReturnButton extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 18,
-            )),
-        Text(
-          searchKey,
-          style: TextStyle(
-              color: CustomColors.textPrimary,
-              fontSize: TextSizes.medium,
-              fontWeight: FontWeight.bold),
-        )
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 18,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
+              searchKey,
+              style: TextStyle(
+                color: CustomColors.textPrimary,
+                fontSize: TextSizes.medium,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.visible,
+            ),
+          ),
+        ),
       ],
     );
   }

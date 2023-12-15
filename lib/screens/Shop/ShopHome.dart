@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/controller/items/categoryChooserController.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../components/itemCard.dart';
 import '../../components/Shop/CategoryChooser.dart';
+import '../../controller/items/itemsController.dart';
 
 class ShopHome extends StatelessWidget {
   ShopHome({
@@ -16,18 +16,30 @@ class ShopHome extends StatelessWidget {
   });
 
   //final Map<String, dynamic> items;
-  final CategoryChooserController chooserController =
-      Get.put(CategoryChooserController());
+  final ItemsController itemsController =
+      Get.put(ItemsController());
 
   @override
   Widget build(BuildContext context) {
+    /**
+     * number of shown item in each category
+     */
+    final int showCount = 10;
+
+    /**
+     * To display data when widget first loads 
+     */
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      itemsController.updateCategoryChooser(itemsController.category.value);
+    });
+
     return ListView(
       children: [
         // category chooser
         Padding(
           padding:
               const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child: CategoryChooser(controller: chooserController),
+          child: CategoryChooser(controller: itemsController),
         ),
 
         // Feature Products
@@ -50,7 +62,7 @@ class ShopHome extends StatelessWidget {
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
                           arguments:
-                              SearchArguments('Feature Products', false));
+                              SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'Show all',
@@ -66,7 +78,7 @@ class ShopHome extends StatelessWidget {
                     () => Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: FutureBuilder(
-                            future: chooserController.categoryItems.value,
+                            future: itemsController.categoriedItems.value,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 List<DocumentSnapshot<Object?>>? itemsList =
@@ -74,6 +86,7 @@ class ShopHome extends StatelessWidget {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: itemsList!
+                                      .take(showCount)
                                       .map((document) =>
                                           ItemCard(item: document))
                                       .toList(),
@@ -112,7 +125,7 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('Recommended', false));
+                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'Show all',
@@ -127,7 +140,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.categoryItems.value,
+                        future: itemsController.categoriedItems.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
@@ -135,6 +148,7 @@ class ShopHome extends StatelessWidget {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: itemsList!
+                                  .take(showCount)
                                   .map((document) => ItemCard(item: document))
                                   .toList(),
                             );
@@ -172,7 +186,7 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('Deals', false));
+                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
                     },
                     child: Text(
                       'View all',
@@ -187,7 +201,7 @@ class ShopHome extends StatelessWidget {
                 child: Obx(() => Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: FutureBuilder(
-                        future: chooserController.categoryItems.value,
+                        future: itemsController.categoriedItems.value,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
@@ -195,6 +209,7 @@ class ShopHome extends StatelessWidget {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: itemsList!
+                                  .take(showCount)
                                   .map((document) => ItemCard(item: document))
                                   .toList(),
                             );
