@@ -53,13 +53,12 @@ class ItemsDatabase {
   }
 
   Future<List<DocumentSnapshot>> getSpecificItems(
-      Map<String, dynamic> appliedFilters) async {
+    Map<String, dynamic> appliedFilters,
+  ) async {
     Map<String, dynamic> filters = appliedFilters;
-    Query filteredQuery = items;
+    Query filteredQuery = FirebaseFirestore.instance.collection('items');
 
-    filteredQuery = filteredQuery.where('name',
-        isEqualTo: filters['name']);
-
+    // Combine all filter criteria into a single compound condition
     if (filters['category'] != 'All') {
       filteredQuery =
           filteredQuery.where('category', isEqualTo: filters['category']);
@@ -76,7 +75,23 @@ class ItemsDatabase {
         isGreaterThanOrEqualTo: filters['minPrice'],
         isLessThanOrEqualTo: filters['maxPrice']);
 
+    // Fetch all documents
     QuerySnapshot snapshot = await filteredQuery.get();
+
+    // Search by name or description
+    String searchKey = filters['name'];
+    if (searchKey.isNotEmpty) {
+      String lowerCaseSearchKey = searchKey.toLowerCase();
+      List<DocumentSnapshot> filteredDocs = snapshot.docs.where((doc) {
+        String itemName = doc['name'].toString().toLowerCase();
+        String itemDescription = doc['description'].toString().toLowerCase();
+        return itemName.contains(lowerCaseSearchKey) ||
+            itemDescription.contains(lowerCaseSearchKey);
+      }).toList();
+
+      return filteredDocs;
+    }
+
     return snapshot.docs;
   }
 }
