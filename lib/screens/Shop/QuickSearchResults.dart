@@ -114,7 +114,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
-    final searchKey = arguments.search;
+    var searchKey = arguments.search;
     final searchBar = arguments.searchBar;
     if (!searchBar) {
       selectedCategory = searchKey.split(' ').first;
@@ -124,14 +124,20 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
     //Map<String, dynamic> items = itemsController.items;
     Map<String, dynamic> filters = {
+      'name': searchKey,
       'category': selectedCategory,
       'subcategory': selectedSubcategory,
       'condition': selectedCondition,
       'minPrice': _selectedRange.start,
       'maxPrice': _selectedRange.end
     };
-    Future<List<DocumentSnapshot>> filteredItems =
-        ItemsDatabase().getFilteredItems(filters);
+    Future<List<DocumentSnapshot>> filteredItems;
+
+    if (searchBar) {
+      filteredItems = ItemsDatabase().getSpecificItems(filters);
+    } else {
+      filteredItems = ItemsDatabase().getFilteredItems(filters);
+    }
 
     return ScrollConfiguration(
       behavior: BehaviorOfScroll(),

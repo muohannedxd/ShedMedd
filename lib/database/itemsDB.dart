@@ -31,11 +31,35 @@ class ItemsDatabase {
       Map<String, dynamic> appliedFilters) async {
     Map<String, dynamic> filters = appliedFilters;
     Query filteredQuery = items;
-    
-    String namePattern = ".*{filters['name']}.*";
-    if (filters['name'] != 'All') {
-      filteredQuery.where('name', whereIn: [namePattern]);
+
+    if (filters['category'] != 'All') {
+      filteredQuery =
+          filteredQuery.where('category', isEqualTo: filters['category']);
     }
+    if (filters['subcategory'] != 'All') {
+      filteredQuery =
+          filteredQuery.where('subcategory', isEqualTo: filters['subcategory']);
+    }
+    if (filters['condition'] != 'All') {
+      filteredQuery =
+          filteredQuery.where('condition', isEqualTo: filters['condition']);
+    }
+    filteredQuery = filteredQuery.where('price',
+        isGreaterThanOrEqualTo: filters['minPrice'],
+        isLessThanOrEqualTo: filters['maxPrice']);
+
+    QuerySnapshot snapshot = await filteredQuery.get();
+    return snapshot.docs;
+  }
+
+  Future<List<DocumentSnapshot>> getSpecificItems(
+      Map<String, dynamic> appliedFilters) async {
+    Map<String, dynamic> filters = appliedFilters;
+    Query filteredQuery = items;
+
+    filteredQuery = filteredQuery.where('name',
+        isEqualTo: filters['name']);
+
     if (filters['category'] != 'All') {
       filteredQuery =
           filteredQuery.where('category', isEqualTo: filters['category']);
