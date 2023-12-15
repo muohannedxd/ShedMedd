@@ -497,19 +497,39 @@ class ReturnButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 18,
-            )),
-        Text(
-          searchKey,
-          style: TextStyle(
-              color: CustomColors.textPrimary,
-              fontSize: TextSizes.medium,
-              fontWeight: FontWeight.bold),
-        )
+        Container(
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          Material(
+            elevation: 1,
+            shape: CircleBorder(),
+            color: Colors.white,
+            child: Container(
+              width: 36,
+              height: 36,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  size: 15,
+                ),
+                onPressed: () {
+                  // Navigate back when the button is pressed
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Text(
+            searchKey,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+    )
       ],
     );
   }

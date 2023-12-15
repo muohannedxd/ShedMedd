@@ -15,6 +15,7 @@ class BackHeaderWidget extends StatelessWidget {
           Material(
             elevation: 1,
             shape: CircleBorder(),
+            color: Colors.white,
             child: Container(
               width: 36,
               height: 36,

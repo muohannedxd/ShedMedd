@@ -14,6 +14,7 @@ import 'package:shedmedd/screens/Splash.dart';
 import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   // firebase
@@ -28,8 +29,25 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  void initState() {
+    
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override

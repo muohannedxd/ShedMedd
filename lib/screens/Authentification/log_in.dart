@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
+import '../../database/usersDB.dart';
+import '../Shop/Home.dart';
+
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
 
@@ -12,6 +15,14 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   Color LogInButtonColor = Color(0xFF2D201C);
+  bool obscurePassword = true;
+  String errorMessage = '';
+  String emailError = '';
+  String passwordError = '';
+  // Controllers for handling input values
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +50,35 @@ class _LogInState extends State<LogIn> {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(hintText: "Email address"),
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    hintText: "Email address",
+                    errorText: emailError.isNotEmpty ? emailError : null,
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 TextField(
-                  decoration: InputDecoration(hintText: "Password"),
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    errorText: passwordError.isNotEmpty ? passwordError : null,
+                    suffixIcon: IconButton(
+                      iconSize: 16,
+                      icon: Icon(
+                        obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          obscurePassword = !obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: obscurePassword,
                 ),
               ],
             ),
@@ -71,26 +104,85 @@ class _LogInState extends State<LogIn> {
           Container(
             alignment: Alignment.center,
             child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color?>(Color(0xFF2D201C)),
-                  fixedSize: MaterialStateProperty.all<Size>(Size(147, 51)),
-                  shape: MaterialStateProperty.all<OutlinedBorder?>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          26.5), // Adjust the radius for sharpness
-                    ),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color?>(Color(0xFF2D201C)),
+                fixedSize: MaterialStateProperty.all<Size>(Size(147, 51)),
+                shape: MaterialStateProperty.all<OutlinedBorder?>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        26.5), // Adjust the radius for sharpness
                   ),
                 ),
-                onPressed: () {},
-                child: Text(
-                  "LOG IN",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                )),
+              ),
+              onPressed: () {
+                setState(() {
+                  emailError =
+                      emailController.text.isEmpty ? "Fill email field" : "";
+                  passwordError = passwordController.text.isEmpty
+                      ? "Fill password field"
+                      : "";
+                });
+                if (emailError.isEmpty && passwordError.isEmpty) {
+                  UsersDatabase()
+                      .loginUser(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                  )
+                      .then((result) {
+                    if (result == 'Login successful!') {
+                      // Navigate to the next screen or perform other actions for successful signup
+                      // Clear all input fields
+                      emailController.clear();
+                      passwordController.clear();
+                      Get.offAll(Shop(currentIndex: 0));
+                      print('User successfully logged in');
+                    } else {
+                      setState(() {
+                        switch (result) {
+                          case 'Wrong email or password provided':
+                            passwordError = result;
+                            emailError = result;
+                            errorMessage = '';
+                            break;
+                          case 'Error during login':
+                            emailError = '';
+                            passwordError = '';
+                            errorMessage = result;
+                            break;
+                          default:
+                            passwordError = '';
+                            emailError = '';
+                            errorMessage = '';
+                        }
+                      });
+                    }
+                  });
+                }
+              },
+              child: Text(
+                "LOG IN",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
+          errorMessage.isNotEmpty
+              ? Container(
+                  padding: EdgeInsets.all(8),
+                  margin: EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )
+              : SizedBox.shrink(),
           Container(
             alignment: Alignment.center,
             child: Column(
@@ -153,7 +245,7 @@ class _LogInState extends State<LogIn> {
                 GestureDetector(
                   onTap: () {
                     // Navigate to the login page when "Log In" text is tapped
-                    Get.to(SignUp());
+                    Get.offAll(SignUp());
                   },
                   child: Text(
                     "Sign Up",

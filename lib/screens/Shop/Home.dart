@@ -54,7 +54,7 @@ class _ShopState extends State<Shop> {
       child: Scaffold(
         appBar: isShownBottomBar
             ? Bar(_pageTitles[currentPageIndex], _isSubpage[currentPageIndex])
-            : BarWithReturn(context, 'Sell an Item', returnPage: 'shop'),
+            : null, // Set to null if isShownBottomBar is false
         drawer: AppDrawer(
           current: currentPageIndex,
         ),
