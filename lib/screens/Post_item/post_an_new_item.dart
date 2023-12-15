@@ -1,9 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shedmedd/screens/Shop/ShopHome.dart';
 import '../../constants/customColors.dart';
 import '../Shop/Home.dart';
+import 'package:shedmedd/screens/Profile/Profile.dart';
+import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 import '../../controller/post_item/conditon_controller.dart';
 import 'category_page.dart';
@@ -60,11 +66,51 @@ class _PostAnItemState extends State<PostAnItem> {
       );
     }
 
-    return Scaffold(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+    value: SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // Set the color you want
+      statusBarIconBrightness: Brightness.dark, // Use dark icons for better visibility
+    ),
+    child:Scaffold(
       backgroundColor: CustomColors.backgroundForPostItem,
       body: Container(
         child: ListView(
           children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.only(left:24, bottom: 20, top: 32),
+                child: Row(
+                  children: [
+                    IconButton(
+                          icon: Icon(
+                            Icons.close_outlined,
+                            size: 30,
+                          ),
+                          color: Colors.black,
+                          onPressed: () {
+                            // Navigate back when the button is pressed
+                            Get.to(Shop(currentIndex: 0));
+                          },
+                        ),
+                    SizedBox(
+                      width: 70,
+                    ),
+                    Text(
+                      "Sell an item",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Divider(
+              height: 0,
+              thickness: 1,
+              color: Color(0xFFF3F3F6),
+            ),
             Container(
               height: 166,
               color: Colors.white,
@@ -122,6 +168,7 @@ class _PostAnItemState extends State<PostAnItem> {
                 ],
               ),
             ),
+            
             Container(
               margin: EdgeInsets.only(top: 16),
               color: Colors.white,
@@ -153,7 +200,7 @@ class _PostAnItemState extends State<PostAnItem> {
             Divider(
               height: 0,
               thickness: 1,
-              color: CustomColors.backgroundForPostItem,
+              color: Color(0xFFF3F3F6),
             ),
             Container(
               color: Colors.white,
@@ -192,7 +239,7 @@ class _PostAnItemState extends State<PostAnItem> {
             Divider(
               height: 0,
               thickness: 1,
-              color: CustomColors.backgroundForPostItem,
+              color: Color(0xFFF3F3F6),
             ),
             CategoryAndCondition(
                 page: 'Condition',
@@ -233,7 +280,7 @@ class _PostAnItemState extends State<PostAnItem> {
             Divider(
               height: 0,
               thickness: 1,
-              color: CustomColors.backgroundForPostItem,
+              color:Color(0xFFF3F3F6),
             ),
             Container(
               color: Colors.white,
@@ -269,6 +316,7 @@ class _PostAnItemState extends State<PostAnItem> {
           ],
         ),
       ),
+    )
     );
   }
 }
@@ -312,7 +360,7 @@ class CategoryAndCondition extends StatelessWidget {
                       (catogoryController.category == "" ||
                               catogoryController.subCategory == "")
                           ? ""
-                          : "${catogoryController.category} && ${catogoryController.subCategory}",
+                          : "${catogoryController.category} - ${catogoryController.subCategory}",
                       style: TextStyle(
                           fontSize: 14,
                           color: Color.fromARGB(255, 152, 150, 149)),
