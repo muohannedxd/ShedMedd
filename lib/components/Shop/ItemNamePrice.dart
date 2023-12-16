@@ -7,12 +7,12 @@ import '../../constants/textSizes.dart';
 class ItemNamePrice extends StatelessWidget {
   const ItemNamePrice({
     super.key,
-    required this.name,
+    required this.title,
     required this.condition,
     required this.price,
   });
 
-  final String name;
+  final String title;
   final String condition;
   final int price;
 
@@ -31,7 +31,7 @@ class ItemNamePrice extends StatelessWidget {
                   0.56,
                 ),
                 child: Text(
-                  name,
+                  title,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: TextSizes.subtitle,

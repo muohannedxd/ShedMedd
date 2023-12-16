@@ -16,7 +16,7 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String itemId = item.id;
-    String name = item['name'];
+    String name = item['title'];
     var price = item['price'];
     String image = item['images'][0];
 

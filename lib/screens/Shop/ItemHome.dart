@@ -51,7 +51,7 @@ class ItemHome extends StatelessWidget {
                         padding: const EdgeInsets.only(
                             left: 30, right: 30, top: 20, bottom: 20),
                         child: ItemInformation(
-                            name: item?['name'],
+                            title: item?['title'],
                             category: item?['category'],
                             subcategory: item?['subcategory'],
                             condition: item?['condition'],
@@ -82,7 +82,7 @@ class ItemHome extends StatelessWidget {
                         left: 0,
                         right: 0,
                         child: DirectMessageButton(
-                            name: item?['name'],
+                            title: item?['title'],
                             condition: item?['condition'],
                             price: item?['price'],
                             sellerID: item?['user_id']),
@@ -102,13 +102,13 @@ class ItemHome extends StatelessWidget {
 class DirectMessageButton extends StatelessWidget {
   const DirectMessageButton({
     super.key,
-    required this.name,
+    required this.title,
     required this.condition,
     required this.price,
     required this.sellerID,
   });
 
-  final String name;
+  final String title;
   final String condition;
   final int price;
   final String sellerID;
@@ -134,7 +134,7 @@ class DirectMessageButton extends StatelessWidget {
                     context,
                     '/message',
                     arguments: {
-                      'name': name,
+                      'title': title,
                       'condition': condition,
                       'price': price,
                       'sellerName': user?['name']
