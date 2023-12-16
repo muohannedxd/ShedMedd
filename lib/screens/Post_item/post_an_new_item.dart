@@ -1,32 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:shedmedd/controller/post_item/description_controller.dart';
-import 'package:shedmedd/controller/post_item/price_controller.dart';
-import 'package:shedmedd/controller/post_item/title_controller.dart';
-import 'package:shedmedd/screens/Shop/ShopHome.dart';
-import 'package:shedmedd/controller/post_item/description_controller.dart';
-import 'package:shedmedd/controller/post_item/price_controller.dart';
-import 'package:shedmedd/controller/post_item/title_controller.dart';
+
 import '../../constants/customColors.dart';
 import '../../controller/auth/auth_controller.dart';
-import '../../controller/post_item/images_controller.dart';
-import '../../database/itemsDB.dart';
-import '../../controller/auth/auth_controller.dart';
-import '../../controller/post_item/images_controller.dart';
-import '../../database/itemsDB.dart';
-import '../Shop/Home.dart';
 import '../../controller/post_item/category_controller.dart';
 import '../../controller/post_item/conditon_controller.dart';
+import '../../controller/post_item/description_controller.dart';
+import '../../controller/post_item/images_controller.dart';
+import '../../controller/post_item/price_controller.dart';
+import '../../controller/post_item/title_controller.dart';
+import '../../database/itemsDB.dart';
+import '../Shop/Home.dart';
 import 'category_page.dart';
 import 'condition_page.dart';
+
 
 class PostAnItem extends StatefulWidget {
   PostAnItem({super.key});
