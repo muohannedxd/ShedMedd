@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
-import 'package:shedmedd/screens/Shop/ShopHome.dart';
 import '../../../database/usersDB.dart';
 
 import 'log_in.dart';

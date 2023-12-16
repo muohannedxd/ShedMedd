@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/config/getImageUrl.dart';
 
 import '../screens/Shop/ItemHome.dart';
 
@@ -34,20 +36,37 @@ class ItemCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: 136,
-              height: 180,
-              clipBehavior: Clip
-                  .antiAlias, // Add this line to apply clipping with anti-aliasing
-              child: Image.asset(
-                'assets/images/dummy/${image}',
-                fit: BoxFit.cover,
-              ),
-            ),
+            FutureBuilder(
+                future: getImageUrl(image),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
+                        width: 136,
+                        height: 180,
+                        child: Center(
+                          child: CustomCircularProgress(),
+                        ));
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('an error occured'),
+                    );
+                  } else {
+                    String downloadUrl = snapshot.data!;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: 136,
+                      height: 180,
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.network(
+                        downloadUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  }
+                }),
             SizedBox(
               height: 10,
             ),
