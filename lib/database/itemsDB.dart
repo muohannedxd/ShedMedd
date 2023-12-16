@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ItemsDatabase {
   // get collection of items
@@ -93,5 +96,39 @@ class ItemsDatabase {
     }
 
     return snapshot.docs;
+  }
+
+  Future<void> addAnItemData(
+      Map<String, dynamic> itemData, List<String> imagePaths) async {
+    List<String> imageUrls = [];
+
+    for (int i = 0; i < imagePaths.length; i++) {
+      String imagePath = imagePaths[i];
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('images/items/$i');
+      UploadTask uploadTask = storageReference.putFile(File(imagePath));
+
+      await uploadTask.whenComplete(() async {
+        String imageUrl = await storageReference.getDownloadURL();
+        imageUrls.add(imageUrl);
+      });
+    }
+
+    // Now 'imageUrls' contains the download URLs of the uploaded images
+    print('Image URLs: $imageUrls');
+
+    // Add the image URLs to the item data
+    itemData["images"] = imageUrls;
+
+    // Reference to the Firebase Firestore collection 'items'
+    CollectionReference itemsCollection =
+        FirebaseFirestore.instance.collection('items');
+
+    // Add data to the 'items' collection
+    itemsCollection.add(itemData).then((DocumentReference docRef) {
+      print('Item added successfully with ID: ${docRef.id}');
+    }).catchError((error) {
+      print('Failed to add item data: $error');
+    });
   }
 }

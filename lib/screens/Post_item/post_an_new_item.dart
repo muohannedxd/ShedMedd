@@ -1,14 +1,25 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+
 import '../../constants/customColors.dart';
-import '../Shop/Home.dart';
+import '../../controller/auth/auth_controller.dart';
 import '../../controller/post_item/category_controller.dart';
 import '../../controller/post_item/conditon_controller.dart';
+import '../../controller/post_item/description_controller.dart';
+import '../../controller/post_item/images_controller.dart';
+import '../../controller/post_item/price_controller.dart';
+import '../../controller/post_item/title_controller.dart';
+import '../../database/itemsDB.dart';
+import '../Shop/Home.dart';
 import 'category_page.dart';
 import 'condition_page.dart';
+
 
 class PostAnItem extends StatefulWidget {
   PostAnItem({super.key});
@@ -18,7 +29,19 @@ class PostAnItem extends StatefulWidget {
 }
 
 class _PostAnItemState extends State<PostAnItem> {
-  List<XFile> _imageList = [];
+  final ImageListController imageListController =
+      Get.put(ImageListController());
+  final TitleController _titleController = Get.put(TitleController());
+  final DescriptionController _descriptionController =
+      Get.put(DescriptionController());
+  final PriceController _priceController = Get.put(PriceController());
+
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  ItemsDatabase itemsDatabase = ItemsDatabase(); // Create an instance
+  AuthController authController = AuthController();
+  String errorMessage = "";
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -26,7 +49,10 @@ class _PostAnItemState extends State<PostAnItem> {
 
     if (pickedImage != null) {
       setState(() {
-        _imageList.add(pickedImage);
+        imageListController.addImage(pickedImage);
+        print(imageListController);
+        imageListController.addImage(pickedImage);
+        print(imageListController);
       });
     }
   }
@@ -36,30 +62,78 @@ class _PostAnItemState extends State<PostAnItem> {
   final ConditionController conditionController =
       Get.put(ConditionController(), permanent: true);
 
-  @override
-  Widget build(BuildContext context) {
-    void addNewItem() {
-      // Add your upload logic here
-      // dummy added item
-      /*Map<String, dynamic> newItem = {
-        'id': 0,
-        'name': 'New Item',
-        'category': 'Women',
-        'subcategory': 'Shirt',
-        'condition': 'Good',
-        'price': 380,
-        'description': 'This is a new pink item',
-        'images': ['pink_shirt3.jpeg', 'pink_shirt2.jpeg'],
-      };*/
+void addNewItem() async {
+  try {
+    setState(() {
+      errorMessage = ""; // Reset the error message
+    });
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Shop(currentIndex: 0),
-        ),
-      );
+    // Validate fields
+    if (_titleController.title.value.isEmpty ||
+        _descriptionController.description.value.isEmpty ||
+        _priceController.price.value.isEmpty ||
+        categoryController.category.isEmpty ||
+        categoryController.subCategory.isEmpty ||
+        conditionController.condition.isEmpty) {
+      setState(() {
+        errorMessage = "All fields must be filled";
+      });
+      return;
     }
 
+    // Show loading indicator
+    Get.dialog(
+      Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(CustomColors.buttonSecondary),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+
+    List<String> imagePaths = [];
+
+    for (int i = 0; i < imageListController.length; i++) {
+      imagePaths.add(imageListController.pathAtIndex(i));
+    }
+
+    Map<String, dynamic> newItemData = {
+      'title': _titleController.title.value,
+      'description': _descriptionController.description.value,
+      'price': int.tryParse(_priceController.price.value),
+      'category': categoryController.category,
+      'subcategory': categoryController.subCategory,
+      'condition': conditionController.condition,
+      'user_id': await authController.getCurrentUserId()
+    };
+
+    print(newItemData);
+
+    await itemsDatabase.addAnItemData(newItemData, imagePaths);
+
+    // Clear inputs and image list after successful submission
+    setState(() {
+      _clearInputs();
+    });
+
+    // Close the loading indicator
+    Get.back();
+
+    // Navigate to the desired screen or perform other actions after data is added
+    Get.offAll(Shop(currentIndex: 0));
+  } catch (e, stackTrace) {
+    print("Error adding new item: $e");
+    print("Stack trace: $stackTrace");
+
+    // Close the loading indicator
+    Get.back();
+
+    // Handle the error as needed
+  }
+}
+
+  @override
+  Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.white, // Set the color you want
@@ -122,52 +196,117 @@ class _PostAnItemState extends State<PostAnItem> {
                     children: [
                       Container(
                         height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _imageList.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                width: 100, // Adjust the width as needed
-                                height: 100, // Adjust the height as needed
-                                child: Image.file(
-                                  File(_imageList[index].path),
-                                  fit: BoxFit.cover,
+                        child: imageListController.isEmpty
+                            ? Center(
+                                child: ElevatedButton(
+                                  onPressed: _pickImage,
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    primary: Colors.white,
+                                    onPrimary:
+                                        CustomColors.backgroundForPostItem,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(32.0),
+                                      side: BorderSide(
+                                        color:
+                                            CustomColors.backgroundForPostItem,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.add_circle_outline),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        "Upload Photos",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                              )
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: imageListController.length + 1,
+                                      itemBuilder: (context, index) {
+                                        if (index ==
+                                            imageListController.length) {
+                                          // Render "Add Photos" button
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SizedBox(
+                                              width: 100,
+                                              height: 100,
+                                              child: ElevatedButton(
+                                                onPressed: () async {
+                                                  await _pickImage();
+                                                  print(imageListController);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  primary: Colors.white,
+                                                  onPrimary: CustomColors
+                                                      .backgroundForPostItem,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            32.0),
+                                                  ),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add_box_outlined,
+                                                  size: 32,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          // Render images from imageListController
+                                          return Stack(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: 100,
+                                                  height: 100,
+                                                  child: Image.file(
+                                                    File(imageListController
+                                                        .pathAtIndex(index)),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: IconButton(
+                                                  color: Color(0xFFF3F3F6),
+                                                  icon: Icon(Icons.cancel),
+                                                  onPressed: () {
+                                                    // Remove the image from the list
+                                                    setState(() {
+                                                      imageListController
+                                                          .removeImage(index);
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
                       ),
-                      ElevatedButton(
-                        onPressed: _pickImage,
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          primary: Colors.white, // Background color
-                          onPrimary: CustomColors.grey, // Text and icon color
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(32.0), // Border radius
-                            side: BorderSide(
-                                color: CustomColors.grey), // Border color
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.add_circle_outline),
-                            SizedBox(
-                                width:
-                                    8), // Adjust the spacing between icon and text
-                            Text(
-                              "Upload Photos",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            )
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -187,6 +326,12 @@ class _PostAnItemState extends State<PostAnItem> {
                         ),
                         SizedBox(height: 8),
                         TextField(
+                          controller: TextEditingController(
+                            text: _titleController.title.value,
+                          ),
+                          onChanged: (title) {
+                            _titleController.updateTitle(title);
+                          },
                           decoration: InputDecoration(
                               hintText: "e.g. White t-shirt",
                               hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
@@ -221,7 +366,13 @@ class _PostAnItemState extends State<PostAnItem> {
                         ),
                         SizedBox(height: 8),
                         TextField(
-                          maxLines: null,
+                          controller: TextEditingController(
+                            text: _descriptionController.description.value,
+                          ),
+                          onChanged: (description) {
+                            _descriptionController
+                                .updateDescription(description);
+                          },
                           decoration: InputDecoration(
                               hintText: "e.g. Only worn few times",
                               hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
@@ -268,15 +419,26 @@ class _PostAnItemState extends State<PostAnItem> {
                         ),
                         SizedBox(height: 8),
                         TextField(
+                          controller: TextEditingController(
+                            text: _priceController.price.value,
+                          ),
+                          onChanged: (price) {
+                            _priceController.updatePrice(price);
+                          },
                           decoration: InputDecoration(
-                              hintText: "e.g. 500DA",
-                              hintStyle: TextStyle(
-                                  color: Color(0xFF4F4F4F), fontSize: 16),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: CustomColors.buttonSecondary,
-                                    width: 2.0),
-                              )),
+                            hintText: "e.g. 500",
+                            hintStyle: TextStyle(
+                                color: Color(0xFF4F4F4F), fontSize: 16),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,2}$')),
+                          ],
                         ),
                       ],
                     ),
@@ -287,6 +449,25 @@ class _PostAnItemState extends State<PostAnItem> {
                   thickness: 1,
                   color: Color(0xFFF3F3F6),
                 ),
+                errorMessage.isNotEmpty
+                    ? Container(
+                        color: Colors.white,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 32),
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              errorMessage,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 Container(
                   color: Colors.white,
                   child: Container(
@@ -322,6 +503,17 @@ class _PostAnItemState extends State<PostAnItem> {
             ),
           ),
         ));
+  }
+
+  void _clearInputs() {
+    _titleController.updateTitle("");
+    _descriptionController.updateDescription("");
+    _priceController.updatePrice("");
+    categoryController
+        .resetCategories(); // Implement a reset function in your CategoryController
+    conditionController
+        .resetCondition(); // Implement a reset function in your ConditionController
+    imageListController.clear();
   }
 }
 

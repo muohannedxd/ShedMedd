@@ -8,4 +8,8 @@ class ConditionController extends GetxController {
     update();
   }
 
+ void resetCondition() {
+    condition = "";
+    update();
+  }
 }
