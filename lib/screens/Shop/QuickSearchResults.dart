@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
@@ -11,6 +12,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import '../../controller/items/itemsController.dart';
 
 class QuickSearchResults extends StatefulWidget {
   const QuickSearchResults({super.key});
@@ -111,6 +113,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     setState(() {});
   }
 
+  final ItemsController itemsController = Get.put(ItemsController());
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -142,8 +146,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     }
 
     return ScrollConfiguration(
-      behavior: BehaviorOfScroll(),
-      child: Scaffold(
+        behavior: BehaviorOfScroll(),
+        child: Scaffold(
           endDrawer: FilterDrawer(searchBar),
           backgroundColor: CustomColors.bgColor,
           body: FutureBuilder(
@@ -157,12 +161,85 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   if (itemsList!.isEmpty) {
                     return ListView(
                       children: [
+                        Text('search: $searchKey'),
+                        Text('category: $selectedCategory'),
+                        Text('sub: $selectedSubcategory'),
+                        Text('cond: $selectedCondition'),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 30, right: 30, top: 20, bottom: 10),
                           child: ReturnButton(searchKey: searchKey),
                         ),
-                        SizedBox(height: 20,),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Found',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${itemsList.length} results',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Builder(builder: (context) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      Scaffold.of(context).openEndDrawer();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 18,
+                                            right: 10,
+                                            top: 6,
+                                            bottom: 6),
+                                        child: Row(
+                                          children: [
+                                            Text('Filter',
+                                                style: TextStyle(
+                                                    color: CustomColors
+                                                        .textPrimary,
+                                                    fontSize: TextSizes.small)),
+                                            SizedBox(
+                                              width: 6,
+                                            ),
+                                            Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: CustomColors.textPrimary,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         EmptyListWidget(
                             emptyError: 'There are no items to show here.'),
                       ],
@@ -170,6 +247,10 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   } else {
                     return ListView(
                       children: [
+                        Text('search: $searchKey'),
+                        Text('category: $selectedCategory'),
+                        Text('sub: $selectedSubcategory'),
+                        Text('cond: $selectedCondition'),
                         // return button
                         Padding(
                           padding: const EdgeInsets.only(
@@ -298,7 +379,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   );
                 }
               })),
-    );
+        );
   }
 
   SafeArea FilterDrawer(bool isSearchBar) {

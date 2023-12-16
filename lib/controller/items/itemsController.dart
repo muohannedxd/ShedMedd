@@ -19,7 +19,7 @@ class ItemsController extends GetxController {
     categoriedItems.value = ItemsDatabase().getCategoryItems(categoryName);
   }
 
-  void filterItems(
+  void filterItems(Set set, 
       {
         String name = 'All',
         String category = 'All',
