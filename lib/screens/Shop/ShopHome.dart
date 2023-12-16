@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shedmedd/components/emptyListWidget.dart';
+import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
 import '../../config/bouncingScroll.dart';
@@ -16,8 +18,7 @@ class ShopHome extends StatelessWidget {
   });
 
   //final Map<String, dynamic> items;
-  final ItemsController itemsController =
-      Get.put(ItemsController());
+  final ItemsController itemsController = Get.put(ItemsController());
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +62,10 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments:
-                              SearchArguments('${itemsController.category.value} All', false, false));
+                          arguments: SearchArguments(
+                              '${itemsController.category.value} All',
+                              false,
+                              false));
                     },
                     child: Text(
                       'Show all',
@@ -83,18 +86,24 @@ class ShopHome extends StatelessWidget {
                               if (snapshot.hasData) {
                                 List<DocumentSnapshot<Object?>>? itemsList =
                                     snapshot.data;
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: itemsList!
-                                      .take(showCount)
-                                      .map((document) =>
-                                          ItemCard(item: document))
-                                      .toList(),
-                                );
+                                if (itemsList!.isEmpty) {
+                                  return EmptyListWidget(
+                                      emptyError:
+                                          'There are no items to show here.');
+                                } else {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: itemsList
+                                        .take(showCount)
+                                        .map((document) =>
+                                            ItemCard(item: document))
+                                        .toList(),
+                                  );
+                                }
                               } else if (snapshot.hasError) {
-                                return Center(
-                                  child: Text('An error occured'),
-                                );
+                                return CustomErrorWidget(
+                                    errorText:
+                                        'An error occured. Try again later');
                               } else {
                                 return Center(
                                   child: CustomCircularProgress(),
@@ -125,7 +134,10 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
+                          arguments: SearchArguments(
+                              '${itemsController.category.value} All',
+                              false,
+                              false));
                     },
                     child: Text(
                       'Show all',
@@ -145,17 +157,22 @@ class ShopHome extends StatelessWidget {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
                                 snapshot.data;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: itemsList!
-                                  .take(showCount)
-                                  .map((document) => ItemCard(item: document))
-                                  .toList(),
-                            );
+                            if (itemsList!.isEmpty) {
+                              return EmptyListWidget(
+                                  emptyError:
+                                      'There are no items to show here.');
+                            } else {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: itemsList
+                                    .take(showCount)
+                                    .map((document) => ItemCard(item: document))
+                                    .toList(),
+                              );
+                            }
                           } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text('An error occured'),
-                            );
+                            return CustomErrorWidget(
+                                errorText: 'An error occured. Try again later');
                           } else {
                             return Center(
                               child: CustomCircularProgress(),
@@ -186,7 +203,10 @@ class ShopHome extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/discover/results',
-                          arguments: SearchArguments('${itemsController.category.value} All', false, false));
+                          arguments: SearchArguments(
+                              '${itemsController.category.value} All',
+                              false,
+                              false));
                     },
                     child: Text(
                       'View all',
@@ -206,17 +226,22 @@ class ShopHome extends StatelessWidget {
                           if (snapshot.hasData) {
                             List<DocumentSnapshot<Object?>>? itemsList =
                                 snapshot.data;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: itemsList!
-                                  .take(showCount)
-                                  .map((document) => ItemCard(item: document))
-                                  .toList(),
-                            );
+                            if (itemsList!.isEmpty) {
+                              return EmptyListWidget(
+                                  emptyError:
+                                      'There are no items to show here.');
+                            } else {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: itemsList
+                                    .take(showCount)
+                                    .map((document) => ItemCard(item: document))
+                                    .toList(),
+                              );
+                            }
                           } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text('An error occured'),
-                            );
+                            return CustomErrorWidget(
+                                errorText: 'An error occured. Try again later');
                           } else {
                             return Center(
                               child: CustomCircularProgress(),

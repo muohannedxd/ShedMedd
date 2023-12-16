@@ -5,6 +5,8 @@ import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/getImageUrl.dart';
 import 'package:shedmedd/constants/customColors.dart';
 
+import '../errorWidget.dart';
+
 // Pictures of the item
 class Pictures extends StatelessWidget {
   const Pictures({
@@ -37,9 +39,8 @@ class Pictures extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CustomCircularProgress());
                   } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('an error occured'),
-                    );
+                    return CustomErrorWidget(
+                                errorText: 'An error occured. Try again later');
                   } else {
                     String downloadUrl = snapshot.data!;
                     return InstaImageViewer(
