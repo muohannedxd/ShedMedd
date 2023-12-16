@@ -56,7 +56,7 @@ class ItemsDatabase {
     Map<String, dynamic> appliedFilters,
   ) async {
     Map<String, dynamic> filters = appliedFilters;
-    Query filteredQuery = FirebaseFirestore.instance.collection('items');
+    Query filteredQuery = items;
 
     // Combine all filter criteria into a single compound condition
     if (filters['category'] != 'All') {

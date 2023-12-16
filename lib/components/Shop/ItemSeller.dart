@@ -5,6 +5,7 @@ import 'package:shedmedd/config/customCircularProg.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
+import '../errorWidget.dart';
 
 class Seller extends StatelessWidget {
   final String sellerID;
@@ -19,8 +20,8 @@ class Seller extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
-            child: Text('an error occured'),
-          );
+              child: CustomErrorWidget(
+                  errorText: 'An error occured. Try again later'));
         } else if (snapshot.hasData) {
           DocumentSnapshot<Object?>? user = snapshot.data;
           return Row(
@@ -55,16 +56,18 @@ class Seller extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    user?['location'] != '' ? Container(
-                      width: 200,
-                      child: Text(
-                        user?['location'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: TextSizes.small,
-                            color: CustomColors.textPrimary),
-                      ),
-                    ) : Visibility(visible: false, child: Text(''))
+                    user?['location'] != ''
+                        ? Container(
+                            width: 200,
+                            child: Text(
+                              user?['location'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: TextSizes.small,
+                                  color: CustomColors.textPrimary),
+                            ),
+                          )
+                        : Visibility(visible: false, child: Text(''))
                   ],
                 ),
               ),

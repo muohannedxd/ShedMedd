@@ -6,6 +6,7 @@ import 'package:shedmedd/database/itemsDB.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
+import '../../components/errorWidget.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
@@ -26,9 +27,8 @@ class ItemHome extends StatelessWidget {
           future: currentItem,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text('an error occured'),
-              );
+              return CustomErrorWidget(
+                                errorText: 'An error occured. Try again later');
             } else if (snapshot.hasData) {
               DocumentSnapshot<Object?>? item = snapshot.data;
               return Stack(children: [

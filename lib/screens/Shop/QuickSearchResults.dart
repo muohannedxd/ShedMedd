@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/database/itemsDB.dart';
+import '../../components/emptyListWidget.dart';
+import '../../components/errorWidget.dart';
 import '../../components/itemCard.dart';
 import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import '../../controller/items/itemsController.dart';
 
 class QuickSearchResults extends StatefulWidget {
   const QuickSearchResults({super.key});
@@ -109,6 +112,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     setState(() {});
   }
 
+  final ItemsController itemsController = Get.put(ItemsController());
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -131,159 +136,255 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       'minPrice': _selectedRange.start,
       'maxPrice': _selectedRange.end
     };
-    Future<List<DocumentSnapshot>> filteredItems;
 
     if (searchBar) {
-      filteredItems = ItemsDatabase().getSpecificItems(filters);
+      itemsController.searchItems(
+        name: filters['name'],
+        category: filters['category'],
+        subcategory: filters['subcategory'],
+        condition: filters['condition'],
+        minPrice: filters['minPrice'],
+        maxPrice: filters['maxPrice'],
+      );
     } else {
-      filteredItems = ItemsDatabase().getFilteredItems(filters);
+      itemsController.filterItems(
+        category: filters['category'],
+        subcategory: filters['subcategory'],
+        condition: filters['condition'],
+        minPrice: filters['minPrice'],
+        maxPrice: filters['maxPrice'],
+      );
     }
 
     return ScrollConfiguration(
-      behavior: BehaviorOfScroll(),
-      child: Scaffold(
+        behavior: BehaviorOfScroll(),
+        child: Scaffold(
           endDrawer: FilterDrawer(searchBar),
           backgroundColor: CustomColors.bgColor,
-          body: FutureBuilder(
-              future: filteredItems,
+          body: Obx(() => FutureBuilder(
+              future: searchBar
+                  ? itemsController.specificItems.value
+                  : itemsController.filteredItems.value,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(
-                    child: Text('an error occured'),
-                  );
+                  return CustomErrorWidget(
+                      errorText: 'An error occured. Try again later');
                 } else if (snapshot.hasData) {
                   List<DocumentSnapshot<Object?>>? itemsList = snapshot.data;
-
-                  return ListView(
-                    children: [
-                      // return button
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 20, bottom: 10),
-                        child: ReturnButton(searchKey: searchKey),
-                      ),
-
-                      // Header
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 10, bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Found',
-                                  style: TextStyle(
-                                      color: CustomColors.textPrimary,
-                                      fontSize: TextSizes.medium,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '${itemsList?.length} results',
-                                  style: TextStyle(
-                                      color: CustomColors.textPrimary,
-                                      fontSize: TextSizes.medium,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Builder(builder: (context) {
-                              return GestureDetector(
-                                  onTap: () {
-                                    Scaffold.of(context).openEndDrawer();
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border:
-                                          Border.all(color: CustomColors.grey),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 18,
-                                          right: 10,
-                                          top: 6,
-                                          bottom: 6),
-                                      child: Row(
-                                        children: [
-                                          Text('Filter',
-                                              style: TextStyle(
-                                                  color:
-                                                      CustomColors.textPrimary,
-                                                  fontSize: TextSizes.small)),
-                                          SizedBox(
-                                            width: 6,
-                                          ),
-                                          Icon(
-                                            Icons.arrow_drop_down_outlined,
-                                            color: CustomColors.textPrimary,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ));
-                            }),
-                          ],
-                        ),
-                      ),
-
-                      Padding(
+                  if (itemsList!.isEmpty) {
+                    return ListView(
+                      children: [
+                        Padding(
                           padding: const EdgeInsets.only(
                               left: 30, right: 30, top: 20, bottom: 10),
-                          child: SingleChildScrollView(
-                            physics: BouncingScroll(),
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              children: [
-                                for (int i = 0; i < itemsList!.length; i += 2)
-                                  Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Expanded(
-                                            child: ItemCard(
-                                              item: itemsList[i],
-                                              isSeller: isSeller,
+                          child: ReturnButton(searchKey: searchKey),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Found',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${itemsList.length} results',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Builder(builder: (context) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      Scaffold.of(context).openEndDrawer();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 18,
+                                            right: 10,
+                                            top: 6,
+                                            bottom: 6),
+                                        child: Row(
+                                          children: [
+                                            Text('Filter',
+                                                style: TextStyle(
+                                                    color: CustomColors
+                                                        .textPrimary,
+                                                    fontSize: TextSizes.small)),
+                                            SizedBox(
+                                              width: 6,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          if (i + 1 < itemsList.length)
+                                            Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: CustomColors.textPrimary,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        EmptyListWidget(
+                            emptyError: 'There are no items to show here.'),
+                      ],
+                    );
+                  } else {
+                    return ListView(
+                      children: [
+                        // return button
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 20, bottom: 10),
+                          child: ReturnButton(searchKey: searchKey),
+                        ),
+
+                        // Header
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Found',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    '${itemsList.length} results',
+                                    style: TextStyle(
+                                        color: CustomColors.textPrimary,
+                                        fontSize: TextSizes.medium,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Builder(builder: (context) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      Scaffold.of(context).openEndDrawer();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 18,
+                                            right: 10,
+                                            top: 6,
+                                            bottom: 6),
+                                        child: Row(
+                                          children: [
+                                            Text('Filter',
+                                                style: TextStyle(
+                                                    color: CustomColors
+                                                        .textPrimary,
+                                                    fontSize: TextSizes.small)),
+                                            SizedBox(
+                                              width: 6,
+                                            ),
+                                            Icon(
+                                              Icons.arrow_drop_down_outlined,
+                                              color: CustomColors.textPrimary,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }),
+                            ],
+                          ),
+                        ),
+
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20, bottom: 10),
+                            child: SingleChildScrollView(
+                              physics: BouncingScroll(),
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [
+                                  for (int i = 0; i < itemsList.length; i += 2)
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
                                             Expanded(
                                               child: ItemCard(
-                                                item: itemsList[i + 1],
+                                                item: itemsList[i],
                                                 isSeller: isSeller,
                                               ),
                                             ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 20),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          )),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            if (i + 1 < itemsList.length)
+                                              Expanded(
+                                                child: ItemCard(
+                                                  item: itemsList[i + 1],
+                                                  isSeller: isSeller,
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 20),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            )),
 
-                      SizedBox(
-                        height: 20,
-                      )
-                    ],
-                  );
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    );
+                  }
                 } else {
                   return Center(
                     child: CustomCircularProgress(),
                   );
                 }
               })),
-    );
+        ));
   }
 
   SafeArea FilterDrawer(bool isSearchBar) {
@@ -482,7 +583,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   Button(
                     action: resetFilters,
                     title: 'Reset',
-                    xPadding: 20,
+                    xPadding: 10,
                     background: CustomColors.bgColor,
                     textColor: CustomColors.textPrimary,
                     borderColor: CustomColors.grey,
@@ -493,7 +594,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                         Scaffold.of(context).closeEndDrawer();
                       },
                       title: 'Apply',
-                      xPadding: 20,
+                      xPadding: 10,
                       background: CustomColors.buttonPrimary,
                     );
                   }),
