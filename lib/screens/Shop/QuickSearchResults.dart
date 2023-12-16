@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
-import 'package:shedmedd/database/itemsDB.dart';
 import '../../components/emptyListWidget.dart';
 import '../../components/errorWidget.dart';
 import '../../components/itemCard.dart';
@@ -137,12 +136,24 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       'minPrice': _selectedRange.start,
       'maxPrice': _selectedRange.end
     };
-    Future<List<DocumentSnapshot>> filteredItems;
 
     if (searchBar) {
-      filteredItems = ItemsDatabase().getSpecificItems(filters);
+      itemsController.searchItems(
+        name: filters['name'],
+        category: filters['category'],
+        subcategory: filters['subcategory'],
+        condition: filters['condition'],
+        minPrice: filters['minPrice'],
+        maxPrice: filters['maxPrice'],
+      );
     } else {
-      filteredItems = ItemsDatabase().getFilteredItems(filters);
+      itemsController.filterItems(
+        category: filters['category'],
+        subcategory: filters['subcategory'],
+        condition: filters['condition'],
+        minPrice: filters['minPrice'],
+        maxPrice: filters['maxPrice'],
+      );
     }
 
     return ScrollConfiguration(
@@ -150,8 +161,10 @@ class _QuickSearchResults extends State<QuickSearchResults> {
         child: Scaffold(
           endDrawer: FilterDrawer(searchBar),
           backgroundColor: CustomColors.bgColor,
-          body: FutureBuilder(
-              future: filteredItems,
+          body: Obx(() => FutureBuilder(
+              future: searchBar
+                  ? itemsController.specificItems.value
+                  : itemsController.filteredItems.value,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return CustomErrorWidget(
@@ -161,10 +174,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   if (itemsList!.isEmpty) {
                     return ListView(
                       children: [
-                        Text('search: $searchKey'),
-                        Text('category: $selectedCategory'),
-                        Text('sub: $selectedSubcategory'),
-                        Text('cond: $selectedCondition'),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 30, right: 30, top: 20, bottom: 10),
@@ -247,10 +256,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   } else {
                     return ListView(
                       children: [
-                        Text('search: $searchKey'),
-                        Text('category: $selectedCategory'),
-                        Text('sub: $selectedSubcategory'),
-                        Text('cond: $selectedCondition'),
                         // return button
                         Padding(
                           padding: const EdgeInsets.only(
@@ -379,7 +384,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                   );
                 }
               })),
-        );
+        ));
   }
 
   SafeArea FilterDrawer(bool isSearchBar) {
