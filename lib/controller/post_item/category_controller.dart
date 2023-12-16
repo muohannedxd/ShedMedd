@@ -13,4 +13,9 @@ class CategoryController extends GetxController {
     subCategory = subCategoryName;
     update();
   }
+
+  void resetCategories() {
+    category = "";
+    update();
+  }
 }

@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/screens/Authentification/log_in.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 
 import '../../config/searchArguments.dart';
@@ -77,7 +80,10 @@ class _ProfileState extends State<Profile> {
                       child: Transform.rotate(
                         angle: isHovered ? 0.5 : 0,
                         child: IconButton(
-                          icon: Image.asset('assets/icons/edit_profile.png', width: 24,),
+                          icon: Image.asset(
+                            'assets/icons/edit_profile.png',
+                            width: 24,
+                          ),
                           onPressed: () {
                             // Handle settings icon press
                             Navigator.push(
@@ -167,6 +173,17 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  Future<void> _signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pop();
+      Get.offAll(LogIn());
+    } catch (e) {
+      print("Error during logout: $e");
+      // Handle errors if needed
+    }
+  }
+
   void _showLogoutConfirmationDialog() {
     showDialog(
       context: context,
@@ -189,7 +206,7 @@ class _ProfileState extends State<Profile> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Cancel',
@@ -200,9 +217,7 @@ class _ProfileState extends State<Profile> {
             ),
             TextButton(
               onPressed: () {
-                // Perform logout logic here
-                // ...
-                Navigator.of(context).pop(); // Close the dialog
+                _signOut();
               },
               child: Text(
                 'Log Out',
