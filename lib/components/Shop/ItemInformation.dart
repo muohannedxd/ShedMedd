@@ -65,7 +65,7 @@ class ItemInformation extends StatelessWidget {
               height: 10,
             ),
             Text(
-              '${description} ${description} ${description} ${description} ${description}',
+              '${description}',
               style: TextStyle(
                   fontSize: TextSizes.small,
                   height: 1.5,
