@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: Bar('Profile', context),
       
-      drawer: AppDrawer(),
+      drawer: Drawer(),
       backgroundColor: CustomColors.bgColor,
       body: ListView(
         padding: EdgeInsets.all(20),

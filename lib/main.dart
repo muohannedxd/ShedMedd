@@ -4,6 +4,8 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
+import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
+import 'package:shedmedd/screens/Profile/sellerProfile.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/chatInbox': (context) => ChatInbox(),
 
       },
-      home: Settings(),
+      home: SellerProfile(),
     );
   }
 }
