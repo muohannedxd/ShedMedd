@@ -129,6 +129,28 @@ void addNewItem() async {
 
   @override
   Widget build(BuildContext context) {
+    void addNewItem() {
+      // Add your upload logic here
+      // dummy added item
+      /*Map<String, dynamic> newItem = {
+        'id': 0,
+        'name': 'New Item',
+        'category': 'Women',
+        'subcategory': 'Shirt',
+        'condition': 'Good',
+        'price': 380,
+        'description': 'This is a new pink item',
+        'images': ['pink_shirt3.jpeg', 'pink_shirt2.jpeg'],
+      };*/
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Shop(currentIndex: 0),
+        ),
+      );
+    }
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.white, // Set the color you want
@@ -157,7 +179,13 @@ void addNewItem() async {
                           color: Colors.black,
                           onPressed: () {
                             // Navigate back when the button is pressed
-                            Get.to(Shop(currentIndex: 0));
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Shop(currentIndex: 0),
+                              ),
+                            );
                           },
                         ),
                         SizedBox(
@@ -185,117 +213,52 @@ void addNewItem() async {
                     children: [
                       Container(
                         height: 100,
-                        child: imageListController.isEmpty
-                            ? Center(
-                                child: ElevatedButton(
-                                  onPressed: _pickImage,
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    primary: Colors.white,
-                                    onPrimary:
-                                        CustomColors.backgroundForPostItem,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(32.0),
-                                      side: BorderSide(
-                                        color:
-                                            CustomColors.backgroundForPostItem,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.add_circle_outline),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        "Upload Photos",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _imageList.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: 100, // Adjust the width as needed
+                                height: 100, // Adjust the height as needed
+                                child: Image.file(
+                                  File(_imageList[index].path),
+                                  fit: BoxFit.cover,
                                 ),
-                              )
-                            : Row(
-                                children: [
-                                  Expanded(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: imageListController.length + 1,
-                                      itemBuilder: (context, index) {
-                                        if (index ==
-                                            imageListController.length) {
-                                          // Render "Add Photos" button
-                                          return Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: SizedBox(
-                                              width: 100,
-                                              height: 100,
-                                              child: ElevatedButton(
-                                                onPressed: () async {
-                                                  await _pickImage();
-                                                  print(imageListController);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  elevation: 0,
-                                                  primary: Colors.white,
-                                                  onPrimary: CustomColors
-                                                      .backgroundForPostItem,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            32.0),
-                                                  ),
-                                                ),
-                                                child: Icon(
-                                                  Icons.add_box_outlined,
-                                                  size: 32,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          // Render images from imageListController
-                                          return Stack(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: SizedBox(
-                                                  width: 100,
-                                                  height: 100,
-                                                  child: Image.file(
-                                                    File(imageListController
-                                                        .pathAtIndex(index)),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: 0,
-                                                right: 0,
-                                                child: IconButton(
-                                                  color: Color(0xFFF3F3F6),
-                                                  icon: Icon(Icons.cancel),
-                                                  onPressed: () {
-                                                    // Remove the image from the list
-                                                    setState(() {
-                                                      imageListController
-                                                          .removeImage(index);
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
                               ),
+                            );
+                          },
+                        ),
                       ),
+                      ElevatedButton(
+                        onPressed: _pickImage,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          primary: Colors.white, // Background color
+                          onPrimary: CustomColors.grey, // Text and icon color
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(32.0), // Border radius
+                            side: BorderSide(
+                                color: CustomColors.grey), // Border color
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.add_circle_outline),
+                            SizedBox(
+                                width:
+                                    8), // Adjust the spacing between icon and text
+                            Text(
+                              "Upload Photos",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -315,12 +278,6 @@ void addNewItem() async {
                         ),
                         SizedBox(height: 8),
                         TextField(
-                          controller: TextEditingController(
-                            text: _titleController.title.value,
-                          ),
-                          onChanged: (title) {
-                            _titleController.updateTitle(title);
-                          },
                           decoration: InputDecoration(
                               hintText: "e.g. White t-shirt",
                               hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
@@ -355,13 +312,7 @@ void addNewItem() async {
                         ),
                         SizedBox(height: 8),
                         TextField(
-                          controller: TextEditingController(
-                            text: _descriptionController.description.value,
-                          ),
-                          onChanged: (description) {
-                            _descriptionController
-                                .updateDescription(description);
-                          },
+                          maxLines: null,
                           decoration: InputDecoration(
                               hintText: "e.g. Only worn few times",
                               hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
@@ -408,26 +359,15 @@ void addNewItem() async {
                         ),
                         SizedBox(height: 8),
                         TextField(
-                          controller: TextEditingController(
-                            text: _priceController.price.value,
-                          ),
-                          onChanged: (price) {
-                            _priceController.updatePrice(price);
-                          },
                           decoration: InputDecoration(
-                            hintText: "e.g. 500",
-                            hintStyle: TextStyle(
-                                color: Color(0xFF4F4F4F), fontSize: 16),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d+\.?\d{0,2}$')),
-                          ],
+                              hintText: "e.g. 500DA",
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF4F4F4F), fontSize: 16),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: CustomColors.buttonSecondary,
+                                    width: 2.0),
+                              )),
                         ),
                       ],
                     ),
@@ -438,25 +378,6 @@ void addNewItem() async {
                   thickness: 1,
                   color: Color(0xFFF3F3F6),
                 ),
-                errorMessage.isNotEmpty
-                    ? Container(
-                        color: Colors.white,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 32),
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              errorMessage,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
                 Container(
                   color: Colors.white,
                   child: Container(
@@ -492,17 +413,6 @@ void addNewItem() async {
             ),
           ),
         ));
-  }
-
-  void _clearInputs() {
-    _titleController.updateTitle("");
-    _descriptionController.updateDescription("");
-    _priceController.updatePrice("");
-    categoryController
-        .resetCategories(); // Implement a reset function in your CategoryController
-    conditionController
-        .resetCondition(); // Implement a reset function in your ConditionController
-    imageListController.clear();
   }
 }
 
