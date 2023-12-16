@@ -6,6 +6,7 @@ import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/config/getImageUrl.dart';
 
 import '../screens/Shop/ItemHome.dart';
+import 'errorWidget.dart';
 
 class ItemCard extends StatelessWidget {
   final DocumentSnapshot<Object?> item;
@@ -47,9 +48,8 @@ class ItemCard extends StatelessWidget {
                           child: CustomCircularProgress(),
                         ));
                   } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('an error occured'),
-                    );
+                    return CustomErrorWidget(
+                                errorText: 'An error occured. Try again later');
                   } else {
                     String downloadUrl = snapshot.data!;
                     return Container(

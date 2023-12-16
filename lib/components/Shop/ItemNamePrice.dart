@@ -27,7 +27,8 @@ class ItemNamePrice extends StatelessWidget {
             children: [
               Container(
                 constraints: BoxConstraints(
-                  maxWidth: 180
+                  maxWidth: MediaQuery.of(context).size.width *
+                  0.56,
                 ),
                 child: Text(
                   name,
@@ -42,7 +43,8 @@ class ItemNamePrice extends StatelessWidget {
               ),
               Container(
                 constraints: BoxConstraints(
-                  maxWidth: 180
+                  maxWidth: MediaQuery.of(context).size.width *
+                  0.80,
                 ),
                 child: Text(
                   'Condition: ${condition}',
@@ -56,12 +58,23 @@ class ItemNamePrice extends StatelessWidget {
           ),
         ),
 
-        Text(
-          '${price.toString()} DZD',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: TextSizes.title,
-              color: CustomColors.textPrimary),
+        Column(
+          children: [
+            Text(
+              '${price.toString()}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: TextSizes.title,
+                  color: CustomColors.textPrimary),
+            ),
+            Text(
+              'DZD',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: TextSizes.title,
+                  color: CustomColors.textPrimary),
+            ),
+          ],
         )
       ],
     );
