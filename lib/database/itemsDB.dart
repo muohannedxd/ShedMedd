@@ -82,11 +82,11 @@ class ItemsDatabase {
     QuerySnapshot snapshot = await filteredQuery.get();
 
     // Search by name or description
-    String searchKey = filters['name'];
+    String searchKey = filters['title'];
     if (searchKey.isNotEmpty) {
       String lowerCaseSearchKey = searchKey.toLowerCase();
       List<DocumentSnapshot> filteredDocs = snapshot.docs.where((doc) {
-        String itemName = doc['name'].toString().toLowerCase();
+        String itemName = doc['title'].toString().toLowerCase();
         String itemDescription = doc['description'].toString().toLowerCase();
         return itemName.contains(lowerCaseSearchKey) ||
             itemDescription.contains(lowerCaseSearchKey);

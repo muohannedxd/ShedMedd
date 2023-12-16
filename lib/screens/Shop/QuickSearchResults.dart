@@ -129,7 +129,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
     //Map<String, dynamic> items = itemsController.items;
     Map<String, dynamic> filters = {
-      'name': searchKey,
+      'title': searchKey,
       'category': selectedCategory,
       'subcategory': selectedSubcategory,
       'condition': selectedCondition,
@@ -139,7 +139,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
     if (searchBar) {
       itemsController.searchItems(
-        name: filters['name'],
+        title: filters['title'],
         category: filters['category'],
         subcategory: filters['subcategory'],
         condition: filters['condition'],

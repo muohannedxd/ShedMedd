@@ -12,7 +12,7 @@ class DirectMessage extends StatefulWidget {
 }
 
 class _DirectMessage extends State<DirectMessage> {
-  String name = '';
+  String title = '';
   String condition = '';
   int price = 0;
   String sellerName = '';
@@ -26,7 +26,7 @@ class _DirectMessage extends State<DirectMessage> {
   Widget build(BuildContext context) {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    name = arguments['name'] as String;
+    title = arguments['title'] as String;
     condition = arguments['condition'] as String;
     price = arguments['price'] as int;
     sellerName = arguments['sellerName'] as String;
@@ -47,7 +47,7 @@ class _DirectMessage extends State<DirectMessage> {
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
                 child: ItemNamePrice(
-                    name: name, condition: condition, price: price),
+                    title: title, condition: condition, price: price),
               ),
               Divider(),
             ]),

@@ -37,7 +37,7 @@ class ItemsController extends GetxController {
   }
 
   void searchItems({
-    String name = 'All',
+    String title = 'All',
     String category = 'All',
     String subcategory = 'All',
     String condition = 'All',
@@ -45,7 +45,7 @@ class ItemsController extends GetxController {
     double maxPrice = 10000,
   }) {
     Map<String, dynamic> filters = {
-      'name': name,
+      'title': title,
       'category': category,
       'subcategory': subcategory,
       'condition': condition,

@@ -7,14 +7,14 @@ import 'ItemNamePrice.dart';
 class ItemInformation extends StatelessWidget {
   const ItemInformation(
       {super.key,
-      required this.name,
+      required this.title,
       required this.category,
       required this.subcategory,
       required this.condition,
       required this.price,
       required this.description});
 
-  final String name;
+  final String title;
   final String category;
   final String subcategory;
   final String condition;
@@ -26,7 +26,7 @@ class ItemInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ItemNamePrice(name: name, condition: condition, price: price),
+        ItemNamePrice(title: title, condition: condition, price: price),
         SizedBox(
           height: 20,
         ),
