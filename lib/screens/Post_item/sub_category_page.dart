@@ -89,11 +89,11 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
             color: CustomColors.backgroundForPostItem,
           ),
           SubCategory(
-            subCategory: "Other",
-            isSelected: selectedSubCategory == "Other",
+            subCategory: "Others",
+            isSelected: selectedSubCategory == "Others",
             onChanged: () {
-              updateSelectedSubCategory("Other");
-              SubCategoryController.updateSubCategory("Other");
+              updateSelectedSubCategory("Others");
+              SubCategoryController.updateSubCategory("Others");
               Get.offAll(PostAnItem());
             },
           ),

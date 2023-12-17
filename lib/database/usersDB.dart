@@ -2,9 +2,6 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flutter_bcrypt/flutter_bcrypt.dart';
-import '../screens/Shop/Home.dart';
 
 class UsersDatabase {
   // get collection of users
