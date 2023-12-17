@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -49,8 +47,6 @@ class _PostAnItemState extends State<PostAnItem> {
 
     if (pickedImage != null) {
       setState(() {
-        imageListController.addImage(pickedImage);
-        print(imageListController);
         imageListController.addImage(pickedImage);
         print(imageListController);
       });
