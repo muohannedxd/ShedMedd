@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/SidebarButton.dart';
+import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/database/usersDB.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Settings/Aboutus.dart';
 import 'package:shedmedd/screens/Settings/settings.dart';
@@ -32,63 +35,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 Center(
                   child: Padding(
                       padding: const EdgeInsets.only(top: 50, bottom: 50),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Shop(currentIndex: 4),
-                            ),
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              child: CircleAvatar(
-                                backgroundColor: CustomColors.grey,
-                                child: Text('MK'),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 120,
-                                    child: Text(
-                                      'Mohanned kadache',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: TextSizes.regular,
-                                          color: CustomColors.textPrimary),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width: 120,
-                                    child: Text(
-                                      'mohanned@gmail.com',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: TextSizes.small,
-                                          color: CustomColors.textPrimary),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      )),
+                      child: LoggedInUser()),
                 ),
                 SidebarButton(
                   title: 'Homepage',
@@ -189,7 +136,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Settings(),
+                          builder: (context) => SettingsPage(),
                         ),
                       );
                     }
@@ -257,5 +204,103 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
               ],
             )));
+  }
+}
+
+class LoggedInUser extends StatelessWidget {
+  LoggedInUser({
+    super.key,
+  });
+
+  final Future<DocumentSnapshot> user = UsersDatabase().getLoggedInUser();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Shop(currentIndex: 4),
+            ),
+          );
+        },
+        child: FutureBuilder(
+            future: user,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return CustomErrorWidget(errorText: 'Error occured');
+              } else if (snapshot.hasData) {
+                // get the user and his profile image url
+                DocumentSnapshot<Object?>? user = snapshot.data;
+                if (user == null || !user.exists) {
+                  return CustomErrorWidget(
+                      errorText: 'Signup to fully enjoy ShedMedd!');
+                }
+                String imageUrl = user['profile_pic'];
+                String initials = user['name'].toUpperCase().substring(0, 2);
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      child: CircleAvatar(
+                        backgroundColor: CustomColors.grey,
+                        child: ClipOval(
+                          child: imageUrl.isNotEmpty
+                              ? Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
+                                  width: 60,
+                                  height: 60,
+                                )
+                              : Text(initials),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 160,
+                            child: Text(
+                              user['name'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: TextSizes.regular,
+                                  color: CustomColors.textPrimary),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: 160,
+                            child: Text(
+                              user['email'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: TextSizes.small,
+                                  color: CustomColors.textPrimary),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                    child: CustomErrorWidget(
+                        errorText: 'Signup to fully enjoy ShedMedd!'));
+              }
+            }));
   }
 }

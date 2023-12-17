@@ -2,6 +2,8 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../controller/auth/auth_controller.dart';
+
 
 class UsersDatabase {
   // get collection of users
@@ -23,6 +25,13 @@ class UsersDatabase {
     //await Future.delayed(Duration(milliseconds: 1000));
     DocumentSnapshot snapshot = await users.doc(id).get();
     return snapshot;
+  }
+
+  Future<DocumentSnapshot> getLoggedInUser() async {
+    final AuthController authController = AuthController();
+    String? user_id = await authController.getCurrentUserId();
+    DocumentSnapshot logged_in_user = await users.doc(user_id).get();
+    return logged_in_user;
   }
 
   void addUserData(String userId, Map<String, dynamic> userData) {
@@ -70,9 +79,9 @@ class UsersDatabase {
           'password': hashedPassword,
           'isSeller': false,
           'location': '',
-          'phone':'',
-          'profile_pic':'',
-          'rate':''
+          'phone': '',
+          'profile_pic': '',
+          'rate': ''
         };
 
         // Add user data to the database
@@ -157,6 +166,4 @@ class UsersDatabase {
       return 'Error during login';
     }
   }
-  
-
 }
