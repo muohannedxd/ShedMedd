@@ -1,9 +1,10 @@
 class TextSizes {
-  static const double verybig = 32.0;
-  static const double title = 26.0;
-  static const double subtitle = 22.0;
-  static const double medium = 18.0;
-  static const double regular = 16.0;
-  static const double small = 14.0;
-  static const double verysmall = 12.0;
+  static const double large = 32.0;
+  static const double verybig = 30.0;
+  static const double title = 24.0;
+  static const double subtitle = 20.0;
+  static const double medium = 16.0;
+  static const double regular = 14.0;
+  static const double small = 12.0;
+  static const double verysmall = 10.0;
 }
