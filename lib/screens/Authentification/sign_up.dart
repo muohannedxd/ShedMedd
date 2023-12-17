@@ -329,6 +329,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   height: 32,
@@ -347,6 +348,7 @@ class _SignUpState extends State<SignUp> {
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16.0), // Adjust spacing as needed
                 Text(
