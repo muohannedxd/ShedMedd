@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shedmedd/components/back_header_widget.dart';
 import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
@@ -64,9 +65,9 @@ class ItemHome extends StatelessWidget {
 
                 // return button
                 Positioned(
-                    top: MediaQuery.of(context).size.height * 0.06,
-                    left: MediaQuery.of(context).size.width * 0.05,
-                    child: ReturnButton()),
+                    top: MediaQuery.of(context).size.height * 0.04,
+                    left: MediaQuery.of(context).size.width * 0.065,
+                    child: BackHeaderWidget(title: '',)),
 
                 isSeller
                     ? Positioned(

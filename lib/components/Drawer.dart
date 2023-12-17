@@ -236,7 +236,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                 ),
                 SidebarButton(
-                  title: 'Sign Up',
+                  title: 'Sign In',
                   icon: Image.asset(
                     'assets/icons/signup.png',
                     width: 20,
