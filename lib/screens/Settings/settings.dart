@@ -6,14 +6,14 @@ import 'package:shedmedd/screens/Settings/Aboutus.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/components/BarWithReturn.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsPageState extends State<SettingsPage> {
   int selectedBoxIndex = -1; // Index of the selected box, -1 means none selected
   late Timer _timer;
 

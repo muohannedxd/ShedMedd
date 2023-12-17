@@ -24,6 +24,7 @@ class Seller extends StatelessWidget {
                   errorText: 'An error occured. Try again later'));
         } else if (snapshot.hasData) {
           DocumentSnapshot<Object?>? user = snapshot.data;
+          String initials = user?['name'].toUpperCase().substring(0, 2);
           String imageUrl = user?['profile_pic'];
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,12 +36,12 @@ class Seller extends StatelessWidget {
                 child: CircleAvatar(
                     backgroundColor: CustomColors.grey,
                     child: ClipOval(
-                      child: Image.network(
+                      child: imageUrl.isNotEmpty ? Image.network(
                         imageUrl,
                         fit: BoxFit.cover,
                         width: 60,
                         height: 60,
-                      ),
+                      ) : Text(initials),
                     )
                   ),
               ),
