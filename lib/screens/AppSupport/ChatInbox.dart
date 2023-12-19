@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/customColors.dart';
+import '../Shop/Home.dart';
 
 class ChatInbox extends StatefulWidget {
   @override
@@ -21,72 +22,85 @@ class _ChatInboxState extends State<ChatInbox> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 25),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+            (route) => false);
+        return false;
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 25),
 
-            // Search Bar
-            Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Container(
-                width: 350.0, // Set the desired width
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 20, top: 10, bottom: 10, right: 10),
+              // Search Bar
+              Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Container(
+                  width: 350.0, // Set the desired width
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(
+                                left: 20, top: 10, bottom: 10, right: 10),
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Image.asset('assets/icons/search_filled.png', width: 22, color: CustomColors.textPrimary,),
-                      onPressed: () {
-                        // Handle search action
-                      },
-                    ),
-                  ],
+                      IconButton(
+                        icon: Image.asset(
+                          'assets/icons/search_filled.png',
+                          width: 22,
+                          color: CustomColors.textPrimary,
+                        ),
+                        onPressed: () {
+                          // Handle search action
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            SizedBox(height: 20.0), // Spacer
+              SizedBox(height: 20.0), // Spacer
 
-            // Line with light grey
-            Container(
-              height: 1.0,
-              color: Colors.grey[300],
-            ),
-            SizedBox(height: 5), // Spacer
-
-            // Unread messages text
-            Text(
-              '5 unread messages',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              // Line with light grey
+              Container(
+                height: 1.0,
+                color: Colors.grey[300],
               ),
-            ),
-            SizedBox(height: 25), // Spacer
+              SizedBox(height: 5), // Spacer
 
-            // Inbox Items
-            for (int i = 0; i < inboxItems.length; i++) ...[
-              buildInboxItem(inboxItems[i]),
-              if (i < inboxItems.length - 1)
-                SizedBox(height: 2), // Add spacing between items
+              // Unread messages text
+              Text(
+                '5 unread messages',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 25), // Spacer
+
+              // Inbox Items
+              for (int i = 0; i < inboxItems.length; i++) ...[
+                buildInboxItem(inboxItems[i]),
+                if (i < inboxItems.length - 1)
+                  SizedBox(height: 2), // Add spacing between items
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

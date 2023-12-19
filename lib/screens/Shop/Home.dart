@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
+import '../../controller/auth/auth_controller.dart';
 import '../Post_item/post_an_new_item.dart';
 import 'ShopHome.dart';
 import '../../constants/customColors.dart';
@@ -23,6 +26,9 @@ class _ShopState extends State<Shop> {
   late int currentPageIndex;
   bool isShownBottomBar = true;
 
+  final AuthController authController = Get.put(AuthController());
+  final bool isLoggedIn = AuthController().isLoggedIn();
+
   @override
   void initState() {
     currentPageIndex = widget.currentIndex;
@@ -35,9 +41,9 @@ class _ShopState extends State<Shop> {
     List<Widget> _pages = <Widget>[
       ShopHome(),
       Discover(),
-      PostAnItem(),
-      ChatInbox(),
-      Profile(),
+      isLoggedIn ? PostAnItem() : SignUp(),
+      isLoggedIn ? ChatInbox() : SignUp(),
+      isLoggedIn ? Profile() : SignUp(),
     ];
     List<String> _pageTitles = [
       'ShedMedd',

@@ -7,6 +7,7 @@ import 'package:shedmedd/screens/Authentification/log_in.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 
 import '../../config/searchArguments.dart';
+import '../Shop/Home.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -20,129 +21,138 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(),
-      backgroundColor: CustomColors.bgColor,
-      body: ListView(
-        padding: EdgeInsets.all(28),
-        children: [
-          // First Section: Profile Information
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // Icon for Settings
-                  // Profile Picture
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage:
-                        AssetImage('assets/images/profile_picture.png'),
-                  ),
-                  // Add padding between the image and the name
-                  SizedBox(width: 20),
-                  // Name and Email of the Person
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'John Doe',
-                        style: TextStyle(
-                          color: CustomColors.textPrimary,
-                          fontSize: TextSizes.title - 6,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'johndoe@gmail.com',
-                        style: TextStyle(
-                          color: CustomColors.textPrimary,
-                          fontSize: TextSizes.subtitle - 4,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    // Add padding to the right
-                    child: MouseRegion(
-                      onEnter: (_) {
-                        setState(() {
-                          isHovered = true;
-                        });
-                      },
-                      onExit: (_) {
-                        setState(() {
-                          isHovered = false;
-                        });
-                      },
-                      child: Transform.rotate(
-                        angle: isHovered ? 0.5 : 0,
-                        child: IconButton(
-                          icon: Image.asset(
-                            'assets/icons/edit_profile.png',
-                            width: 24,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+            (route) => false);
+        return false;
+      },
+      child: Scaffold(
+        drawer: Drawer(),
+        backgroundColor: CustomColors.bgColor,
+        body: ListView(
+          padding: EdgeInsets.all(28),
+          children: [
+            // First Section: Profile Information
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    // Icon for Settings
+                    // Profile Picture
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage:
+                          AssetImage('assets/images/profile_picture.png'),
+                    ),
+                    // Add padding between the image and the name
+                    SizedBox(width: 20),
+                    // Name and Email of the Person
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'John Doe',
+                          style: TextStyle(
+                            color: CustomColors.textPrimary,
+                            fontSize: TextSizes.title - 6,
+                            fontWeight: FontWeight.bold,
                           ),
-                          onPressed: () {
-                            // Handle settings icon press
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfileSettings()),
-                            );
-                          },
+                        ),
+                        Text(
+                          'johndoe@gmail.com',
+                          style: TextStyle(
+                            color: CustomColors.textPrimary,
+                            fontSize: TextSizes.subtitle - 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      // Add padding to the right
+                      child: MouseRegion(
+                        onEnter: (_) {
+                          setState(() {
+                            isHovered = true;
+                          });
+                        },
+                        onExit: (_) {
+                          setState(() {
+                            isHovered = false;
+                          });
+                        },
+                        child: Transform.rotate(
+                          angle: isHovered ? 0.5 : 0,
+                          child: IconButton(
+                            icon: Image.asset(
+                              'assets/icons/edit_profile.png',
+                              width: 24,
+                            ),
+                            onPressed: () {
+                              // Handle settings icon press
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileSettings()),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          // Second Section: Options Box
-          Container(
-            margin: EdgeInsets.only(top: 40),
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: CustomColors.grey,
-                width: 1.0,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
+                  ],
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // My Products
-                _buildOptionItem('shopping_bag.png', 'My Products', () {
-                  Navigator.pushNamed(context, '/discover/results',
-                      arguments: SearchArguments('My Products', true, true));
-                }),
-                Divider(),
-                // Rate This App
-                _buildOptionItem('star.png', 'Rate This App', () {
-                  Navigator.pushNamed(context, '/rateApp');
-                }),
-                Divider(),
-                // Log Out
-                _buildOptionItem('logout.png', 'Log Out', () {
-                  _showLogoutConfirmationDialog();
-                }),
-              ],
+
+            // Second Section: Options Box
+            Container(
+              margin: EdgeInsets.only(top: 40),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: CustomColors.grey,
+                  width: 1.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // My Products
+                  _buildOptionItem('shopping_bag.png', 'My Products', () {
+                    Navigator.pushNamed(context, '/discover/results',
+                        arguments: SearchArguments('My Products', true, true));
+                  }),
+                  Divider(),
+                  // Rate This App
+                  _buildOptionItem('star.png', 'Rate This App', () {
+                    Navigator.pushNamed(context, '/rateApp');
+                  }),
+                  Divider(),
+                  // Log Out
+                  _buildOptionItem('logout.png', 'Log Out', () {
+                    _showLogoutConfirmationDialog();
+                  }),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

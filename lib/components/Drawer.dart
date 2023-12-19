@@ -25,8 +25,8 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   final AuthController authController = Get.put(AuthController());
-  final Future<DocumentSnapshot> user = UsersDatabase().getLoggedInUser();
   final bool isLoggedIn = AuthController().isLoggedIn();
+  final Future<DocumentSnapshot> user = UsersDatabase().getLoggedInUser();
 
   @override
   Widget build(BuildContext context) {
