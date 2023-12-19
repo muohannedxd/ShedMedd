@@ -22,13 +22,13 @@ class _ChatInboxState extends State<ChatInbox> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
+    return WillPopScope(
+      onWillPop: () async {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
             (route) => false);
+        return false;
       },
       child: Scaffold(
         body: Padding(
