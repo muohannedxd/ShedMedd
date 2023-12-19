@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class ItemsDatabase {
   // get collection of items
@@ -101,7 +102,8 @@ class ItemsDatabase {
   // get items of a user
   Future<List<DocumentSnapshot>> getUserItems(String user_id) async {
     //await Future.delayed(Duration(seconds: 1));
-    QuerySnapshot snapshot = await items.where('user_id', isEqualTo: user_id).get();
+    QuerySnapshot snapshot =
+        await items.where('user_id', isEqualTo: user_id).get();
     return snapshot.docs;
   }
 
@@ -112,8 +114,10 @@ class ItemsDatabase {
 
     for (int i = 0; i < imagePaths.length; i++) {
       String imagePath = imagePaths[i];
+      // to generate a unique identifier
+      String uuid = Uuid().v4();
       Reference storageReference =
-          FirebaseStorage.instance.ref().child('images/items/$i');
+          FirebaseStorage.instance.ref().child('images/items/$uuid');
       UploadTask uploadTask = storageReference.putFile(File(imagePath));
 
       await uploadTask.whenComplete(() async {
