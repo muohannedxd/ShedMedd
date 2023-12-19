@@ -130,13 +130,13 @@ class _PostAnItemState extends State<PostAnItem> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
             (route) => false);
-        return false;
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(

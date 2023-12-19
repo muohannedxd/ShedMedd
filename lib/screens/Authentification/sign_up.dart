@@ -28,13 +28,13 @@ class _SignUpState extends State<SignUp> {
   TextEditingController confirmPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
             (route) => false);
-        return false;
       },
       child: Scaffold(
         body: ListView(
@@ -52,7 +52,8 @@ class _SignUpState extends State<SignUp> {
                     height: 16,
                   ),
                   Text("your account",
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
                 ],
               ),
             ),
@@ -80,7 +81,8 @@ class _SignUpState extends State<SignUp> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      errorText: passwordError.isNotEmpty ? passwordError : null,
+                      errorText:
+                          passwordError.isNotEmpty ? passwordError : null,
                       suffixIcon: IconButton(
                         iconSize: 16,
                         icon: Icon(
@@ -147,11 +149,12 @@ class _SignUpState extends State<SignUp> {
                     passwordError = passwordController.text.isEmpty
                         ? "Fill password field"
                         : "";
-                    confirmPasswordError = confirmPasswordController.text.isEmpty
-                        ? "Fill confirm password field"
-                        : "";
+                    confirmPasswordError =
+                        confirmPasswordController.text.isEmpty
+                            ? "Fill confirm password field"
+                            : "";
                   });
-      
+
                   if (nameError.isEmpty &&
                       emailError.isEmpty &&
                       passwordError.isEmpty &&
@@ -172,7 +175,7 @@ class _SignUpState extends State<SignUp> {
                         emailController.clear();
                         passwordController.clear();
                         confirmPasswordController.clear();
-      
+
                         print('User successfully registered');
                       } else {
                         // Display error messages below the corresponding TextFields
@@ -196,7 +199,7 @@ class _SignUpState extends State<SignUp> {
                               confirmPasswordError = '';
                               errorMessage = '';
                               break;
-      
+
                             case 'Error during signup':
                               errorMessage = result;
                               emailError = '';
