@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -94,6 +95,7 @@ class _PostAnItemState extends State<PostAnItem> {
       }
 
       Map<String, dynamic> newItemData = {
+        'created_at': FieldValue.serverTimestamp(),
         'title': _titleController.title.value,
         'description': _descriptionController.description.value,
         'price': int.tryParse(_priceController.price.value),

@@ -11,6 +11,7 @@ import '../../components/errorWidget.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
+import 'Home.dart';
 
 class ItemHome extends StatelessWidget {
   final String itemID;
@@ -29,7 +30,7 @@ class ItemHome extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return CustomErrorWidget(
-                                errorText: 'An error occured. Try again later');
+                  errorText: 'An error occured. Try again later');
             } else if (snapshot.hasData) {
               DocumentSnapshot<Object?>? item = snapshot.data;
               return Stack(children: [
@@ -67,13 +68,18 @@ class ItemHome extends StatelessWidget {
                 Positioned(
                     top: MediaQuery.of(context).size.height * 0.04,
                     left: MediaQuery.of(context).size.width * 0.065,
-                    child: BackHeaderWidget(title: '',)),
+                    child: BackHeaderWidget(
+                      title: '',
+                    )),
 
                 isSeller
                     ? Positioned(
                         top: MediaQuery.of(context).size.height * 0.06,
                         right: MediaQuery.of(context).size.width * 0.05,
-                        child: SettingsButton())
+                        child: SettingsButton(
+                          itemID: item?.id,
+                          imagesPaths: item?['images'],
+                        ))
                     : Visibility(visible: false, child: Text('')),
 
                 // go to DM button
@@ -193,15 +199,16 @@ class ReturnButton extends StatelessWidget {
 }
 
 class SettingsButton extends StatelessWidget {
-  const SettingsButton({
-    super.key,
-  });
+  const SettingsButton(
+      {super.key, required this.itemID, required this.imagesPaths});
+  final itemID;
+  final imagesPaths;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.small(
         backgroundColor: CustomColors.white,
-        onPressed: () => print('hh'),
+        onPressed: () => print(''),
         child: PopupMenuButton(
           itemBuilder: (BuildContext context) {
             return [
@@ -218,11 +225,14 @@ class SettingsButton extends StatelessWidget {
               ),
               PopupMenuItem<String>(
                 value: 'delete',
-                child: ListTile(
-                  leading: Icon(Icons.delete_outline,
-                      color: CustomColors.textPrimary),
-                  title: Text('Delete',
-                      style: TextStyle(color: CustomColors.textPrimary)),
+                child: GestureDetector(
+                  onTap: () => showDeleteItemDialog(context),
+                  child: ListTile(
+                    leading: Icon(Icons.delete_outline,
+                        color: CustomColors.textPrimary),
+                    title: Text('Delete',
+                        style: TextStyle(color: CustomColors.textPrimary)),
+                  ),
                 ),
               ),
             ];
@@ -232,5 +242,61 @@ class SettingsButton extends StatelessWidget {
             color: CustomColors.textPrimary,
           ),
         ));
+  }
+  
+
+  void showDeleteItemDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // Set background color to white
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to delete this product?',
+            style: TextStyle(
+              fontSize: TextSizes.medium,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: TextSizes.medium,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await ItemsDatabase().deleteItem(itemID, imagesPaths);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Shop(currentIndex: 0),
+                  ),
+                );
+                ;
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  fontSize: TextSizes.medium,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
