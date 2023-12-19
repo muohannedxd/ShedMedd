@@ -11,6 +11,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import '../../controller/auth/auth_controller.dart';
 import '../../controller/items/itemsController.dart';
 
 class QuickSearchResults extends StatefulWidget {
@@ -126,45 +127,52 @@ class _QuickSearchResults extends State<QuickSearchResults> {
       selectedSubcategory = searchKey.split(' ').last;
     }
     final isSeller = arguments.seller;
-
-    //Map<String, dynamic> items = itemsController.items;
-    Map<String, dynamic> filters = {
-      'title': searchKey,
-      'category': selectedCategory,
-      'subcategory': selectedSubcategory,
-      'condition': selectedCondition,
-      'minPrice': _selectedRange.start,
-      'maxPrice': _selectedRange.end
-    };
-
-    if (searchBar) {
-      itemsController.searchItems(
-        title: filters['title'],
-        category: filters['category'],
-        subcategory: filters['subcategory'],
-        condition: filters['condition'],
-        minPrice: filters['minPrice'],
-        maxPrice: filters['maxPrice'],
-      );
+    if (isSeller) {
+      AuthController().getCurrentUserId().then((userId) {
+        itemsController.getMyProducts(userId!);
+      });
     } else {
-      itemsController.filterItems(
-        category: filters['category'],
-        subcategory: filters['subcategory'],
-        condition: filters['condition'],
-        minPrice: filters['minPrice'],
-        maxPrice: filters['maxPrice'],
-      );
+      //Map<String, dynamic> items = itemsController.items;
+      Map<String, dynamic> filters = {
+        'title': searchKey,
+        'category': selectedCategory,
+        'subcategory': selectedSubcategory,
+        'condition': selectedCondition,
+        'minPrice': _selectedRange.start,
+        'maxPrice': _selectedRange.end
+      };
+
+      if (searchBar) {
+        itemsController.searchItems(
+          title: filters['title'],
+          category: filters['category'],
+          subcategory: filters['subcategory'],
+          condition: filters['condition'],
+          minPrice: filters['minPrice'],
+          maxPrice: filters['maxPrice'],
+        );
+      } else {
+        itemsController.filterItems(
+          category: filters['category'],
+          subcategory: filters['subcategory'],
+          condition: filters['condition'],
+          minPrice: filters['minPrice'],
+          maxPrice: filters['maxPrice'],
+        );
+      }
     }
 
     return ScrollConfiguration(
         behavior: BehaviorOfScroll(),
         child: Scaffold(
-          endDrawer: FilterDrawer(searchBar),
+          endDrawer: !isSeller ? FilterDrawer(searchBar) : null,
           backgroundColor: CustomColors.bgColor,
           body: Obx(() => FutureBuilder(
-              future: searchBar
-                  ? itemsController.specificItems.value
-                  : itemsController.filteredItems.value,
+              future: isSeller
+                  ? itemsController.myProducts.value
+                  : (searchBar
+                      ? itemsController.specificItems.value
+                      : itemsController.filteredItems.value),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return CustomErrorWidget(
@@ -208,40 +216,47 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                 width: 20,
                               ),
                               Builder(builder: (context) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Scaffold.of(context).openEndDrawer();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                            color: CustomColors.grey),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 18,
-                                            right: 10,
-                                            top: 6,
-                                            bottom: 6),
-                                        child: Row(
-                                          children: [
-                                            Text('Filter',
-                                                style: TextStyle(
-                                                    color: CustomColors
-                                                        .textPrimary,
-                                                    fontSize: TextSizes.small)),
-                                            SizedBox(
-                                              width: 6,
+                                return !isSeller
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          Scaffold.of(context).openEndDrawer();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                                color: CustomColors.grey),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 18,
+                                                right: 10,
+                                                top: 6,
+                                                bottom: 6),
+                                            child: Row(
+                                              children: [
+                                                Text('Filter',
+                                                    style: TextStyle(
+                                                        color: CustomColors
+                                                            .textPrimary,
+                                                        fontSize:
+                                                            TextSizes.small)),
+                                                SizedBox(
+                                                  width: 6,
+                                                ),
+                                                Icon(
+                                                  Icons
+                                                      .arrow_drop_down_outlined,
+                                                  color:
+                                                      CustomColors.textPrimary,
+                                                )
+                                              ],
                                             ),
-                                            Icon(
-                                              Icons.arrow_drop_down_outlined,
-                                              color: CustomColors.textPrimary,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ));
+                                          ),
+                                        ))
+                                    : Visibility(
+                                        visible: false, child: Text(''));
                               }),
                             ],
                           ),
@@ -292,42 +307,49 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                               SizedBox(
                                 width: 20,
                               ),
-                              Builder(builder: (context) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Scaffold.of(context).openEndDrawer();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                            color: CustomColors.grey),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 18,
-                                            right: 10,
-                                            top: 6,
-                                            bottom: 6),
-                                        child: Row(
-                                          children: [
-                                            Text('Filter',
-                                                style: TextStyle(
+                              !isSeller
+                                  ? Builder(builder: (context) {
+                                      return GestureDetector(
+                                          onTap: () {
+                                            Scaffold.of(context)
+                                                .openEndDrawer();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              border: Border.all(
+                                                  color: CustomColors.grey),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 18,
+                                                  right: 10,
+                                                  top: 6,
+                                                  bottom: 6),
+                                              child: Row(
+                                                children: [
+                                                  Text('Filter',
+                                                      style: TextStyle(
+                                                          color: CustomColors
+                                                              .textPrimary,
+                                                          fontSize:
+                                                              TextSizes.small)),
+                                                  SizedBox(
+                                                    width: 6,
+                                                  ),
+                                                  Icon(
+                                                    Icons
+                                                        .arrow_drop_down_outlined,
                                                     color: CustomColors
                                                         .textPrimary,
-                                                    fontSize: TextSizes.small)),
-                                            SizedBox(
-                                              width: 6,
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                            Icon(
-                                              Icons.arrow_drop_down_outlined,
-                                              color: CustomColors.textPrimary,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ));
-                              }),
+                                          ));
+                                    })
+                                  : Visibility(visible: false, child: Text('')),
                             ],
                           ),
                         ),
