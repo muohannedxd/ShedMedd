@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shedmedd/components/SidebarButton.dart';
 import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/database/usersDB.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Settings/Aboutus.dart';
 import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
+
+import 'profileShimmer.dart';
 
 class AppDrawer extends StatefulWidget {
   final int current;
@@ -20,6 +24,10 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  final AuthController authController = Get.put(AuthController());
+  final bool isLoggedIn = AuthController().isLoggedIn();
+  final Future<DocumentSnapshot> user = UsersDatabase().getLoggedInUser();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +43,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 Center(
                   child: Padding(
                       padding: const EdgeInsets.only(top: 50, bottom: 50),
-                      child: LoggedInUser()),
+                      child: LoggedInUser(loggedInUser: user)),
                 ),
                 SidebarButton(
                   title: 'Homepage',
@@ -182,37 +190,62 @@ class _AppDrawerState extends State<AppDrawer> {
                     }
                   },
                 ),
-                SidebarButton(
-                  title: 'Sign In',
-                  icon: Image.asset(
-                    'assets/icons/signup.png',
-                    width: 20,
+                Visibility(
+                  visible: !isLoggedIn,
+                  child: SidebarButton(
+                    title: 'Sign In',
+                    icon: Image.asset(
+                      'assets/icons/signup.png',
+                      width: 20,
+                    ),
+                    current: widget.current == 8 ? true : false,
+                    action: () {
+                      //setCurrent(5);
+                      if (widget.current != 8) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUp(),
+                          ),
+                        );
+                      }
+                    },
                   ),
-                  current: widget.current == 8 ? true : false,
-                  action: () {
-                    //setCurrent(5);
-                    if (widget.current != 8) {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignUp(),
-                        ),
-                      );
-                    }
-                  },
                 ),
+                Visibility(
+                  visible: isLoggedIn,
+                  child: SidebarButton(
+                    title: 'Log Out',
+                    icon: Image.asset(
+                      'assets/icons/logout.png',
+                      width: 20,
+                    ),
+                    current: widget.current == 8 ? true : false,
+                    action: () {
+                      //setCurrent(5);
+                      if (widget.current != 8) {
+                        UsersDatabase().logoutUser();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Shop(currentIndex: 0),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  //Text('logged: ${authController.isLoggedIn.value}')
+                )
               ],
             )));
   }
 }
 
 class LoggedInUser extends StatelessWidget {
-  LoggedInUser({
-    super.key,
-  });
+  LoggedInUser({super.key, required this.loggedInUser});
 
-  final Future<DocumentSnapshot> user = UsersDatabase().getLoggedInUser();
+  final Future<DocumentSnapshot> loggedInUser;
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +260,7 @@ class LoggedInUser extends StatelessWidget {
           );
         },
         child: FutureBuilder(
-            future: user,
+            future: loggedInUser,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return CustomErrorWidget(errorText: 'Error occured');
@@ -240,7 +273,6 @@ class LoggedInUser extends StatelessWidget {
                 }
                 String imageUrl = user['profile_pic'];
                 String initials = user['name'].toUpperCase().substring(0, 2);
-
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -297,10 +329,13 @@ class LoggedInUser extends StatelessWidget {
                   ],
                 );
               } else {
-                return Center(
-                    child: CustomErrorWidget(
-                        errorText: 'Signup to fully enjoy ShedMedd!'));
+                return Center(child: ProfileShimmer());
               }
             }));
   }
 }
+
+/**
+ * 
+ * return 
+ */

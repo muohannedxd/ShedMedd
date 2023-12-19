@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/back_header_widget.dart';
-import 'package:shedmedd/config/customCircularProg.dart';
+import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
 import '../../components/Shop/ItemInformation.dart';

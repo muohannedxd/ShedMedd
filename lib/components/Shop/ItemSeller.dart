@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shedmedd/config/customCircularProg.dart';
-
+import 'package:shedmedd/components/profileShimmer.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
@@ -36,14 +35,15 @@ class Seller extends StatelessWidget {
                 child: CircleAvatar(
                     backgroundColor: CustomColors.grey,
                     child: ClipOval(
-                      child: imageUrl.isNotEmpty ? Image.network(
-                        imageUrl,
-                        fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
-                      ) : Text(initials),
-                    )
-                  ),
+                      child: imageUrl.isNotEmpty
+                          ? Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              width: 60,
+                              height: 60,
+                            )
+                          : Text(initials),
+                    )),
               ),
               SizedBox(
                 width: 20,
@@ -83,9 +83,7 @@ class Seller extends StatelessWidget {
             ],
           );
         } else {
-          return Center(
-            child: CustomCircularProgress(),
-          );
+          return ProfileShimmer();
         }
       },
     );

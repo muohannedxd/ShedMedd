@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
-class AuthController {
+class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Method to get the current user ID
@@ -15,6 +16,19 @@ class AuthController {
     } catch (e) {
       print("Error getting user ID: $e");
       return null;
+    }
+  }
+
+  bool isLoggedIn() {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        return true;
+      }
+      return false; // User is not signed in
+    } catch (e) {
+      print("Error: $e");
+      return false;
     }
   }
 }

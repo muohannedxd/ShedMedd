@@ -5,6 +5,7 @@ import '../../config/bouncingScroll.dart';
 import '../../config/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import 'Home.dart';
 
 class Discover extends StatefulWidget {
   const Discover({super.key});
@@ -41,83 +42,93 @@ class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: BehaviorOfScroll(),
-      child: Scaffold(
-        backgroundColor: CustomColors.bgColor,
-        body: Column(children: [
-          Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, top: 20, bottom: 20),
-              child: SearchBar(
-                  onSubmitted: (value) => submitSearch(value),
-                  hintText: 'Search',
-                  hintStyle: MaterialStateProperty.all(TextStyle(
-                      color: CustomColors.textGrey,
-                      fontWeight: FontWeight.w600,
-                      fontSize: TextSizes.small)),
-                  backgroundColor: MaterialStateProperty.all(Color(0XFFFAFAFA)),
-                  shadowColor:
-                      MaterialStateProperty.all(CustomColors.textPrimary),
-                  elevation: MaterialStateProperty.all(2),
-                  shape: MaterialStateProperty.all(ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(40))),
-                  //controller: controller,
-                  padding: const MaterialStatePropertyAll<EdgeInsets>(
-                      EdgeInsets.symmetric(horizontal: 20.0)),
-                  leading: Image.asset(
-                    'assets/icons/search_filled.png',
-                    width: 22,
-                    color: CustomColors.textPrimary.withOpacity(0.4),
-                  ))),
-          Expanded(
-            child: ListView(
-              children: [
-                // Categories
-                Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: Column(
-                      children: [
-                        MainCategory(
-                          onToggle: () {
-                            toggleSubcategories(0);
-                          },
-                          showSubcategories: showSubCategory[0],
-                          category: 'Men',
-                          bgColor: Color.fromARGB(255, 159, 164, 143),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        MainCategory(
-                          onToggle: () {
-                            toggleSubcategories(1);
-                          },
-                          showSubcategories: showSubCategory[1],
-                          category: 'Women',
-                          bgColor: Color.fromARGB(255, 205, 200, 199),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        MainCategory(
-                          onToggle: () {
-                            toggleSubcategories(2);
-                          },
-                          showSubcategories: showSubCategory[2],
-                          category: 'Kids',
-                          bgColor: Color.fromARGB(255, 177, 202, 210),
-                        )
-                      ],
-                    )),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+            (route) => false);
+        return false;
+      },
+      child: ScrollConfiguration(
+        behavior: BehaviorOfScroll(),
+        child: Scaffold(
+          backgroundColor: CustomColors.bgColor,
+          body: Column(children: [
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 20, bottom: 20),
+                child: SearchBar(
+                    onSubmitted: (value) => submitSearch(value),
+                    hintText: 'Search',
+                    hintStyle: MaterialStateProperty.all(TextStyle(
+                        color: CustomColors.textGrey,
+                        fontWeight: FontWeight.w600,
+                        fontSize: TextSizes.small)),
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0XFFFAFAFA)),
+                    shadowColor:
+                        MaterialStateProperty.all(CustomColors.textPrimary),
+                    elevation: MaterialStateProperty.all(2),
+                    shape: MaterialStateProperty.all(ContinuousRectangleBorder(
+                        borderRadius: BorderRadius.circular(40))),
+                    //controller: controller,
+                    padding: const MaterialStatePropertyAll<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 20.0)),
+                    leading: Image.asset(
+                      'assets/icons/search_filled.png',
+                      width: 22,
+                      color: CustomColors.textPrimary.withOpacity(0.4),
+                    ))),
+            Expanded(
+              child: ListView(
+                children: [
+                  // Categories
+                  Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: Column(
+                        children: [
+                          MainCategory(
+                            onToggle: () {
+                              toggleSubcategories(0);
+                            },
+                            showSubcategories: showSubCategory[0],
+                            category: 'Men',
+                            bgColor: Color.fromARGB(255, 159, 164, 143),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          MainCategory(
+                            onToggle: () {
+                              toggleSubcategories(1);
+                            },
+                            showSubcategories: showSubCategory[1],
+                            category: 'Women',
+                            bgColor: Color.fromARGB(255, 205, 200, 199),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          MainCategory(
+                            onToggle: () {
+                              toggleSubcategories(2);
+                            },
+                            showSubcategories: showSubCategory[2],
+                            category: 'Kids',
+                            bgColor: Color.fromARGB(255, 177, 202, 210),
+                          )
+                        ],
+                      )),
 
-                SizedBox(
-                  height: 20,
-                )
-              ],
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../controller/auth/auth_controller.dart';
 
-
 class UsersDatabase {
   // get collection of users
   final CollectionReference users =
@@ -164,6 +163,17 @@ class UsersDatabase {
       // Handle other exceptions
       print('Error during login: $e');
       return 'Error during login';
+    }
+  }
+
+  Future<void> logoutUser() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print('Logout successful');
+      // You can perform additional actions after logout if needed
+    } catch (e) {
+      print('Error during logout: $e');
+      // Handle any errors that occur during logout
     }
   }
 }
