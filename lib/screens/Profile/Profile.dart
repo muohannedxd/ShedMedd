@@ -1,12 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/screens/Authentification/log_in.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 
 import '../../config/searchArguments.dart';
+import '../../database/usersDB.dart';
 import '../Shop/Home.dart';
 
 class Profile extends StatefulWidget {
@@ -185,9 +184,9 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      UsersDatabase().logoutUser();              
       Navigator.of(context).pop();
-      Get.offAll(LogIn());
+      Get.offAll(Shop(currentIndex: 0));
     } catch (e) {
       print("Error during logout: $e");
       // Handle errors if needed

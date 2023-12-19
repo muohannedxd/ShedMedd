@@ -98,6 +98,14 @@ class ItemsDatabase {
     return snapshot.docs;
   }
 
+  // get items of a user
+  Future<List<DocumentSnapshot>> getUserItems(String user_id) async {
+    //await Future.delayed(Duration(seconds: 1));
+    QuerySnapshot snapshot = await items.where('user_id', isEqualTo: user_id).get();
+    return snapshot.docs;
+  }
+
+  // adding a new item
   Future<void> addAnItemData(
       Map<String, dynamic> itemData, List<String> imagePaths) async {
     List<String> imageUrls = [];

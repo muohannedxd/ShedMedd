@@ -42,7 +42,7 @@ class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+   return WillPopScope(
       onWillPop: () async {
         Navigator.pushAndRemoveUntil(
             context,

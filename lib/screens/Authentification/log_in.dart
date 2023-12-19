@@ -49,7 +49,8 @@ class _LogInState extends State<LogIn> {
                     height: 16,
                   ),
                   Text("your account",
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold))
                 ],
               ),
             ),
@@ -71,7 +72,8 @@ class _LogInState extends State<LogIn> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      errorText: passwordError.isNotEmpty ? passwordError : null,
+                      errorText:
+                          passwordError.isNotEmpty ? passwordError : null,
                       suffixIcon: IconButton(
                         iconSize: 16,
                         icon: Icon(

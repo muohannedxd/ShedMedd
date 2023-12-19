@@ -13,6 +13,7 @@ class ItemsController extends GetxController {
   final categoriedItems = Rx<Future<List<DocumentSnapshot>>?>(null);
   final filteredItems = Rx<Future<List<DocumentSnapshot>>?>(null);
   final specificItems = Rx<Future<List<DocumentSnapshot>>?>(null);
+  final myProducts = Rx<Future<List<DocumentSnapshot>>?>(null);
 
   void updateCategoryChooser(String categoryName) {
     category.value = categoryName;
@@ -53,5 +54,9 @@ class ItemsController extends GetxController {
       'maxPrice': maxPrice,
     };
     specificItems.value = ItemsDatabase().getSpecificItems(filters);
+  }
+
+  void getMyProducts(String user_id) {
+    myProducts.value = ItemsDatabase().getUserItems(user_id);
   }
 }
