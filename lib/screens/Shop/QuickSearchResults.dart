@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
-import 'package:shedmedd/config/customCircularProg.dart';
+import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
 import '../../components/emptyListWidget.dart';
 import '../../components/errorWidget.dart';

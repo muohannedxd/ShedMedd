@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/components/emptyListWidget.dart';
 import 'package:shedmedd/components/errorWidget.dart';
-import 'package:shedmedd/config/customCircularProg.dart';
 import 'package:shedmedd/config/searchArguments.dart';
+import '../../components/itemCardShimmer.dart';
 import '../../config/bouncingScroll.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
@@ -105,8 +105,13 @@ class ShopHome extends StatelessWidget {
                                     errorText:
                                         'An error occured. Try again later');
                               } else {
-                                return Center(
-                                  child: CustomCircularProgress(),
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ItemCardShimmer(),
+                                    ItemCardShimmer(),
+                                    ItemCardShimmer()
+                                  ],
                                 );
                               }
                             })),
@@ -174,8 +179,13 @@ class ShopHome extends StatelessWidget {
                             return CustomErrorWidget(
                                 errorText: 'An error occured. Try again later');
                           } else {
-                            return Center(
-                              child: CustomCircularProgress(),
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ItemCardShimmer(),
+                                ItemCardShimmer(),
+                                ItemCardShimmer()
+                              ],
                             );
                           }
                         }))),
@@ -243,8 +253,13 @@ class ShopHome extends StatelessWidget {
                             return CustomErrorWidget(
                                 errorText: 'An error occured. Try again later');
                           } else {
-                            return Center(
-                              child: CustomCircularProgress(),
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ItemCardShimmer(),
+                                ItemCardShimmer(),
+                                ItemCardShimmer()
+                              ],
                             );
                           }
                         }))),

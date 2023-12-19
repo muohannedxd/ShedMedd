@@ -11,6 +11,8 @@ import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 
+import 'profileShimmer.dart';
+
 class AppDrawer extends StatefulWidget {
   final int current;
   const AppDrawer({super.key, required this.current});
@@ -240,7 +242,6 @@ class LoggedInUser extends StatelessWidget {
                 }
                 String imageUrl = user['profile_pic'];
                 String initials = user['name'].toUpperCase().substring(0, 2);
-
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -297,10 +298,13 @@ class LoggedInUser extends StatelessWidget {
                   ],
                 );
               } else {
-                return Center(
-                    child: CustomErrorWidget(
-                        errorText: 'Signup to fully enjoy ShedMedd!'));
+                return Center(child: ProfileShimmer());
               }
             }));
   }
 }
+
+/**
+ * 
+ * return 
+ */
