@@ -213,30 +213,6 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                   ),
                 ),
-                Visibility(
-                  visible: isLoggedIn,
-                  child: SidebarButton(
-                    title: 'Log Out',
-                    icon: Image.asset(
-                      'assets/icons/logout.png',
-                      width: 20,
-                    ),
-                    current: widget.current == 8 ? true : false,
-                    action: () {
-                      //setCurrent(5);
-                      if (widget.current != 8) {
-                        UsersDatabase().logoutUser();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Shop(currentIndex: 0),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  //Text('logged: ${authController.isLoggedIn.value}')
-                )
               ],
             )));
   }
