@@ -33,6 +33,9 @@ class ItemHome extends StatelessWidget {
                   errorText: 'An error occured. Try again later');
             } else if (snapshot.hasData) {
               DocumentSnapshot<Object?>? item = snapshot.data;
+              if (item == null || !item.exists) {
+                return CustomErrorWidget(errorText: 'Item does not exist!');
+              }
               return Stack(children: [
                 Center(
                     child: ScrollConfiguration(
@@ -42,23 +45,23 @@ class ItemHome extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, top: 10, bottom: 10),
-                        child: Pictures(images: item?['images']),
+                        child: Pictures(images: item['images']),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 30, right: 30, top: 10, bottom: 10),
-                        child: Seller(sellerID: item?['user_id']),
+                        child: Seller(sellerID: item['user_id']),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 30, right: 30, top: 20, bottom: 20),
                         child: ItemInformation(
-                            title: item?['title'],
-                            category: item?['category'],
-                            subcategory: item?['subcategory'],
-                            condition: item?['condition'],
-                            price: item?['price'],
-                            description: item?['description']),
+                            title: item['title'],
+                            category: item['category'],
+                            subcategory: item['subcategory'],
+                            condition: item['condition'],
+                            price: item['price'],
+                            description: item['description']),
                       ),
                     ],
                   ),
@@ -77,8 +80,8 @@ class ItemHome extends StatelessWidget {
                         top: MediaQuery.of(context).size.height * 0.06,
                         right: MediaQuery.of(context).size.width * 0.05,
                         child: SettingsButton(
-                          itemID: item?.id,
-                          imagesPaths: item?['images'],
+                          itemID: item.id,
+                          imagesPaths: item['images'],
                         ))
                     : Visibility(visible: false, child: Text('')),
 
@@ -89,10 +92,10 @@ class ItemHome extends StatelessWidget {
                         left: 0,
                         right: 0,
                         child: DirectMessageButton(
-                            title: item?['title'],
-                            condition: item?['condition'],
-                            price: item?['price'],
-                            sellerID: item?['user_id']),
+                            title: item['title'],
+                            condition: item['condition'],
+                            price: item['price'],
+                            sellerID: item['user_id']),
                       )
                     : Visibility(visible: false, child: Text('')),
               ]);
@@ -243,7 +246,6 @@ class SettingsButton extends StatelessWidget {
           ),
         ));
   }
-  
 
   void showDeleteItemDialog(BuildContext context) {
     showDialog(

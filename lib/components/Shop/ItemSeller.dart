@@ -23,8 +23,11 @@ class Seller extends StatelessWidget {
                   errorText: 'An error occured. Try again later'));
         } else if (snapshot.hasData) {
           DocumentSnapshot<Object?>? user = snapshot.data;
-          String initials = user?['name'].toUpperCase().substring(0, 2);
-          String imageUrl = user?['profile_pic'];
+          if (user == null || !user.exists) {
+            return CustomErrorWidget(errorText: 'User does not exist!');
+          }
+          String initials = user['name'].toUpperCase().substring(0, 2);
+          String imageUrl = user['profile_pic'];
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -55,7 +58,7 @@ class Seller extends StatelessWidget {
                     Container(
                       constraints: BoxConstraints(maxWidth: 180),
                       child: Text(
-                        user?['name'],
+                        user['name'],
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: TextSizes.medium,
@@ -65,11 +68,11 @@ class Seller extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    user?['location'] != ''
+                    user['location'] != ''
                         ? Container(
                             width: 200,
                             child: Text(
-                              user?['location'],
+                              user['location'],
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
                                   fontSize: TextSizes.small,
