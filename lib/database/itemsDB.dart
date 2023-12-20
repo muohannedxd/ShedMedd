@@ -149,13 +149,13 @@ class ItemsDatabase {
   // removing an item
   Future<void> deleteItem(String itemId, List<dynamic> imageUrls) async {
     try {
+      // Delete item document from Firestore collection
+      await items.doc(itemId).delete();
+
       // Delete images from Firebase Storage
       for (String imageUrl in imageUrls) {
         await FirebaseStorage.instance.refFromURL(imageUrl).delete();
       }
-
-      // Delete item document from Firestore collection
-      await items.doc(itemId).delete();
 
       print('Item deleted successfully.');
     } catch (error) {

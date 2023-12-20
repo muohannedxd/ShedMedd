@@ -284,7 +284,7 @@ class SettingsButton extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Shop(currentIndex: 0),
+                    builder: (context) => Shop(currentIndex: 4),
                   ),
                 );
                 ;
