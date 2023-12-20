@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../components/back_header_widget.dart';
+import '../../components/floating_button.dart';
+import '../../config/returnAction.dart';
 import '../../constants/customColors.dart';
 import '../../controller/post_item/conditon_controller.dart';
 import 'post_an_new_item.dart';
@@ -23,7 +24,7 @@ class _ConditionPageState extends State<ConditionPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          BackHeaderWidget(title: 'Condition'),
+          FloatingButton(title: 'Condition', action: returnToPreviousPage,),
           SizedBox(
             height: 20,
           ),

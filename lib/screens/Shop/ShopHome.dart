@@ -59,7 +59,7 @@ class ShopHome extends StatelessWidget {
                 const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
             child: CategoryChooser(controller: itemsController),
           ),
-      
+
           // Feature Products
           Padding(
             padding:
@@ -106,10 +106,11 @@ class ShopHome extends StatelessWidget {
                                   if (itemsList!.isEmpty) {
                                     return EmptyListWidget(
                                         emptyError:
-                                            'There are no items to show here.');
+                                            'There are no items to show here!');
                                   } else {
                                     return Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: itemsList
                                           .take(showCount)
                                           .map((document) =>
@@ -136,7 +137,7 @@ class ShopHome extends StatelessWidget {
               ],
             ),
           ),
-      
+
           // Recommended
           Padding(
             padding:
@@ -182,19 +183,21 @@ class ShopHome extends StatelessWidget {
                               if (itemsList!.isEmpty) {
                                 return EmptyListWidget(
                                     emptyError:
-                                        'There are no items to show here.');
+                                        'There are no items to show here!');
                               } else {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: itemsList
                                       .take(showCount)
-                                      .map((document) => ItemCard(item: document))
+                                      .map((document) =>
+                                          ItemCard(item: document))
                                       .toList(),
                                 );
                               }
                             } else if (snapshot.hasError) {
                               return CustomErrorWidget(
-                                  errorText: 'An error occured. Try again later');
+                                  errorText:
+                                      'An error occured. Try again later');
                             } else {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -210,7 +213,7 @@ class ShopHome extends StatelessWidget {
               ],
             ),
           ),
-      
+
           // Deals
           Padding(
             padding:
@@ -256,19 +259,21 @@ class ShopHome extends StatelessWidget {
                               if (itemsList!.isEmpty) {
                                 return EmptyListWidget(
                                     emptyError:
-                                        'There are no items to show here.');
+                                        'There are no items to show here!');
                               } else {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: itemsList
                                       .take(showCount)
-                                      .map((document) => ItemCard(item: document))
+                                      .map((document) =>
+                                          ItemCard(item: document))
                                       .toList(),
                                 );
                               }
                             } else if (snapshot.hasError) {
                               return CustomErrorWidget(
-                                  errorText: 'An error occured. Try again later');
+                                  errorText:
+                                      'An error occured. Try again later');
                             } else {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.start,

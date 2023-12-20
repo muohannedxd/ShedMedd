@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shedmedd/components/back_header_widget.dart';
+import 'package:shedmedd/components/floating_button.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
@@ -9,6 +9,7 @@ import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
 import '../../components/errorWidget.dart';
 import '../../config/myBehavior.dart';
+import '../../config/returnAction.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
 import 'Home.dart';
@@ -70,15 +71,15 @@ class ItemHome extends StatelessWidget {
                 // return button
                 Positioned(
                     top: MediaQuery.of(context).size.height * 0.04,
-                    left: MediaQuery.of(context).size.width * 0.065,
-                    child: BackHeaderWidget(
-                      title: '',
+                    left: MediaQuery.of(context).size.width * 0.04,
+                    child: FloatingButton(
+                      action: returnToPreviousPage,
                     )),
 
                 isSeller
                     ? Positioned(
-                        top: MediaQuery.of(context).size.height * 0.06,
-                        right: MediaQuery.of(context).size.width * 0.05,
+                        top: MediaQuery.of(context).size.height * 0.04,
+                        right: MediaQuery.of(context).size.width * 0.095,
                         child: SettingsButton(
                           itemID: item.id,
                           imagesPaths: item['images'],
@@ -182,25 +183,6 @@ class DirectMessageButton extends StatelessWidget {
   }
 }
 
-class ReturnButton extends StatelessWidget {
-  const ReturnButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-      backgroundColor: CustomColors.white,
-      onPressed: () => Navigator.pop(context),
-      child: Icon(
-        Icons.arrow_back_ios_rounded,
-        color: CustomColors.textPrimary,
-        size: 20,
-      ),
-    );
-  }
-}
-
 class SettingsButton extends StatelessWidget {
   const SettingsButton(
       {super.key, required this.itemID, required this.imagesPaths});
@@ -209,42 +191,58 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.small(
-        backgroundColor: CustomColors.white,
-        onPressed: () => print(''),
-        child: PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return [
-              PopupMenuItem<String>(
-                value: 'edit',
-                child: ListTile(
-                  leading: Icon(Icons.edit_outlined,
-                      color: CustomColors.textPrimary),
-                  title: Text(
-                    'Edit',
-                    style: TextStyle(color: CustomColors.textPrimary),
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(top: 32),
+      child: Material(
+        elevation: 1,
+        shape: CircleBorder(),
+        color: CustomColors.white,
+        child: Container(
+          width: 40,
+          height: 40,
+          child: PopupMenuButton(
+            icon:
+                Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ), // Rectangular shape with rounded corners
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListTile(
+                      leading: Icon(Icons.edit_outlined,
+                          color: CustomColors.textPrimary),
+                      title: Text('Edit',
+                          style: TextStyle(color: CustomColors.textPrimary)),
+                    ),
                   ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'delete',
-                child: GestureDetector(
-                  onTap: () => showDeleteItemDialog(context),
-                  child: ListTile(
-                    leading: Icon(Icons.delete_outline,
-                        color: CustomColors.textPrimary),
-                    title: Text('Delete',
-                        style: TextStyle(color: CustomColors.textPrimary)),
+                PopupMenuItem<String>(
+                  value: 'delete',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: GestureDetector(
+                      onTap: () => showDeleteItemDialog(context),
+                      child: ListTile(
+                        leading: Icon(Icons.delete_outline,
+                            color: CustomColors.textPrimary),
+                        title: Text('Delete',
+                            style: TextStyle(color: CustomColors.textPrimary)),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ];
-          },
-          child: Icon(
-            Icons.more_vert_rounded,
-            color: CustomColors.textPrimary,
+              ];
+            },
+            position: PopupMenuPosition.under,
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void showDeleteItemDialog(BuildContext context) {
@@ -254,7 +252,7 @@ class SettingsButton extends StatelessWidget {
         return AlertDialog(
           backgroundColor: Colors.white, // Set background color to white
           title: Text(
-            'Logout',
+            'Remove item',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

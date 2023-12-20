@@ -282,7 +282,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                             height: 20,
                           ),
                           EmptyListWidget(
-                              emptyError: 'There are no items to show here.'),
+                              emptyError: 'There are no items to show here!'),
                         ],
                       );
                     } else {

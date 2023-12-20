@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/create_new_password.dart';
 import 'package:flutterotpfield/flutterotpfield.dart';
 
-import '../../../components/back_header_widget.dart';
+import '../../../components/floating_button.dart';
+import '../../../config/returnAction.dart';
 
 class VerificationCode extends StatefulWidget {
   const VerificationCode({super.key});
@@ -19,7 +20,7 @@ class _VerificationCodeState extends State<VerificationCode> {
     return Scaffold(
       body: ListView(
         children: [
-          BackHeaderWidget(title: ''),
+          FloatingButton(action: returnToPreviousPage,),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(

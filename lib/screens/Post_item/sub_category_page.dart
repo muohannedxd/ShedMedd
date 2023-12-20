@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../components/back_header_widget.dart';
+import '../../components/floating_button.dart';
+import '../../config/returnAction.dart';
 import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 import 'post_an_new_item.dart';
@@ -23,7 +24,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          BackHeaderWidget(title: 'Sub Category'),
+          FloatingButton(action: returnToPreviousPage,),
           SizedBox(
             height: 20,
           ),
