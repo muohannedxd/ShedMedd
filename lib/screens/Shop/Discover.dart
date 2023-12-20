@@ -42,7 +42,7 @@ class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
-   return WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         Navigator.pushAndRemoveUntil(
             context,
@@ -56,34 +56,52 @@ class _DiscoverState extends State<Discover> {
           backgroundColor: CustomColors.bgColor,
           body: Column(children: [
             Padding(
-                padding: const EdgeInsets.only(
-                    left: 30, right: 30, top: 20, bottom: 20),
-                child: SearchBar(
-                    onSubmitted: (value) => submitSearch(value),
-                    hintText: 'Search',
-                    hintStyle: MaterialStateProperty.all(TextStyle(
-                        color: CustomColors.textGrey,
-                        fontWeight: FontWeight.w600,
-                        fontSize: TextSizes.small)),
-                    backgroundColor:
-                        MaterialStateProperty.all(Color(0XFFFAFAFA)),
-                    shadowColor:
-                        MaterialStateProperty.all(CustomColors.textPrimary),
-                    elevation: MaterialStateProperty.all(2),
-                    shape: MaterialStateProperty.all(ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.circular(40))),
-                    //controller: controller,
-                    padding: const MaterialStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 20.0)),
-                    leading: Image.asset(
-                      'assets/icons/search_filled.png',
-                      width: 22,
-                      color: CustomColors.textPrimary.withOpacity(0.4),
-                    ))),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, top: 20, bottom: 20),
+              child: Container(
+                width: 350.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                            left: 20,
+                            top: 10,
+                            bottom: 10,
+                            right: 10,
+                          ),
+                        ),
+                        // Key modification: Add the onSubmitted callback
+                        onSubmitted: (value) => submitSearch(value),
+                        onChanged: (value) {
+                          setState(() {
+                            searchController = value;
+                          });
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: Image.asset(
+                        'assets/icons/search_filled.png',
+                        width: 22,
+                        color: CustomColors.textPrimary,
+                      ),
+                      onPressed: () => submitSearch(searchController), // Or call submitSearch directly here
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Expanded(
               child: ListView(
                 children: [
-                  // Categories
                   Padding(
                       padding: const EdgeInsets.only(left: 30, right: 30),
                       child: Column(
@@ -120,7 +138,6 @@ class _DiscoverState extends State<Discover> {
                           )
                         ],
                       )),
-
                   SizedBox(
                     height: 20,
                   )
