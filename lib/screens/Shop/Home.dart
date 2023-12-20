@@ -21,7 +21,6 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
-  
   // current Page
   late int currentPageIndex;
   bool isShownBottomBar = true;

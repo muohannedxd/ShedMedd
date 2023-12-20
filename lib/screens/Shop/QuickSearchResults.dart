@@ -24,7 +24,17 @@ class QuickSearchResults extends StatefulWidget {
 class _QuickSearchResults extends State<QuickSearchResults> {
   // price
   RangeValues _selectedRange = RangeValues(0, 10000);
-  //final ItemsController itemsController = Get.put(ItemsController());
+
+  /**
+   * refresh on slide down
+   */
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+  Future<Null> refreshPage() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {});
+    return null;
+  }
 
   // category
   List<DropdownMenuItem> categories = [
@@ -164,152 +174,66 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
     return ScrollConfiguration(
         behavior: BehaviorOfScroll(),
-        child: Scaffold(
-          endDrawer: !isSeller ? FilterDrawer(searchBar) : null,
+        child: RefreshIndicator(
           backgroundColor: CustomColors.bgColor,
-          body: Obx(() => FutureBuilder(
-              future: isSeller
-                  ? itemsController.myProducts.value
-                  : (searchBar
-                      ? itemsController.specificItems.value
-                      : itemsController.filteredItems.value),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return CustomErrorWidget(
-                      errorText: 'An error occured. Try again later');
-                } else if (snapshot.hasData) {
-                  List<DocumentSnapshot<Object?>>? itemsList = snapshot.data;
-                  if (itemsList!.isEmpty) {
-                    return ListView(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, top: 20, bottom: 10),
-                          child: ReturnButton(searchKey: searchKey),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, top: 10, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Found',
-                                    style: TextStyle(
-                                        color: CustomColors.textPrimary,
-                                        fontSize: TextSizes.medium,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    '${itemsList.length} results',
-                                    style: TextStyle(
-                                        color: CustomColors.textPrimary,
-                                        fontSize: TextSizes.medium,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Builder(builder: (context) {
-                                return !isSeller
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Scaffold.of(context).openEndDrawer();
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            border: Border.all(
-                                                color: CustomColors.grey),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 18,
-                                                right: 10,
-                                                top: 6,
-                                                bottom: 6),
-                                            child: Row(
-                                              children: [
-                                                Text('Filter',
-                                                    style: TextStyle(
-                                                        color: CustomColors
-                                                            .textPrimary,
-                                                        fontSize:
-                                                            TextSizes.small)),
-                                                SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Icon(
-                                                  Icons
-                                                      .arrow_drop_down_outlined,
-                                                  color:
-                                                      CustomColors.textPrimary,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ))
-                                    : Visibility(
-                                        visible: false, child: Text(''));
-                              }),
-                            ],
+          color: CustomColors.textPrimary,
+          displacement: MediaQuery.of(context).size.height * 0.08,
+          key: refreshKey,
+          onRefresh: refreshPage,
+          child: Scaffold(
+            endDrawer: !isSeller ? FilterDrawer(searchBar) : null,
+            backgroundColor: CustomColors.bgColor,
+            body: Obx(() => FutureBuilder(
+                future: isSeller
+                    ? itemsController.myProducts.value
+                    : (searchBar
+                        ? itemsController.specificItems.value
+                        : itemsController.filteredItems.value),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return CustomErrorWidget(
+                        errorText: 'An error occured. Try again later');
+                  } else if (snapshot.hasData) {
+                    List<DocumentSnapshot<Object?>>? itemsList = snapshot.data;
+                    if (itemsList!.isEmpty) {
+                      return ListView(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20, bottom: 10),
+                            child: ReturnButton(searchKey: searchKey),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        EmptyListWidget(
-                            emptyError: 'There are no items to show here.'),
-                      ],
-                    );
-                  } else {
-                    return ListView(
-                      children: [
-                        // return button
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, top: 20, bottom: 10),
-                          child: ReturnButton(searchKey: searchKey),
-                        ),
-
-                        // Header
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, top: 10, bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Found',
-                                    style: TextStyle(
-                                        color: CustomColors.textPrimary,
-                                        fontSize: TextSizes.medium,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    '${itemsList.length} results',
-                                    style: TextStyle(
-                                        color: CustomColors.textPrimary,
-                                        fontSize: TextSizes.medium,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              !isSeller
-                                  ? Builder(builder: (context) {
-                                      return GestureDetector(
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 10, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Found',
+                                      style: TextStyle(
+                                          color: CustomColors.textPrimary,
+                                          fontSize: TextSizes.medium,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '${itemsList.length} results',
+                                      style: TextStyle(
+                                          color: CustomColors.textPrimary,
+                                          fontSize: TextSizes.medium,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Builder(builder: (context) {
+                                  return !isSeller
+                                      ? GestureDetector(
                                           onTap: () {
                                             Scaffold.of(context)
                                                 .openEndDrawer();
@@ -347,65 +271,162 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                                 ],
                                               ),
                                             ),
-                                          ));
-                                    })
-                                  : Visibility(visible: false, child: Text('')),
-                            ],
+                                          ))
+                                      : Visibility(
+                                          visible: false, child: Text(''));
+                                }),
+                              ],
+                            ),
                           ),
-                        ),
-
-                        Padding(
+                          SizedBox(
+                            height: 20,
+                          ),
+                          EmptyListWidget(
+                              emptyError: 'There are no items to show here.'),
+                        ],
+                      );
+                    } else {
+                      return ListView(
+                        children: [
+                          // return button
+                          Padding(
                             padding: const EdgeInsets.only(
                                 left: 30, right: 30, top: 20, bottom: 10),
-                            child: SingleChildScrollView(
-                              physics: BouncingScroll(),
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                children: [
-                                  for (int i = 0; i < itemsList.length; i += 2)
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Expanded(
-                                              child: ItemCard(
-                                                item: itemsList[i],
-                                                isSeller: isSeller,
+                            child: ReturnButton(searchKey: searchKey),
+                          ),
+
+                          // Header
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 10, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Found',
+                                      style: TextStyle(
+                                          color: CustomColors.textPrimary,
+                                          fontSize: TextSizes.medium,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '${itemsList.length} results',
+                                      style: TextStyle(
+                                          color: CustomColors.textPrimary,
+                                          fontSize: TextSizes.medium,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                !isSeller
+                                    ? Builder(builder: (context) {
+                                        return GestureDetector(
+                                            onTap: () {
+                                              Scaffold.of(context)
+                                                  .openEndDrawer();
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    color: CustomColors.grey),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            if (i + 1 < itemsList.length)
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 18,
+                                                    right: 10,
+                                                    top: 6,
+                                                    bottom: 6),
+                                                child: Row(
+                                                  children: [
+                                                    Text('Filter',
+                                                        style: TextStyle(
+                                                            color: CustomColors
+                                                                .textPrimary,
+                                                            fontSize: TextSizes
+                                                                .small)),
+                                                    SizedBox(
+                                                      width: 6,
+                                                    ),
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_drop_down_outlined,
+                                                      color: CustomColors
+                                                          .textPrimary,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ));
+                                      })
+                                    : Visibility(
+                                        visible: false, child: Text('')),
+                              ],
+                            ),
+                          ),
+
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 30, right: 30, top: 20, bottom: 10),
+                              child: SingleChildScrollView(
+                                physics: BouncingScroll(),
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  children: [
+                                    for (int i = 0;
+                                        i < itemsList.length;
+                                        i += 2)
+                                      Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
                                               Expanded(
                                                 child: ItemCard(
-                                                  item: itemsList[i + 1],
+                                                  item: itemsList[i],
                                                   isSeller: isSeller,
                                                 ),
                                               ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 20),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            )),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              if (i + 1 < itemsList.length)
+                                                Expanded(
+                                                  child: ItemCard(
+                                                    item: itemsList[i + 1],
+                                                    isSeller: isSeller,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 20),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              )),
 
-                        SizedBox(
-                          height: 20,
-                        )
-                      ],
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: CustomCircularProgress(),
                     );
                   }
-                } else {
-                  return Center(
-                    child: CustomCircularProgress(),
-                  );
-                }
-              })),
+                })),
+          ),
         ));
   }
 
