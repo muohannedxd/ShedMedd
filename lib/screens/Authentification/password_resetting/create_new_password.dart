@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/floating_button.dart';
-import '../../../config/returnAction.dart';
+import '../../../utilities/returnAction.dart';
 
 class CreateNewPassword extends StatefulWidget {
   const CreateNewPassword({super.key});

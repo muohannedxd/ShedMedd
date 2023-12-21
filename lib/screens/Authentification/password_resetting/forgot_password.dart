@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/verification_code.dart';
 
 import '../../../components/floating_button.dart';
-import '../../../config/returnAction.dart';
+import '../../../utilities/returnAction.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});

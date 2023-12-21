@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shedmedd/config/searchArguments.dart';
+import 'package:shedmedd/utilities/searchArguments.dart';
 import '../../components/Divider.dart';
-import '../../config/bouncingScroll.dart';
-import '../../config/myBehavior.dart';
+import '../../utilities/bouncingScroll.dart';
+import '../../utilities/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import 'Home.dart';

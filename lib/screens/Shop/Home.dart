@@ -10,7 +10,7 @@ import '../../controller/auth/auth_controller.dart';
 import '../Post_item/post_an_new_item.dart';
 import 'ShopHome.dart';
 import '../../constants/customColors.dart';
-import '../../config/myBehavior.dart';
+import '../../utilities/myBehavior.dart';
 
 class Shop extends StatefulWidget {
   final int currentIndex;

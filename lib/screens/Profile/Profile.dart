@@ -4,7 +4,7 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 
-import '../../config/searchArguments.dart';
+import '../../utilities/searchArguments.dart';
 import '../../database/usersDB.dart';
 import '../Shop/Home.dart';
 

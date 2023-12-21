@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../components/floating_button.dart';
-import '../../config/returnAction.dart';
+import '../../utilities/returnAction.dart';
 import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 import 'post_an_new_item.dart';

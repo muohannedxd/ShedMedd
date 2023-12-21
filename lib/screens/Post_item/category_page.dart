@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/screens/Post_item/sub_category_page.dart';
 import '../../components/floating_button.dart';
-import '../../config/returnAction.dart';
+import '../../utilities/returnAction.dart';
 import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 

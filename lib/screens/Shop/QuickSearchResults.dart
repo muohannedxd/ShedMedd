@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
-import 'package:shedmedd/config/searchArguments.dart';
+import 'package:shedmedd/utilities/searchArguments.dart';
 import '../../components/emptyListWidget.dart';
 import '../../components/errorWidget.dart';
 import '../../components/itemCard.dart';
-import '../../config/bouncingScroll.dart';
-import '../../config/myBehavior.dart';
+import '../../utilities/bouncingScroll.dart';
+import '../../utilities/myBehavior.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../controller/auth/auth_controller.dart';
@@ -392,7 +392,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                               Expanded(
                                                 child: ItemCard(
                                                   item: itemsList[i],
-                                                  isSeller: isSeller,
                                                 ),
                                               ),
                                               SizedBox(
@@ -402,7 +401,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                                 Expanded(
                                                   child: ItemCard(
                                                     item: itemsList[i + 1],
-                                                    isSeller: isSeller,
                                                   ),
                                                 ),
                                             ],

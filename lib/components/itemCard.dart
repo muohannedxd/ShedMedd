@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
-import 'package:shedmedd/config/getImageUrl.dart';
+import 'package:shedmedd/utilities/getImageUrl.dart';
 
 import '../screens/Shop/ItemHome.dart';
 import 'errorWidget.dart';
 
 class ItemCard extends StatelessWidget {
   final DocumentSnapshot<Object?> item;
-  final bool isSeller;
-  const ItemCard({super.key, required this.item, this.isSeller = false});
+  const ItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,6 @@ class ItemCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => ItemHome(
                 itemID: itemId,
-                isSeller: isSeller,
               ),
             ),
           );

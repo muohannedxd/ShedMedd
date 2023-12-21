@@ -1,52 +1,66 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/floating_button.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
+import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
 import '../../components/errorWidget.dart';
-import '../../config/myBehavior.dart';
-import '../../config/returnAction.dart';
+import '../../utilities/myBehavior.dart';
+import '../../utilities/returnAction.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
 import 'Home.dart';
 
 class ItemHome extends StatelessWidget {
   final String itemID;
-  final bool isSeller;
 
-  ItemHome({super.key, required this.itemID, this.isSeller = false});
+  ItemHome({Key? key, required this.itemID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //dynamic currentItem = itemsController.getItem(1);
     Future<DocumentSnapshot> currentItem = ItemsDatabase().getOneItem(itemID);
 
+    String loggedInId = '';
+    bool isLoggedIn = false;
+    if (FirebaseAuth.instance.currentUser != null) {
+      loggedInId = FirebaseAuth.instance.currentUser!.uid;
+      isLoggedIn = true;
+    }
+
     return Scaffold(
-      body: FutureBuilder(
-          future: currentItem,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return CustomErrorWidget(
-                  errorText: 'An error occured. Try again later');
-            } else if (snapshot.hasData) {
-              DocumentSnapshot<Object?>? item = snapshot.data;
-              if (item == null || !item.exists) {
-                return CustomErrorWidget(errorText: 'Item does not exist!');
-              }
-              return Stack(children: [
-                Center(
-                    child: ScrollConfiguration(
+      body: FutureBuilder<DocumentSnapshot>(
+        future: currentItem,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CustomCircularProgress(),
+            );
+          } else if (snapshot.hasError) {
+            return CustomErrorWidget(
+              errorText: 'An error occured. Try again later',
+            );
+          } else if (!snapshot.hasData || !snapshot.data!.exists) {
+            return CustomErrorWidget(errorText: 'Item does not exist!');
+          }
+
+          DocumentSnapshot<Object?>? item = snapshot.data;
+
+          return Stack(
+            children: [
+              Center(
+                child: ScrollConfiguration(
                   behavior: BehaviorOfScroll(),
                   child: ListView(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, top: 10, bottom: 10),
-                        child: Pictures(images: item['images']),
+                        child: Pictures(images: item!['images']),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -57,55 +71,50 @@ class ItemHome extends StatelessWidget {
                         padding: const EdgeInsets.only(
                             left: 30, right: 30, top: 20, bottom: 20),
                         child: ItemInformation(
-                            title: item['title'],
-                            category: item['category'],
-                            subcategory: item['subcategory'],
-                            condition: item['condition'],
-                            price: item['price'],
-                            description: item['description']),
+                          title: item['title'],
+                          category: item['category'],
+                          subcategory: item['subcategory'],
+                          condition: item['condition'],
+                          price: item['price'],
+                          description: item['description'],
+                        ),
                       ),
                     ],
                   ),
-                )),
-
-                // return button
+                ),
+              ),
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.04,
+                left: MediaQuery.of(context).size.width * 0.04,
+                child: FloatingButton(
+                  action: returnToPreviousPage,
+                ),
+              ),
+              if (item['user_id'] == loggedInId)
                 Positioned(
-                    top: MediaQuery.of(context).size.height * 0.04,
-                    left: MediaQuery.of(context).size.width * 0.04,
-                    child: FloatingButton(
-                      action: returnToPreviousPage,
-                    )),
-
-                isSeller
-                    ? Positioned(
-                        top: MediaQuery.of(context).size.height * 0.04,
-                        right: MediaQuery.of(context).size.width * 0.095,
-                        child: SettingsButton(
-                          itemID: item.id,
-                          imagesPaths: item['images'],
-                        ))
-                    : Visibility(visible: false, child: Text('')),
-
-                // go to DM button
-                !isSeller
-                    ? Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: DirectMessageButton(
-                            title: item['title'],
-                            condition: item['condition'],
-                            price: item['price'],
-                            sellerID: item['user_id']),
-                      )
-                    : Visibility(visible: false, child: Text('')),
-              ]);
-            } else {
-              return Center(
-                child: CustomCircularProgress(),
-              );
-            }
-          }),
+                  top: MediaQuery.of(context).size.height * 0.04,
+                  right: MediaQuery.of(context).size.width * 0.095,
+                  child: SettingsButton(
+                    itemID: item.id,
+                    imagesPaths: item['images'],
+                  ),
+                ),
+              if ((item['user_id'] != loggedInId))
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: DirectMessageButton(
+                      title: item['title'],
+                      condition: item['condition'],
+                      price: item['price'],
+                      sellerID: item['user_id'],
+                      loggedIn: isLoggedIn),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -117,12 +126,14 @@ class DirectMessageButton extends StatelessWidget {
     required this.condition,
     required this.price,
     required this.sellerID,
+    required this.loggedIn,
   });
 
   final String title;
   final String condition;
   final int price;
   final String sellerID;
+  final bool loggedIn;
 
   @override
   Widget build(BuildContext context) {
@@ -141,16 +152,23 @@ class DirectMessageButton extends StatelessWidget {
             if (snapshot.hasData) {
               return TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/message',
-                    arguments: {
-                      'title': title,
-                      'condition': condition,
-                      'price': price,
-                      'sellerName': user?['name']
-                    },
-                  );
+                  loggedIn
+                      ? Navigator.pushNamed(
+                          context,
+                          '/message',
+                          arguments: {
+                            'title': title,
+                            'condition': condition,
+                            'price': price,
+                            'sellerName': user?['name']
+                          },
+                        )
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUp(),
+                          ),
+                        );
                 },
                 child: Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 16),

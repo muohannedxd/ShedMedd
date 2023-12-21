@@ -4,7 +4,7 @@ import 'package:shedmedd/screens/Authentification/password_resetting/create_new_
 import 'package:flutterotpfield/flutterotpfield.dart';
 
 import '../../../components/floating_button.dart';
-import '../../../config/returnAction.dart';
+import '../../../utilities/returnAction.dart';
 
 class VerificationCode extends StatefulWidget {
   const VerificationCode({super.key});
