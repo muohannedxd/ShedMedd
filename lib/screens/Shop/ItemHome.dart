@@ -213,15 +213,15 @@ class SettingsButton extends StatelessWidget {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(top: 32),
       child: Material(
-        elevation: 1,
+        elevation: 2,
         shape: CircleBorder(),
         color: CustomColors.white,
         child: Container(
-          width: 40,
-          height: 40,
+          width: 38,
+          height: 38,
           child: PopupMenuButton(
             icon:
-                Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary),
+                Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary, size: 20,),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ), // Rectangular shape with rounded corners

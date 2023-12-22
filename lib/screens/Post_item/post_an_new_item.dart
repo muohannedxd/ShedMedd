@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shedmedd/components/floating_button.dart';
 
 import '../../constants/customColors.dart';
 import '../../controller/auth/auth_controller.dart';
@@ -130,6 +131,16 @@ class _PostAnItemState extends State<PostAnItem> {
     }
   }
 
+  void returnFromPostingItem(BuildContext context) {
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Shop(currentIndex: 0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -156,38 +167,14 @@ class _PostAnItemState extends State<PostAnItem> {
                     color: Colors.white,
                     margin: EdgeInsets.zero,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 24, bottom: 20, top: 32),
-                      child: Row(
-                        children: [
-                          IconButton(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: FloatingButton(
+                            title: 'Sell an item',
+                            action: returnFromPostingItem,
                             icon: Icon(
                               Icons.close_outlined,
-                              size: 30,
-                            ),
-                            color: Colors.black,
-                            onPressed: () {
-                              // Navigate back when the button is pressed
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Shop(currentIndex: 0),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            width: 70,
-                          ),
-                          Text(
-                            "Sell an item",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                    ),
+                              size: 20,
+                            ))),
                   ),
                   Divider(
                     height: 0,
@@ -504,7 +491,7 @@ class _PostAnItemState extends State<PostAnItem> {
                             width: double.infinity,
                             height: 38,
                             alignment: Alignment.center,
-                            child: Text("Upload"),
+                            child: Text("Upload item"),
                           ),
                         ),
                       ),

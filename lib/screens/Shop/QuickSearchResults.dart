@@ -6,6 +6,7 @@ import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/utilities/searchArguments.dart';
 import '../../components/emptyListWidget.dart';
 import '../../components/errorWidget.dart';
+import '../../components/floating_button.dart';
 import '../../components/itemCard.dart';
 import '../../utilities/bouncingScroll.dart';
 import '../../utilities/myBehavior.dart';
@@ -13,6 +14,7 @@ import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../controller/auth/auth_controller.dart';
 import '../../controller/items/itemsController.dart';
+import '../../utilities/returnAction.dart';
 
 class QuickSearchResults extends StatefulWidget {
   const QuickSearchResults({super.key});
@@ -200,8 +202,9 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 30, right: 30, top: 20, bottom: 10),
-                            child: ReturnButton(searchKey: searchKey),
+                                 bottom: 20),
+                            child: FloatingButton(
+                              action: returnToPreviousPage, title: searchKey),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -291,8 +294,9 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                           // return button
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 30, right: 30, top: 20, bottom: 10),
-                            child: ReturnButton(searchKey: searchKey),
+                                 bottom: 20),
+                            child: FloatingButton(
+                              action: returnToPreviousPage, title: searchKey),
                           ),
 
                           // Header

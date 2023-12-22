@@ -9,7 +9,7 @@ class FloatingButton extends StatelessWidget {
 
   FloatingButton({
     this.title = '',
-    this.icon = const Icon(Icons.arrow_back_ios_rounded),
+    this.icon = const Icon(Icons.arrow_back_ios_rounded, size: 20,),
     required this.action,
   });
 
@@ -21,12 +21,12 @@ class FloatingButton extends StatelessWidget {
       child: Row(
         children: [
           Material(
-            elevation: 1,
+            elevation: 2,
             shape: CircleBorder(),
             color: CustomColors.white,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 38,
+              height: 38,
               child: IconButton(
                 icon: icon,
                 onPressed: () {
@@ -36,7 +36,7 @@ class FloatingButton extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 20,
           ),
           Text(
             title,

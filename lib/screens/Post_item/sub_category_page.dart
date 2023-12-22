@@ -24,7 +24,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          FloatingButton(action: returnToPreviousPage,),
+          FloatingButton(title: 'Sub-category', action: returnToPreviousPage,),
           SizedBox(
             height: 20,
           ),
