@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
-import 'package:shedmedd/config/getImageUrl.dart';
+import 'package:shedmedd/utilities/getImageUrl.dart';
 import 'package:shedmedd/constants/customColors.dart';
 
 import '../errorWidget.dart';

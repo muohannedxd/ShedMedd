@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/verification_code.dart';
 
-import '../../../components/back_header_widget.dart';
+import '../../../components/floating_button.dart';
+import '../../../utilities/returnAction.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -18,7 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Scaffold(
       body: ListView(
         children: [
-          BackHeaderWidget(title: ''),
+          FloatingButton(action: returnToPreviousPage,),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(

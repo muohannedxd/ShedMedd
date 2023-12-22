@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/screens/Post_item/sub_category_page.dart';
-import '../../components/back_header_widget.dart';
+import '../../components/floating_button.dart';
+import '../../utilities/returnAction.dart';
 import '../../constants/customColors.dart';
 import '../../controller/post_item/category_controller.dart';
 
@@ -14,7 +15,7 @@ class CategoryPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          BackHeaderWidget(title: 'Category'),
+          FloatingButton(title: 'Category', action: returnToPreviousPage,),
           SizedBox(
             height: 20,
           ),

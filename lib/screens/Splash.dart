@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
-import '../config/animatedPageRouteBuilder.dart';
+import '../utilities/animatedPageRouteBuilder.dart';
 import '../constants/customColors.dart';
 
 class Splash extends StatefulWidget {

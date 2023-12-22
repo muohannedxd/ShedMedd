@@ -11,7 +11,7 @@ class ProfileShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: CustomColors.grey,
-      highlightColor: CustomColors.white,
+      highlightColor: CustomColors.grey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

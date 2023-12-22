@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/Shop/ItemNamePrice.dart';
+import 'package:shedmedd/components/floating_button.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/utilities/returnAction.dart';
 
-import '../../../../../components/Shop/ReturnButton.dart';
 
 class DirectMessage extends StatefulWidget {
   const DirectMessage({super.key});
@@ -15,6 +16,7 @@ class _DirectMessage extends State<DirectMessage> {
   String title = '';
   String condition = '';
   int price = 0;
+  bool isSold = false;
   String sellerName = '';
   bool isShownSendingButton = false;
   String message = '';
@@ -39,15 +41,15 @@ class _DirectMessage extends State<DirectMessage> {
             ListView(children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 30, right: 30, top: 20, bottom: 10),
-                child: ReturnButton(searchKey: '$sellerName'),
+                    bottom: 20),
+                child: FloatingButton(action: returnToPreviousPage, title: '$sellerName'),
               ),
               Divider(),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
                 child: ItemNamePrice(
-                    title: title, condition: condition, price: price),
+                    title: title, condition: condition, price: price, isSold: isSold),
               ),
               Divider(),
             ]),

@@ -42,7 +42,6 @@ class _ChatInboxState extends State<ChatInbox> {
               Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: Container(
-                  width: 350.0, // Set the desired width
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(20.0),

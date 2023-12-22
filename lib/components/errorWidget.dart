@@ -15,13 +15,16 @@ class CustomErrorWidget extends StatelessWidget {
       child: Container(
         width:
             MediaQuery.of(context).size.width * 0.6,
-        child: Text(
-          errorText,
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              color: CustomColors.textPrimary),
-          textAlign: TextAlign.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Text(
+            errorText,
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                color: CustomColors.textPrimary),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

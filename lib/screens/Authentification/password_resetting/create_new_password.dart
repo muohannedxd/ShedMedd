@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/back_header_widget.dart';
+import '../../../components/floating_button.dart';
+import '../../../utilities/returnAction.dart';
 
 class CreateNewPassword extends StatefulWidget {
   const CreateNewPassword({super.key});
@@ -102,7 +103,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     return Scaffold(
       body: ListView(
         children: [
-          BackHeaderWidget(title: ''),
+          FloatingButton(action: returnToPreviousPage,),
           Container(
             margin: EdgeInsets.only(left: 32, right: 32, top: 32),
             child: Column(

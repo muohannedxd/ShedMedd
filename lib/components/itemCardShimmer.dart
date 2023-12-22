@@ -9,7 +9,7 @@ class ItemCardShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: CustomColors.grey,
-      highlightColor: CustomColors.white,
+      highlightColor: CustomColors.grey,
       child: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(

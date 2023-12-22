@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
-class BackHeaderWidget extends StatelessWidget {
-  final String title;
+import '../constants/customColors.dart';
 
-  BackHeaderWidget({required this.title});
+class FloatingButton extends StatelessWidget {
+  final String title;
+  final Icon icon;
+  final Function(BuildContext) action;
+
+  FloatingButton({
+    this.title = '',
+    this.icon = const Icon(Icons.arrow_back_ios_rounded, size: 20,),
+    required this.action,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +21,22 @@ class BackHeaderWidget extends StatelessWidget {
       child: Row(
         children: [
           Material(
-            elevation: 1,
+            elevation: 2,
             shape: CircleBorder(),
-            color: Colors.white,
+            color: CustomColors.white,
             child: Container(
-              width: 36,
-              height: 36,
+              width: 38,
+              height: 38,
               child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios_rounded,
-                  size: 15,
-                ),
+                icon: icon,
                 onPressed: () {
-                  // Navigate back when the button is pressed
-                  Navigator.of(context).pop();
+                  action(context);
                 },
               ),
             ),
           ),
           SizedBox(
-            width: 100,
+            width: 20,
           ),
           Text(
             title,
