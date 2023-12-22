@@ -3,16 +3,17 @@ import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import 'ItemNamePrice.dart';
 
-class ItemInformation extends StatelessWidget {
-  const ItemInformation(
-      {super.key,
-      required this.title,
-      required this.category,
-      required this.subcategory,
-      required this.condition,
-      required this.price,
-      required this.isSold,
-      required this.description});
+class ItemInformation extends StatefulWidget {
+  const ItemInformation({
+    super.key,
+    required this.title,
+    required this.category,
+    required this.subcategory,
+    required this.condition,
+    required this.price,
+    required this.isSold,
+    required this.description,
+  });
 
   final String title;
   final String category;
@@ -23,11 +24,22 @@ class ItemInformation extends StatelessWidget {
   final String description;
 
   @override
+  State<ItemInformation> createState() => _ItemInformationState();
+}
+
+class _ItemInformationState extends State<ItemInformation> {
+  bool _isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ItemNamePrice(title: title, condition: condition, price: price, isSold: isSold),
+        ItemNamePrice(
+            title: widget.title,
+            condition: widget.condition,
+            price: widget.price,
+            isSold: widget.isSold),
         SizedBox(
           height: 20,
         ),
@@ -43,11 +55,11 @@ class ItemInformation extends StatelessWidget {
               height: 10,
             ),
             Text(
-              '${category}, ${subcategory}',
+              '${widget.category}, ${widget.subcategory}',
               style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: TextSizes.small,
-                  height: 1.5,
-                  color: CustomColors.textPrimary.withOpacity(0.8)),
+                  color: CustomColors.textGrey),
             )
           ],
         ),
@@ -65,18 +77,53 @@ class ItemInformation extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(
-              '${description}',
-              style: TextStyle(
-                  fontSize: TextSizes.small,
-                  height: 1.5,
-                  color: CustomColors.textPrimary.withOpacity(0.8)),
-            )
+            _buildDescription(),
           ],
         ),
-        SizedBox(
-          height: 80,
-        )
+      ],
+    );
+  }
+
+  Widget _buildDescription() {
+    final maxLines = _isExpanded ? null : 3;
+    final overflow = _isExpanded ? TextOverflow.visible : TextOverflow.fade;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.description,
+          maxLines: maxLines,
+          overflow: overflow,
+          style: TextStyle(
+            fontSize: TextSizes.small,
+            height: 1.5,
+            color: CustomColors.textPrimary.withOpacity(0.8),
+          ),
+        ),
+        if (!_isExpanded && widget.description.length > 3 * 50)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+            children: [
+              TextButton(
+                onPressed: () => setState(() => _isExpanded = true),
+                child: Text(
+                  'View more',
+                  style: TextStyle(color: CustomColors.textGrey),
+                ),
+              ),
+            ],
+          ),
+        if (_isExpanded)
+          Center(
+            // Center the "Show less" button
+            child: TextButton(
+              onPressed: () => setState(() => _isExpanded = false),
+              child: Text('Show less',
+                  style: TextStyle(color: CustomColors.textPrimary)),
+            ),
+          ),
+        SizedBox(height: 60,)
       ],
     );
   }

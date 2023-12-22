@@ -69,7 +69,7 @@ class ItemHome extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 20, bottom: 20),
+                            left: 30, right: 30, top: 10, bottom: 20),
                         child: ItemInformation(
                           title: item['title'],
                           category: item['category'],
@@ -100,7 +100,7 @@ class ItemHome extends StatelessWidget {
                     imagesPaths: item['images'],
                   ),
                 ),
-              if ((item['user_id'] != loggedInId))
+              if (true)
                 Positioned(
                   bottom: 0,
                   left: 0,
