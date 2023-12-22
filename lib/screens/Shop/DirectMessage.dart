@@ -16,6 +16,7 @@ class _DirectMessage extends State<DirectMessage> {
   String title = '';
   String condition = '';
   int price = 0;
+  bool isSold = false;
   String sellerName = '';
   bool isShownSendingButton = false;
   String message = '';
@@ -48,7 +49,7 @@ class _DirectMessage extends State<DirectMessage> {
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
                 child: ItemNamePrice(
-                    title: title, condition: condition, price: price),
+                    title: title, condition: condition, price: price, isSold: isSold),
               ),
               Divider(),
             ]),

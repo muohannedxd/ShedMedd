@@ -18,6 +18,7 @@ class ItemCard extends StatelessWidget {
     String name = item['title'];
     var price = item['price'];
     String image = item['images'][0];
+    bool isSold = item['isSold'];
 
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -47,7 +48,7 @@ class ItemCard extends StatelessWidget {
                         ));
                   } else if (snapshot.hasError) {
                     return CustomErrorWidget(
-                                errorText: 'An error occured. Try again later');
+                        errorText: 'An error occured. Try again later');
                   } else {
                     String downloadUrl = snapshot.data!;
                     return Container(
@@ -82,7 +83,12 @@ class ItemCard extends StatelessWidget {
             ),
             Container(
                 width: 120,
-                child: Text('${price} DZD',
+                child: !isSold ? Text('${price} DZD',
+                    style: TextStyle(
+                        color: CustomColors.textPrimary,
+                        fontSize: TextSizes.regular,
+                        fontWeight: FontWeight.bold)) : 
+                        Text('Sold',
                     style: TextStyle(
                         color: CustomColors.textPrimary,
                         fontSize: TextSizes.regular,

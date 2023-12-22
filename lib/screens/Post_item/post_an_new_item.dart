@@ -100,6 +100,7 @@ class _PostAnItemState extends State<PostAnItem> {
         'title': _titleController.title.value,
         'description': _descriptionController.description.value,
         'price': int.tryParse(_priceController.price.value),
+        'isSold': false,
         'category': categoryController.category,
         'subcategory': categoryController.subCategory,
         'condition': conditionController.condition,

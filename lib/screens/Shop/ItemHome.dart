@@ -76,6 +76,7 @@ class ItemHome extends StatelessWidget {
                           subcategory: item['subcategory'],
                           condition: item['condition'],
                           price: item['price'],
+                          isSold: item['isSold'],
                           description: item['description'],
                         ),
                       ),

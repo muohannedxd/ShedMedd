@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import 'ItemNamePrice.dart';
@@ -12,6 +11,7 @@ class ItemInformation extends StatelessWidget {
       required this.subcategory,
       required this.condition,
       required this.price,
+      required this.isSold,
       required this.description});
 
   final String title;
@@ -19,6 +19,7 @@ class ItemInformation extends StatelessWidget {
   final String subcategory;
   final String condition;
   final int price;
+  final bool isSold;
   final String description;
 
   @override
@@ -26,7 +27,7 @@ class ItemInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ItemNamePrice(title: title, condition: condition, price: price),
+        ItemNamePrice(title: title, condition: condition, price: price, isSold: isSold),
         SizedBox(
           height: 20,
         ),
