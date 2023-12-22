@@ -108,7 +108,7 @@ class _ItemInformationState extends State<ItemInformation> {
               TextButton(
                 onPressed: () => setState(() => _isExpanded = true),
                 child: Text(
-                  'View more',
+                  'Show more',
                   style: TextStyle(color: CustomColors.textGrey),
                 ),
               ),
