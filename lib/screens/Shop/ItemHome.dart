@@ -100,7 +100,7 @@ class ItemHome extends StatelessWidget {
                     imagesPaths: item['images'],
                   ),
                 ),
-              if (true)
+              if (item['user_id'] != loggedInId)
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -221,8 +221,11 @@ class SettingsButton extends StatelessWidget {
           width: 38,
           height: 38,
           child: PopupMenuButton(
-            icon:
-                Icon(Icons.more_vert_rounded, color: CustomColors.textPrimary, size: 20,),
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: CustomColors.textPrimary,
+              size: 20,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ), // Rectangular shape with rounded corners
