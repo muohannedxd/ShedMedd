@@ -4,19 +4,14 @@ import 'package:flutter/material.dart';
 import '../../constants/customColors.dart';
 import '../Shop/Home.dart';
 
-class ChatInbox extends StatefulWidget {
-  @override
-  _ChatInboxState createState() => _ChatInboxState();
-}
-
-class _ChatInboxState extends State<ChatInbox> {
-  List<InboxItem> inboxItems = [
-    InboxItem('Jane Cooper', 'manhhachkt08@gmail.com',
-        'assets/images/logo_small_icon_only_inverted.png', false),
-    InboxItem('Jane Cooper', 'manhhachkt08@gmail.com',
-        'assets/images/logo_small_icon_only_inverted.png', false),
-    InboxItem('Jane Cooper', 'manhhachkt08@gmail.com',
-        'assets/images/logo_small_icon_only_inverted.png', false),
+class ChatInbox extends StatelessWidget {
+  final List<InboxItem> inboxItems = [
+    InboxItem('Jane Cooper', 'Red blouse',
+        'assets/images/logo_small_icon_only_inverted.png'),
+    InboxItem('Jane Cooper', 'Pink shirt',
+        'assets/images/logo_small_icon_only_inverted.png'),
+    InboxItem('Jane Cooper', 'Pantalon',
+        'assets/images/logo_small_icon_only_inverted.png'),
     // Add more Inbox items as needed...
   ];
 
@@ -32,7 +27,7 @@ class _ChatInboxState extends State<ChatInbox> {
       },
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,10 +35,10 @@ class _ChatInboxState extends State<ChatInbox> {
 
               // Search Bar
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: EdgeInsets.only(left: 15, right: 15),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: CustomColors.grey.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: Row(
@@ -54,7 +49,7 @@ class _ChatInboxState extends State<ChatInbox> {
                             hintText: 'Search',
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.only(
-                                left: 20, top: 10, bottom: 10, right: 10),
+                                left: 20, top: 10, bottom: 10, right: 20),
                           ),
                         ),
                       ),
@@ -78,19 +73,18 @@ class _ChatInboxState extends State<ChatInbox> {
               // Line with light grey
               Container(
                 height: 1.0,
-                color: Colors.grey[300],
+                color: CustomColors.grey.withOpacity(0.2),
               ),
               SizedBox(height: 5), // Spacer
 
               // Unread messages text
-              Text(
+              /*Text(
                 '5 unread messages',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
-              ),
-              SizedBox(height: 25), // Spacer
+              ),*/
 
               // Inbox Items
               for (int i = 0; i < inboxItems.length; i++) ...[
@@ -108,13 +102,11 @@ class _ChatInboxState extends State<ChatInbox> {
   Widget buildInboxItem(InboxItem item) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          item.isRead = true;
-        });
+        
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
+          border: Border(bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
         ),
         padding: const EdgeInsets.symmetric(
             vertical: 15, horizontal: 15), // Added horizontal padding
@@ -127,19 +119,6 @@ class _ChatInboxState extends State<ChatInbox> {
                   width: 50,
                   height: 50,
                 ),
-                if (!item.isRead)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue, // Change color as needed
-                      ),
-                    ),
-                  ),
               ],
             ),
             SizedBox(width: 18.0),
@@ -150,11 +129,11 @@ class _ChatInboxState extends State<ChatInbox> {
                   item.name,
                   style: TextStyle(
                     fontSize: 20,
-                    fontWeight: item.isRead ? FontWeight.w400 : FontWeight.w800,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 Text(
-                  item.email,
+                  item.itemName,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -171,9 +150,8 @@ class _ChatInboxState extends State<ChatInbox> {
 
 class InboxItem {
   final String name;
-  final String email;
+  final String itemName;
   final String characterImage;
-  bool isRead;
 
-  InboxItem(this.name, this.email, this.characterImage, this.isRead);
+  InboxItem(this.name, this.itemName, this.characterImage);
 }

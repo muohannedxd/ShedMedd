@@ -59,9 +59,8 @@ class _DiscoverState extends State<Discover> {
               padding: const EdgeInsets.only(
                   left: 30, right: 30, top: 20, bottom: 20),
               child: Container(
-                width: 350.0,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: CustomColors.grey.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Row(
