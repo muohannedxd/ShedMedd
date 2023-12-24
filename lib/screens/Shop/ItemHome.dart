@@ -161,7 +161,7 @@ class DirectMessageButton extends StatelessWidget {
                             'title': title,
                             'condition': condition,
                             'price': price,
-                            'sellerName': user?['name']
+                            'receiverName': user?['name']
                           },
                         )
                       : Navigator.push(

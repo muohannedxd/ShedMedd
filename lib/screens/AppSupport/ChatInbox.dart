@@ -1,19 +1,19 @@
 // ChatInbox.dart
 import 'package:flutter/material.dart';
+import 'package:shedmedd/components/emptyListWidget.dart';
+import 'package:shedmedd/components/errorWidget.dart';
+import 'package:shedmedd/components/profileShimmer.dart';
+import 'package:shedmedd/database/chatDB.dart';
+import 'package:shedmedd/utilities/inboxGroupChat.dart';
 
 import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
 import '../Shop/Home.dart';
 
 class ChatInbox extends StatelessWidget {
-  final List<InboxItem> inboxItems = [
-    InboxItem('Jane Cooper', 'Red blouse',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    InboxItem('Jane Cooper', 'Pink shirt',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    InboxItem('Jane Cooper', 'Pantalon',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    // Add more Inbox items as needed...
-  ];
+
+  final Future<List<InboxGroupChat>> inboxGroupChats =
+      ChatDatabase().getInboxGroupChats();
 
   @override
   Widget build(BuildContext context) {
@@ -77,21 +77,58 @@ class ChatInbox extends StatelessWidget {
               ),
               SizedBox(height: 5), // Spacer
 
-              // Unread messages text
-              /*Text(
-                '5 unread messages',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),*/
-
               // Inbox Items
-              for (int i = 0; i < inboxItems.length; i++) ...[
-                buildInboxItem(inboxItems[i]),
+              /*for (int i = 0; i < inboxItems.length; i++) ...[
+                buildInboxItem(context, inboxItems[i]),
                 if (i < inboxItems.length - 1)
                   SizedBox(height: 2), // Add spacing between items
-              ],
+              ],*/
+              FutureBuilder(
+                  future: inboxGroupChats,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: [
+                                  CustomErrorWidget(
+                                    errorText: 'An error occured!',
+                                  ),
+                                  Text('${snapshot.error}')
+                                ],
+                              ));
+                    } else if (snapshot.hasData) {
+                      List<InboxGroupChat> inboxItems = snapshot.data!;
+                      return 
+                      inboxItems.isNotEmpty ? Column(
+                        children: [
+                          for (int i = 0; i < inboxItems.length; i++) ...[
+                            buildInboxItem(context, inboxItems[i]),
+                            if (i < inboxItems.length - 1)
+                              SizedBox(height: 2), // Add spacing between items
+                          ],
+                        ],
+                      ) : EmptyListWidget(emptyError: 'You have no previous messages yet!');
+                    } else {
+                      return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                          Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer()
+                          ],
+                        ),
+                      );
+                    }
+                  })
             ],
           ),
         ),
@@ -99,59 +136,80 @@ class ChatInbox extends StatelessWidget {
     );
   }
 
-  Widget buildInboxItem(InboxItem item) {
+  Widget buildInboxItem(BuildContext context, InboxGroupChat groupchat) {
+    String initials = groupchat.username.toUpperCase().substring(0, 2);
     return GestureDetector(
       onTap: () {
-        
+        Navigator.pushNamed(
+          context,
+          '/message',
+          arguments: {
+            'title': groupchat.itemName,
+            'condition': groupchat.itemCondition,
+            'price': groupchat.itemPrice,
+            'receiverName': groupchat.username
+          },
+        );
       },
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
-        ),
-        padding: const EdgeInsets.symmetric(
-            vertical: 15, horizontal: 15), // Added horizontal padding
-        child: Row(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  item.characterImage,
-                  width: 50,
-                  height: 50,
-                ),
-              ],
-            ),
-            SizedBox(width: 18.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
+          decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
+          ),
+          padding: const EdgeInsets.symmetric(
+              vertical: 15, horizontal: 15), // Added horizontal padding
+          child: Row(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                child: CircleAvatar(
+                  backgroundColor: CustomColors.grey,
+                  child: ClipOval(
+                    child: groupchat.profileImage.isNotEmpty
+                        ? Image.network(
+                            groupchat.profileImage,
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 60,
+                          )
+                        : Text(initials),
                   ),
                 ),
-                Text(
-                  item.itemName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 160,
+                    child: Text(
+                      groupchat.username,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: TextSizes.medium,
+                          color: CustomColors.textPrimary),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: 160,
+                    child: Text(
+                      groupchat.itemName,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: TextSizes.regular,
+                          color: CustomColors.textGrey),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )),
     );
   }
-}
-
-class InboxItem {
-  final String name;
-  final String itemName;
-  final String characterImage;
-
-  InboxItem(this.name, this.itemName, this.characterImage);
 }

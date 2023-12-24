@@ -13,7 +13,6 @@ class ProfileShimmer extends StatelessWidget {
       baseColor: CustomColors.grey,
       highlightColor: CustomColors.grey,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 60,
@@ -33,18 +32,16 @@ class ProfileShimmer extends StatelessWidget {
                   width: 80,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: CustomColors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(2))
-                  ),
+                      color: CustomColors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(2))),
                 ),
                 SizedBox(height: 10),
                 Container(
                   width: 140,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: CustomColors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(2))
-                  ),
+                      color: CustomColors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(2))),
                 ),
               ],
             ),

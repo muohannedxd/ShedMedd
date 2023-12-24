@@ -305,7 +305,10 @@ class LoggedInUser extends StatelessWidget {
                   ],
                 );
               } else {
-                return Center(child: ProfileShimmer());
+                return Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Center(child: ProfileShimmer()),
+                );
               }
             }));
   }

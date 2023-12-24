@@ -17,7 +17,7 @@ class _DirectMessage extends State<DirectMessage> {
   String condition = '';
   int price = 0;
   bool isSold = false;
-  String sellerName = '';
+  String receiverName = '';
   bool isShownSendingButton = false;
   String message = '';
   // dummy messages
@@ -31,7 +31,7 @@ class _DirectMessage extends State<DirectMessage> {
     title = arguments['title'] as String;
     condition = arguments['condition'] as String;
     price = arguments['price'] as int;
-    sellerName = arguments['sellerName'] as String;
+    receiverName = arguments['receiverName'] as String;
 
     return ScrollConfiguration(
       behavior: ScrollBehavior(),
@@ -42,7 +42,7 @@ class _DirectMessage extends State<DirectMessage> {
               Padding(
                 padding: const EdgeInsets.only(
                     bottom: 20),
-                child: FloatingButton(action: returnToPreviousPage, title: '$sellerName'),
+                child: FloatingButton(action: returnToPreviousPage, title: '$receiverName'),
               ),
               Divider(),
               Padding(
@@ -70,7 +70,7 @@ class _DirectMessage extends State<DirectMessage> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: CustomColors.grey.withOpacity(0.4),
+                      color: CustomColors.grey.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(16.0),
                       border:
                           Border.all(color: Colors.grey.shade200, width: 1.0),
