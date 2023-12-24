@@ -33,22 +33,6 @@ class UsersDatabase {
     return logged_in_user;
   }
 
-  void addUserData(String userId, Map<String, dynamic> userData) {
-    // Reference to the Firebase Firestore collection with the specific user ID
-    CollectionReference usersCollection =
-        FirebaseFirestore.instance.collection('users');
-
-    // Reference to the specific document within the collection
-    DocumentReference userDocument = usersCollection.doc(userId);
-
-    // Set data for the specific user ID
-    userDocument.set(userData).then((value) {
-      print('Data added successfully for user with ID: $userId');
-    }).catchError((error) {
-      print('Failed to add data: $error');
-    });
-  }
-
   Future<String> signUpUser({
     required TextEditingController nameController,
     required TextEditingController emailController,
@@ -84,14 +68,7 @@ class UsersDatabase {
         };
 
         // Add user data to the database
-        FirebaseAuth.instance.authStateChanges().listen((User? user) {
-          if (user != null) {
-            addUserData(user.uid, userData);
-          } else {
-            // Handle case where user is not authenticated
-            print('User is not authenticated');
-          }
-        });
+        addUserData(credential.user!.uid, userData);
 
         // Return true to indicate successful signup
         return 'Sign up successful!';
@@ -131,7 +108,7 @@ class UsersDatabase {
       String emailAddress = emailController.text;
       String password = passwordController.text;
 
-      // Sign in user with email and password
+      // Log in user with email and password
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
@@ -141,17 +118,14 @@ class UsersDatabase {
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        // User is authenticated, you can handle the login success
         print('Login successful for user with ID: ${user.uid}');
         return 'Login successful!';
       } else {
-        // Handle case where user is not authenticated
         print('User is not authenticated');
         return 'User is not authenticated';
       }
     } on FirebaseAuthException catch (e) {
       // User name not found or incorrect password error message too vague
-      // it's all about giving an attacker as little information as possible.
       if (e.code == 'invalid-credential') {
         print('No user found for that email');
         return 'Wrong email or password provided';
@@ -160,7 +134,6 @@ class UsersDatabase {
         return 'Error during login';
       }
     } catch (e) {
-      // Handle other exceptions
       print('Error during login: $e');
       return 'Error during login';
     }
@@ -170,10 +143,25 @@ class UsersDatabase {
     try {
       await FirebaseAuth.instance.signOut();
       print('Logout successful');
-      // You can perform additional actions after logout if needed
     } catch (e) {
       print('Error during logout: $e');
-      // Handle any errors that occur during logout
     }
   }
+}
+
+// Add user data to the database
+void addUserData(String userId, Map<String, dynamic> userData) {
+  // Reference to the Firebase Firestore collection with the specific user ID
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  // Reference to the specific document within the collection
+  DocumentReference userDocument = usersCollection.doc(userId);
+
+  // Set data for the specific user ID
+  userDocument.set(userData).then((value) {
+    print('Data added successfully for user with ID: $userId');
+  }).catchError((error) {
+    print('Failed to add data: $error');
+  });
 }
