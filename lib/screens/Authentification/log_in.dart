@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/controller/auth/email_controller.dart';
-import 'package:shedmedd/screens/Authentification/email_verification/email_verification.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
-
 import '../../constants/customColors.dart';
 import '../../database/usersDB.dart';
 import '../Shop/Home.dart';

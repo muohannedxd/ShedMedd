@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/usersDB.dart';
 import 'package:shedmedd/screens/Authentification/log_in.dart';
-import 'package:shedmedd/screens/Authentification/password_resetting/verification_code.dart';
-
 import '../../../components/floating_button.dart';
 import '../../../controller/auth/email_controller.dart';
 import '../../../utilities/returnAction.dart';
