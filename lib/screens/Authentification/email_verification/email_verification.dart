@@ -2,12 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/database/usersDB.dart';
-import 'package:shedmedd/screens/Authentification/password_resetting/create_new_password.dart';
-import 'package:flutterotpfield/flutterotpfield.dart';
-
-import '../../../components/floating_button.dart';
 import '../../../controller/auth/email_controller.dart';
-import '../../../utilities/returnAction.dart';
 import '../../Shop/Home.dart';
 import '../log_in.dart';
 
