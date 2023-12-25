@@ -22,10 +22,11 @@ class ChatDatabase {
 
     // For each document returned by the query, get the item_id field and the timestamp of the most recent message.
     for (DocumentSnapshot groupchatSnapshot in groupChatsSnapshot.docs) {
-      // getting the item, seller and buyer
+      // Getting the item, seller and buyer
       String itemId = groupchatSnapshot['item_id'];
       String seller_id = groupchatSnapshot['seller_id'];
       String buyer_id = groupchatSnapshot['buyer_id'];
+      List<dynamic> messages = groupchatSnapshot['messages'];
 
       String otherPartyId = seller_id == currentUserId ? buyer_id : seller_id;
 
@@ -41,17 +42,12 @@ class ChatDatabase {
           .doc(otherPartyId)
           .get();
 
-      // Query the `chatmessage` collection for the most recent message of the appropriate `chatgroupSnapshot`.
-      QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
-          .collection('chatmessage')
-          .where('chatgroup_id', isEqualTo: groupchatSnapshot.id)
-          .orderBy('created_at', descending: true)
-          .limit(1)
-          .get();
+      // Sort the messages array based on the "created_at" timestamp in descending order
+      messages.sort((a, b) => b['created_at'].compareTo(a['created_at']));
 
-      Timestamp lastMessageTimestamp = messagesSnapshot.docs.isNotEmpty
-          ? messagesSnapshot.docs.first['created_at']
-          : null;
+      // Get the timestamp of the most recent message
+      Timestamp lastMessageTimestamp =
+          messages.isNotEmpty ? messages[0]['created_at'] : null;
 
       InboxGroupChat inboxItem = InboxGroupChat(
           groupchatSnapshot.id,
@@ -66,12 +62,7 @@ class ChatDatabase {
       inboxGroupChats.add(inboxItem);
     }
 
-    /**
-     * Sorting the inbox group chats
-     * Most recent one on top
-     */
-    inboxGroupChats.sort(
-        (a, b) => b.lastTimeSent.compareTo(a.lastTimeSent));
+    inboxGroupChats.sort((a, b) => b.lastTimeSent.compareTo(a.lastTimeSent));
 
     return inboxGroupChats;
   }
