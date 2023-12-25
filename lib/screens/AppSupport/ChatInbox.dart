@@ -111,8 +111,8 @@ class ChatInbox extends StatelessWidget {
                                     children: [
                                       buildInboxItem(
                                           context, inboxItems[index]),
-                                      if (index < inboxItems.length - 1)
-                                        SizedBox(height: 2),
+                                      /*if (index < inboxItems.length - 1)
+                                        SizedBox(height: 2),*/
                                     ],
                                   );
                                 },
@@ -167,12 +167,12 @@ class ChatInbox extends StatelessWidget {
         );
       },
       child: Container(
-          decoration: BoxDecoration(
+          /*decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
-          ),
+          ),*/
           padding: const EdgeInsets.symmetric(
-              vertical: 15, horizontal: 15), // Added horizontal padding
+              vertical: 10, horizontal: 15), // Added horizontal padding
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
