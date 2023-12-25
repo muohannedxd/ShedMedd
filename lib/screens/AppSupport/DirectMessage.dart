@@ -24,6 +24,7 @@ class _DirectMessage extends State<DirectMessage> {
   List<String> messages = ['first message', 'second message'];
   final TextEditingController _textEditingController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -40,16 +41,19 @@ class _DirectMessage extends State<DirectMessage> {
           children: [
             ListView(children: [
               Padding(
-                padding: const EdgeInsets.only(
-                    bottom: 20),
-                child: FloatingButton(action: returnToPreviousPage, title: '$receiverName'),
+                padding: const EdgeInsets.only(bottom: 20),
+                child: FloatingButton(
+                    action: returnToPreviousPage, title: '$receiverName'),
               ),
               Divider(),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
                 child: ItemNamePrice(
-                    title: title, condition: condition, price: price, isSold: isSold),
+                    title: title,
+                    condition: condition,
+                    price: price,
+                    isSold: isSold),
               ),
               Divider(),
             ]),
@@ -78,29 +82,43 @@ class _DirectMessage extends State<DirectMessage> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            controller: _textEditingController,
-                            onChanged: (value) {
-                              setState(() {
-                                message = value;
-                                if (message.length != 0)
-                                  isShownSendingButton = true;
-                                else {
-                                  isShownSendingButton = false;
-                                }
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: 'Write your message here',
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                                top: 4.0,
-                                bottom: 4.0,
-                              ),
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  200.0, // Set a maximum height for the container
                             ),
-                            style: const TextStyle(fontSize: 16.0),
+                            child: TextField(
+                              controller: _textEditingController,
+                              onChanged: (value) {
+                                setState(() {
+                                  message = value;
+                                  if (message.length != 0)
+                                    isShownSendingButton = true;
+                                  else {
+                                    isShownSendingButton = false;
+                                  }
+                                });
+                              },
+                              keyboardType: TextInputType
+                                  .multiline, // Enable multiline input
+                              maxLines:
+                                  null, // Allow an unlimited number of lines
+                              minLines:
+                                  1, // Ensure there's always at least one line
+                              decoration: InputDecoration(
+                                hintText: 'Write your message here',
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.only(
+                                  left: 16.0,
+                                  right: 16.0,
+                                  top:
+                                      8.0, // Adjust the top padding for multiline input
+                                  bottom:
+                                      8.0, // Adjust the bottom padding for multiline input
+                                ),
+                              ),
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
                           ),
                         ),
                         isShownSendingButton
