@@ -1,4 +1,5 @@
 // ChatInbox.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/emptyListWidget.dart';
 import 'package:shedmedd/components/errorWidget.dart';
@@ -8,10 +9,10 @@ import 'package:shedmedd/utilities/inboxGroupChat.dart';
 
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
+import '../../utilities/displayTimeAgo.dart';
 import '../Shop/Home.dart';
 
 class ChatInbox extends StatelessWidget {
-
   final Future<List<InboxGroupChat>> inboxGroupChats =
       ChatDatabase().getInboxGroupChats();
 
@@ -101,16 +102,19 @@ class ChatInbox extends StatelessWidget {
                               ));
                     } else if (snapshot.hasData) {
                       List<InboxGroupChat> inboxItems = snapshot.data!;
-                      return 
-                      inboxItems.isNotEmpty ? Column(
-                        children: [
-                          for (int i = 0; i < inboxItems.length; i++) ...[
-                            buildInboxItem(context, inboxItems[i]),
-                            if (i < inboxItems.length - 1)
-                              SizedBox(height: 2), // Add spacing between items
-                          ],
-                        ],
-                      ) : EmptyListWidget(emptyError: 'You have no previous messages yet!');
+                      return inboxItems.isNotEmpty
+                          ? Column(
+                              children: [
+                                for (int i = 0; i < inboxItems.length; i++) ...[
+                                  buildInboxItem(context, inboxItems[i]),
+                                  if (i < inboxItems.length - 1)
+                                    SizedBox(
+                                        height: 2), // Add spacing between items
+                                ],
+                              ],
+                            )
+                          : EmptyListWidget(
+                              emptyError: 'You have no previous messages yet!');
                     } else {
                       return /*CustomErrorWidget(errorText: 'An error occured!')*/
                           Padding(
@@ -138,6 +142,12 @@ class ChatInbox extends StatelessWidget {
 
   Widget buildInboxItem(BuildContext context, InboxGroupChat groupchat) {
     String initials = groupchat.username.toUpperCase().substring(0, 2);
+    Timestamp currentTime = Timestamp.now();
+    Duration difference =
+        currentTime.toDate().difference(groupchat.lastTimeSent.toDate());
+
+    String timeAgo = displayTimeAgo(difference);
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -159,54 +169,67 @@ class ChatInbox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               vertical: 15, horizontal: 15), // Added horizontal padding
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 60,
-                height: 60,
-                child: CircleAvatar(
-                  backgroundColor: CustomColors.grey,
-                  child: ClipOval(
-                    child: groupchat.profileImage.isNotEmpty
-                        ? Image.network(
-                            groupchat.profileImage,
-                            fit: BoxFit.cover,
-                            width: 60,
-                            height: 60,
-                          )
-                        : Text(initials),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
                   Container(
-                    width: 160,
-                    child: Text(
-                      groupchat.username,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: TextSizes.medium,
-                          color: CustomColors.textPrimary),
+                    width: 60,
+                    height: 60,
+                    child: CircleAvatar(
+                      backgroundColor: CustomColors.grey,
+                      child: ClipOval(
+                        child: groupchat.profileImage.isNotEmpty
+                            ? Image.network(
+                                groupchat.profileImage,
+                                fit: BoxFit.cover,
+                                width: 60,
+                                height: 60,
+                              )
+                            : Text(initials),
+                      ),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    width: 20,
                   ),
-                  Container(
-                    width: 160,
-                    child: Text(
-                      groupchat.itemName,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: TextSizes.regular,
-                          color: CustomColors.textGrey),
-                    ),
-                  )
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 160,
+                        child: Text(
+                          groupchat.username,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: TextSizes.medium,
+                              color: CustomColors.textPrimary),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: 160,
+                        child: Text(
+                          groupchat.itemName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: TextSizes.regular,
+                              color: CustomColors.textGrey),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
+              ),
+              Text(
+                timeAgo,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: TextSizes.small,
+                    color: CustomColors.textGrey),
               ),
             ],
           )),

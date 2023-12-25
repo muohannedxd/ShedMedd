@@ -20,10 +20,10 @@ class ChatDatabase {
             Filter('buyer_id', isEqualTo: currentUserId)))
         .get();
 
-    // For each document returned by the query, get the item_id field.
+    // For each document returned by the query, get the item_id field and the timestamp of the most recent message.
     for (DocumentSnapshot groupchatSnapshot in groupChatsSnapshot.docs) {
+      // getting the item, seller and buyer
       String itemId = groupchatSnapshot['item_id'];
-
       String seller_id = groupchatSnapshot['seller_id'];
       String buyer_id = groupchatSnapshot['buyer_id'];
 
@@ -41,18 +41,37 @@ class ChatDatabase {
           .doc(otherPartyId)
           .get();
 
+      // Query the `chatmessage` collection for the most recent message of the appropriate `chatgroupSnapshot`.
+      QuerySnapshot messagesSnapshot = await FirebaseFirestore.instance
+          .collection('chatmessage')
+          .where('chatgroup_id', isEqualTo: groupchatSnapshot.id)
+          .orderBy('created_at', descending: true)
+          .limit(1)
+          .get();
+
+      Timestamp lastMessageTimestamp = messagesSnapshot.docs.isNotEmpty
+          ? messagesSnapshot.docs.first['created_at']
+          : null;
+
       InboxGroupChat inboxItem = InboxGroupChat(
           groupchatSnapshot.id,
           otherPartySnapshot['name'],
           itemSnapshot['title'],
           itemSnapshot['condition'],
           itemSnapshot['price'],
-          otherPartySnapshot['profile_pic']
-        );
+          otherPartySnapshot['profile_pic'],
+          lastMessageTimestamp);
 
       // Add the `InboxGroupChat` object to the list.
       inboxGroupChats.add(inboxItem);
     }
+
+    /**
+     * Sorting the inbox group chats
+     * Most recent one on top
+     */
+    inboxGroupChats.sort(
+        (a, b) => b.lastTimeSent.compareTo(a.lastTimeSent));
 
     return inboxGroupChats;
   }
