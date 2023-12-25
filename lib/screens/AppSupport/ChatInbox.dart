@@ -103,15 +103,20 @@ class ChatInbox extends StatelessWidget {
                     } else if (snapshot.hasData) {
                       List<InboxGroupChat> inboxItems = snapshot.data!;
                       return inboxItems.isNotEmpty
-                          ? Column(
-                              children: [
-                                for (int i = 0; i < inboxItems.length; i++) ...[
-                                  buildInboxItem(context, inboxItems[i]),
-                                  if (i < inboxItems.length - 1)
-                                    SizedBox(
-                                        height: 2), // Add spacing between items
-                                ],
-                              ],
+                          ? Flexible(
+                              child: ListView.builder(
+                                itemCount: inboxItems.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      buildInboxItem(
+                                          context, inboxItems[index]),
+                                      if (index < inboxItems.length - 1)
+                                        SizedBox(height: 2),
+                                    ],
+                                  );
+                                },
+                              ),
                             )
                           : EmptyListWidget(
                               emptyError: 'You have no previous messages yet!');
@@ -208,7 +213,7 @@ class ChatInbox extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 8,
                       ),
                       Container(
                         width: 160,
