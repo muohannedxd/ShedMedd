@@ -26,7 +26,7 @@ class ShopHome extends StatelessWidget {
   final refreshKey = GlobalKey<RefreshIndicatorState>();
   Future<Null> refreshPage() async {
     refreshKey.currentState?.show(atTop: false);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     itemsController.updateCategoryChooser(itemsController.category.value);
     return null;
   }

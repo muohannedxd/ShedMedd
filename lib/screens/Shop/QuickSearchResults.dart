@@ -33,7 +33,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
   final refreshKey = GlobalKey<RefreshIndicatorState>();
   Future<Null> refreshPage() async {
     refreshKey.currentState?.show(atTop: false);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     setState(() {});
     return null;
   }

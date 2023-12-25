@@ -1,157 +1,265 @@
 // ChatInbox.dart
+// ignore_for_file: must_be_immutable
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:shedmedd/components/emptyListWidget.dart';
+import 'package:shedmedd/components/errorWidget.dart';
+import 'package:shedmedd/components/profileShimmer.dart';
+import 'package:shedmedd/controller/chat/inboxController.dart';
+import 'package:shedmedd/utilities/inboxGroupChat.dart';
 import '../../constants/customColors.dart';
+import '../../constants/textSizes.dart';
+import '../../utilities/displayTimeAgo.dart';
 import '../Shop/Home.dart';
 
 class ChatInbox extends StatelessWidget {
-  final List<InboxItem> inboxItems = [
-    InboxItem('Jane Cooper', 'Red blouse',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    InboxItem('Jane Cooper', 'Pink shirt',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    InboxItem('Jane Cooper', 'Pantalon',
-        'assets/images/logo_small_icon_only_inverted.png'),
-    // Add more Inbox items as needed...
-  ];
+  final InboxController inboxController = Get.put(InboxController());
+
+  /**
+   * refresh on slide down
+   */
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+  Future<Null> refreshPage() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(milliseconds: 500));
+    inboxController.updateInbox();
+  }
 
   @override
   Widget build(BuildContext context) {
+    /**
+     * To display data when widget first loads 
+     */
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      inboxController.updateInbox();
+    });
+
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
-            (route) => false);
-        return false;
-      },
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 25),
+        onWillPop: () async {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+              (route) => false);
+          return false;
+        },
+        child: Scaffold(
+          body: RefreshIndicator(
+            backgroundColor: CustomColors.bgColor,
+            color: CustomColors.textPrimary,
+            displacement: MediaQuery.of(context).size.height * 0.1,
+            key: refreshKey,
+            onRefresh: refreshPage,
+            child: Obx(
+              () => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 25),
 
-              // Search Bar
-              Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: CustomColors.grey.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 20, top: 10, bottom: 10, right: 20),
-                          ),
+                    // Search Bar
+                    Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors.grey.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(
+                                      left: 20, top: 10, bottom: 10, right: 20),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                'assets/icons/search_filled.png',
+                                width: 22,
+                                color: CustomColors.textPrimary,
+                              ),
+                              onPressed: () {
+                                // Handle search action
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      IconButton(
-                        icon: Image.asset(
-                          'assets/icons/search_filled.png',
-                          width: 22,
-                          color: CustomColors.textPrimary,
-                        ),
-                        onPressed: () {
-                          // Handle search action
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+
+                    SizedBox(height: 20.0), // Spacer
+
+                    // Line with light grey
+                    Container(
+                      height: 1.0,
+                      color: CustomColors.grey.withOpacity(0.2),
+                    ),
+                    SizedBox(height: 5), // Spacer
+
+                    FutureBuilder(
+                        future: inboxController.inboxGroupChats.value,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: Column(
+                                      children: [
+                                        CustomErrorWidget(
+                                          errorText: 'An error occured!',
+                                        ),
+                                        Text('${snapshot.error}')
+                                      ],
+                                    ));
+                          } else if (snapshot.hasData) {
+                            List<InboxGroupChat> inboxItems = snapshot.data!;
+                            return inboxItems.isNotEmpty
+                                ? Flexible(
+                                    child: ListView.builder(
+                                      itemCount: inboxItems.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            buildInboxItem(
+                                                context, inboxItems[index]),
+                                            if (index < inboxItems.length - 1)
+                                              SizedBox(height: 2),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  )
+                                : EmptyListWidget(
+                                    emptyError:
+                                        'You have no previous messages yet!');
+                          } else {
+                            return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                                Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Column(
+                                children: [
+                                  ProfileShimmer(),
+                                  SizedBox(height: 20),
+                                  ProfileShimmer(),
+                                  SizedBox(height: 20),
+                                  ProfileShimmer(),
+                                  SizedBox(height: 20),
+                                  ProfileShimmer()
+                                ],
+                              ),
+                            );
+                          }
+                        })
+                  ],
                 ),
               ),
-
-              SizedBox(height: 20.0), // Spacer
-
-              // Line with light grey
-              Container(
-                height: 1.0,
-                color: CustomColors.grey.withOpacity(0.2),
-              ),
-              SizedBox(height: 5), // Spacer
-
-              // Unread messages text
-              /*Text(
-                '5 unread messages',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),*/
-
-              // Inbox Items
-              for (int i = 0; i < inboxItems.length; i++) ...[
-                buildInboxItem(inboxItems[i]),
-                if (i < inboxItems.length - 1)
-                  SizedBox(height: 2), // Add spacing between items
-              ],
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
-  Widget buildInboxItem(InboxItem item) {
+  Widget buildInboxItem(BuildContext context, InboxGroupChat groupchat) {
+    String initials = groupchat.username.toUpperCase().substring(0, 2);
+    Timestamp currentTime = Timestamp.now();
+    Duration difference =
+        currentTime.toDate().difference(groupchat.lastTimeSent.toDate());
+
+    String timeAgo = displayTimeAgo(difference);
+
     return GestureDetector(
       onTap: () {
-        
+        Navigator.pushNamed(
+          context,
+          '/message',
+          arguments: {
+            'gc_id': groupchat.gc_id,
+            'title': groupchat.itemName,
+            'condition': groupchat.itemCondition,
+            'price': groupchat.itemPrice,
+            'receiverName': groupchat.username
+          },
+        );
       },
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
-        ),
-        padding: const EdgeInsets.symmetric(
-            vertical: 15, horizontal: 15), // Added horizontal padding
-        child: Row(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  item.characterImage,
-                  width: 50,
-                  height: 50,
-                ),
-              ],
-            ),
-            SizedBox(width: 18.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
+          /*decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: CustomColors.grey.withOpacity(0.3))),
+          ),*/
+          padding: const EdgeInsets.symmetric(
+              vertical: 10, horizontal: 15), // Added horizontal padding
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    child: CircleAvatar(
+                      backgroundColor: CustomColors.grey,
+                      child: ClipOval(
+                        child: groupchat.profileImage.isNotEmpty
+                            ? Image.network(
+                                groupchat.profileImage,
+                                fit: BoxFit.cover,
+                                width: 60,
+                                height: 60,
+                              )
+                            : Text(initials),
+                      ),
+                    ),
                   ),
-                ),
-                Text(
-                  item.itemName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                  SizedBox(
+                    width: 20,
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 160,
+                        child: Text(
+                          groupchat.username,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: TextSizes.medium,
+                              color: CustomColors.textPrimary),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Container(
+                        width: 160,
+                        child: Text(
+                          groupchat.itemName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: TextSizes.regular,
+                              color: CustomColors.textGrey),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                timeAgo,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: TextSizes.small,
+                    color: CustomColors.textGrey),
+              ),
+            ],
+          )),
     );
   }
-}
-
-class InboxItem {
-  final String name;
-  final String itemName;
-  final String characterImage;
-
-  InboxItem(this.name, this.itemName, this.characterImage);
 }
