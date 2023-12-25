@@ -1,4 +1,6 @@
 // ChatInbox.dart
+// ignore_for_file: must_be_immutable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/emptyListWidget.dart';
@@ -13,8 +15,18 @@ import '../../utilities/displayTimeAgo.dart';
 import '../Shop/Home.dart';
 
 class ChatInbox extends StatelessWidget {
-  final Future<List<InboxGroupChat>> inboxGroupChats =
+  Future<List<InboxGroupChat>> inboxGroupChats =
       ChatDatabase().getInboxGroupChats();
+
+  /**
+   * refresh on slide down
+   */
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+  Future<Null> refreshPage() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(milliseconds: 500));
+    inboxGroupChats = ChatDatabase().getInboxGroupChats();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,118 +39,126 @@ class ChatInbox extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 25),
+        body: RefreshIndicator(
+          backgroundColor: CustomColors.bgColor,
+          color: CustomColors.textPrimary,
+          displacement: MediaQuery.of(context).size.height * 0.1,
+          key: refreshKey,
+          onRefresh: refreshPage,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 25),
 
-              // Search Bar
-              Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: CustomColors.grey.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: 20, top: 10, bottom: 10, right: 20),
+                // Search Bar
+                Padding(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: CustomColors.grey.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(
+                                  left: 20, top: 10, bottom: 10, right: 20),
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Image.asset(
-                          'assets/icons/search_filled.png',
-                          width: 22,
-                          color: CustomColors.textPrimary,
+                        IconButton(
+                          icon: Image.asset(
+                            'assets/icons/search_filled.png',
+                            width: 22,
+                            color: CustomColors.textPrimary,
+                          ),
+                          onPressed: () {
+                            // Handle search action
+                          },
                         ),
-                        onPressed: () {
-                          // Handle search action
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              SizedBox(height: 20.0), // Spacer
+                SizedBox(height: 20.0), // Spacer
 
-              // Line with light grey
-              Container(
-                height: 1.0,
-                color: CustomColors.grey.withOpacity(0.2),
-              ),
-              SizedBox(height: 5), // Spacer
+                // Line with light grey
+                Container(
+                  height: 1.0,
+                  color: CustomColors.grey.withOpacity(0.2),
+                ),
+                SizedBox(height: 5), // Spacer
 
-              // Inbox Items
-              /*for (int i = 0; i < inboxItems.length; i++) ...[
-                buildInboxItem(context, inboxItems[i]),
-                if (i < inboxItems.length - 1)
-                  SizedBox(height: 2), // Add spacing between items
-              ],*/
-              FutureBuilder(
-                  future: inboxGroupChats,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return /*CustomErrorWidget(errorText: 'An error occured!')*/
-                          Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Column(
-                                children: [
-                                  CustomErrorWidget(
-                                    errorText: 'An error occured!',
-                                  ),
-                                  Text('${snapshot.error}')
-                                ],
-                              ));
-                    } else if (snapshot.hasData) {
-                      List<InboxGroupChat> inboxItems = snapshot.data!;
-                      return inboxItems.isNotEmpty
-                          ? Flexible(
-                              child: ListView.builder(
-                                itemCount: inboxItems.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      buildInboxItem(
-                                          context, inboxItems[index]),
-                                      /*if (index < inboxItems.length - 1)
-                                        SizedBox(height: 2),*/
-                                    ],
-                                  );
-                                },
-                              ),
-                            )
-                          : EmptyListWidget(
-                              emptyError: 'You have no previous messages yet!');
-                    } else {
-                      return /*CustomErrorWidget(errorText: 'An error occured!')*/
-                          Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: [
-                            ProfileShimmer(),
-                            SizedBox(height: 20),
-                            ProfileShimmer(),
-                            SizedBox(height: 20),
-                            ProfileShimmer(),
-                            SizedBox(height: 20),
-                            ProfileShimmer()
-                          ],
-                        ),
-                      );
-                    }
-                  })
-            ],
+                // Inbox Items
+                /*for (int i = 0; i < inboxItems.length; i++) ...[
+                  buildInboxItem(context, inboxItems[i]),
+                  if (i < inboxItems.length - 1)
+                    SizedBox(height: 2), // Add spacing between items
+                ],*/
+                FutureBuilder(
+                    future: inboxGroupChats,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                            Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Column(
+                                  children: [
+                                    CustomErrorWidget(
+                                      errorText: 'An error occured!',
+                                    ),
+                                    Text('${snapshot.error}')
+                                  ],
+                                ));
+                      } else if (snapshot.hasData) {
+                        List<InboxGroupChat> inboxItems = snapshot.data!;
+                        return inboxItems.isNotEmpty
+                            ? Flexible(
+                                child: ListView.builder(
+                                  itemCount: inboxItems.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        buildInboxItem(
+                                            context, inboxItems[index]),
+                                        if (index < inboxItems.length - 1)
+                                          SizedBox(height: 2),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )
+                            : EmptyListWidget(
+                                emptyError:
+                                    'You have no previous messages yet!');
+                      } else {
+                        return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                            Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            children: [
+                              ProfileShimmer(),
+                              SizedBox(height: 20),
+                              ProfileShimmer(),
+                              SizedBox(height: 20),
+                              ProfileShimmer(),
+                              SizedBox(height: 20),
+                              ProfileShimmer()
+                            ],
+                          ),
+                        );
+                      }
+                    })
+              ],
+            ),
           ),
         ),
       ),
