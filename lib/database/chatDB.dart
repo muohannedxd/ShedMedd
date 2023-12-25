@@ -10,6 +10,15 @@ class ChatDatabase {
       FirebaseFirestore.instance.collection('chatgroup');
 
   /**
+   * get one group chat messages
+   */
+  Future<List<dynamic>> getGroupChatMessages(String gc_id) async {
+    DocumentSnapshot groupChatSnapshot = await chatgroup.doc(gc_id).get();
+    List<dynamic> messages = groupChatSnapshot['messages'];
+    return messages;
+  }
+
+  /**
    * get all chat groups for the logged in user
    */
   Future<List<InboxGroupChat>> getInboxGroupChats() async {
@@ -45,21 +54,25 @@ class ChatDatabase {
       // Sort the messages array based on the "created_at" timestamp in descending order
       messages.sort((a, b) => b['created_at'].compareTo(a['created_at']));
 
-      // Get the timestamp of the most recent message
-      Timestamp lastMessageTimestamp =
-          messages.isNotEmpty ? messages[0]['created_at'] : null;
+      if (messages.length != 0) {
+        // Get the timestamp of the most recent message
+        Timestamp lastMessageTimestamp =
+            messages.isNotEmpty ? messages[0]['created_at'] : Timestamp.now();
 
-      InboxGroupChat inboxItem = InboxGroupChat(
-          groupchatSnapshot.id,
-          otherPartySnapshot['name'],
-          itemSnapshot['title'],
-          itemSnapshot['condition'],
-          itemSnapshot['price'],
-          otherPartySnapshot['profile_pic'],
-          lastMessageTimestamp);
+        InboxGroupChat inboxItem = InboxGroupChat(
+            groupchatSnapshot.id,
+            otherPartySnapshot['name'],
+            itemSnapshot['title'],
+            itemSnapshot['condition'],
+            itemSnapshot['price'],
+            otherPartySnapshot['profile_pic'],
+            lastMessageTimestamp);
 
-      // Add the `InboxGroupChat` object to the list.
-      inboxGroupChats.add(inboxItem);
+        // Add the `InboxGroupChat` object to the list.
+        inboxGroupChats.add(inboxItem);
+      } else {
+        continue;
+      }
     }
 
     inboxGroupChats.sort((a, b) => b.lastTimeSent.compareTo(a.lastTimeSent));

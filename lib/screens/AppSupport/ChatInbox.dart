@@ -180,6 +180,7 @@ class ChatInbox extends StatelessWidget {
           context,
           '/message',
           arguments: {
+            'gc_id': groupchat.gc_id,
             'title': groupchat.itemName,
             'condition': groupchat.itemCondition,
             'price': groupchat.itemPrice,
