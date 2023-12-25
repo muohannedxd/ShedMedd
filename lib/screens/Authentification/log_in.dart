@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shedmedd/controller/auth/email_controller.dart';
+import 'package:shedmedd/screens/Authentification/email_verification/email_verification.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 
+import '../../constants/customColors.dart';
 import '../../database/usersDB.dart';
 import '../Shop/Home.dart';
 
@@ -22,6 +25,8 @@ class _LogInState extends State<LogIn> {
   // Controllers for handling input values
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+    final EmailController _emailController = Get.put(EmailController());
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -50,8 +55,16 @@ class _LogInState extends State<LogIn> {
             child: Column(
               children: [
                 TextField(
-                  controller: emailController,
+                  controller: emailController = TextEditingController(
+                            text: _emailController.email.value,
+                          ),
+                          onChanged: (email) {
+                            _emailController.setEmail(email);
+                          },
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Email address",
                     errorText: emailError.isNotEmpty ? emailError : null,
                   ),
@@ -62,6 +75,9 @@ class _LogInState extends State<LogIn> {
                 TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Password",
                     errorText: passwordError.isNotEmpty ? passwordError : null,
                     suffixIcon: IconButton(
@@ -115,7 +131,7 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   emailError =
                       emailController.text.isEmpty ? "Fill email field" : "";
@@ -123,6 +139,8 @@ class _LogInState extends State<LogIn> {
                       ? "Fill password field"
                       : "";
                 });
+                bool isVerified = await UsersDatabase().isUserVerified();
+
                 if (emailError.isEmpty && passwordError.isEmpty) {
                   UsersDatabase()
                       .loginUser(

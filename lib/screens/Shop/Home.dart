@@ -7,6 +7,9 @@ import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
 import '../../controller/auth/auth_controller.dart';
+import '../../controller/auth/email_controller.dart';
+import '../../database/usersDB.dart';
+import '../Authentification/email_verification/email_verification.dart';
 import '../Post_item/post_an_new_item.dart';
 import 'ShopHome.dart';
 import '../../constants/customColors.dart';
@@ -27,11 +30,21 @@ class _ShopState extends State<Shop> {
 
   final AuthController authController = Get.put(AuthController());
   final bool isLoggedIn = AuthController().isLoggedIn();
+  final EmailController _emailController = Get.put(EmailController());
+
 
   @override
   void initState() {
-    currentPageIndex = widget.currentIndex;
     super.initState();
+    currentPageIndex = widget.currentIndex;
+    checkVerificationStatus();
+  }
+
+  Future<void> checkVerificationStatus() async {
+    bool isVerified = await UsersDatabase().isUserVerified();
+    if (!isVerified && isLoggedIn) {
+      Get.offAll(VerificationEmail());
+    }
   }
 
   @override

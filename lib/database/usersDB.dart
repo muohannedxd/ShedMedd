@@ -147,21 +147,103 @@ class UsersDatabase {
       print('Error during logout: $e');
     }
   }
-}
 
 // Add user data to the database
-void addUserData(String userId, Map<String, dynamic> userData) {
-  // Reference to the Firebase Firestore collection with the specific user ID
-  CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  void addUserData(String userId, Map<String, dynamic> userData) {
+    // Reference to the Firebase Firestore collection with the specific user ID
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
 
-  // Reference to the specific document within the collection
-  DocumentReference userDocument = usersCollection.doc(userId);
+    // Reference to the specific document within the collection
+    DocumentReference userDocument = usersCollection.doc(userId);
 
-  // Set data for the specific user ID
-  userDocument.set(userData).then((value) {
-    print('Data added successfully for user with ID: $userId');
-  }).catchError((error) {
-    print('Failed to add data: $error');
-  });
+    // Set data for the specific user ID
+    userDocument.set(userData).then((value) {
+      print('Data added successfully for user with ID: $userId');
+    }).catchError((error) {
+      print('Failed to add data: $error');
+    });
+  }
+
+// Send verification email
+  Future<void> sendEmailVerification() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+
+      // You can show a message to the user to check their email for verification.
+      print('Verification email sent to ${user.email}');
+    } else {
+      // Handle the case where the user is not signed in or their email is already verified.
+      print('User is not signed in or email is already verified.');
+    }
+  }
+
+  Future<bool> isUserVerified() async {
+    // Get the current user from Firebase Authentication
+    User? user = FirebaseAuth.instance.currentUser;
+
+    // Check if the user is not null and if their email is verified
+    if (user != null) {
+      await user.reload();
+      user = FirebaseAuth.instance.currentUser;
+      return user!.emailVerified;
+    }
+
+    // If the user is null or their email is not verified, return false
+    return false;
+  }
+
+  Future<String> signUpAndSendVerificationEmail({
+    required TextEditingController nameController,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+    required TextEditingController confirmPasswordController,
+  }) async {
+    try {
+      // Call signUpUser function
+      String signUpResult = await signUpUser(
+        nameController: nameController,
+        emailController: emailController,
+        passwordController: passwordController,
+        confirmPasswordController: confirmPasswordController,
+      );
+
+      // If signUpUser was successful, call sendEmailVerification
+      if (signUpResult == 'Sign up successful!') {
+        await sendEmailVerification();
+      }
+
+      // Return the result of signUpUser
+      return signUpResult;
+    } catch (e) {
+      // Handle any exceptions that may occur
+      print('Error during sign up and email verification: $e');
+      return 'Error during sign up and email verification';
+    }
+  }
+
+  Future<String?> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return null; // No error, operation successful
+    } catch (e) {
+      // Handle specific error cases
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'invalid-email':
+            print("The provided email address is either invalid or not found");
+            return "The provided email address is either invalid or not found";
+          default:
+            print("Error sending password reset email: ${e.message}");
+            return "Error sending password reset email";
+        }
+      } else {
+        // Handle other non-Firebase errors
+        print("Error sending password reset email: $e");
+        return "Error sending password reset email";
+      }
+    }
+  }
 }

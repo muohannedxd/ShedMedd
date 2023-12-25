@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shedmedd/controller/auth/email_controller.dart';
+import 'package:shedmedd/screens/Authentification/email_verification/email_verification.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import '../../../database/usersDB.dart';
 
+import '../../constants/customColors.dart';
 import 'log_in.dart';
 
 class SignUp extends StatefulWidget {
@@ -26,6 +29,8 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+
+  final EmailController _emailController = Get.put(EmailController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +60,25 @@ class _SignUpState extends State<SignUp> {
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Your name",
                     errorText: nameError.isNotEmpty ? nameError : null,
                   ),
                 ),
                 SizedBox(height: 20),
                 TextField(
-                  controller: emailController,
+                  controller: emailController = TextEditingController(
+                            text: _emailController.email.value,
+                          ),
+                          onChanged: (email) {
+                            _emailController.setEmail(email);
+                          },
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Email address",
                     errorText: emailError.isNotEmpty ? emailError : null,
                   ),
@@ -71,6 +87,9 @@ class _SignUpState extends State<SignUp> {
                 TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Password",
                     errorText: passwordError.isNotEmpty ? passwordError : null,
                     suffixIcon: IconButton(
@@ -93,6 +112,9 @@ class _SignUpState extends State<SignUp> {
                 TextField(
                   controller: confirmPasswordController,
                   decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                    ),
                     hintText: "Confirm password",
                     errorText: confirmPasswordError.isNotEmpty
                         ? confirmPasswordError
@@ -149,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                     passwordError.isEmpty &&
                     confirmPasswordError.isEmpty) {
                   UsersDatabase()
-                      .signUpUser(
+                      .signUpAndSendVerificationEmail(
                     nameController: nameController,
                     emailController: emailController,
                     passwordController: passwordController,
@@ -157,13 +179,13 @@ class _SignUpState extends State<SignUp> {
                   )
                       .then((result) {
                     if (result == 'Sign up successful!') {
-                      // Navigate to the next screen or perform other actions for successful signup
-                      _showRegistrationSlider();
                       // Clear all input fields
                       nameController.clear();
                       emailController.clear();
                       passwordController.clear();
                       confirmPasswordController.clear();
+
+                      Get.to(VerificationEmail());
 
                       print('User successfully registered');
                     } else {
@@ -309,89 +331,6 @@ class _SignUpState extends State<SignUp> {
           )
         ],
       ),
-    );
-  }
-
-  void _showRegistrationSlider() {
-    // Show the bottom sheet when the button is pressed
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Container(
-          height: 360.0,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(70.0),
-                topRight: const Radius.circular(70.0),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 32,
-                ),
-                // Add your Image widget here
-                Image.asset(
-                  'assets/images/password_successfully_changed.png',
-                  width: 110.0, // Adjust the width as needed
-                  height: 110.0, // Adjust the height as needed
-                  // You can use other properties like fit, alignment, etc.
-                ),
-                SizedBox(height: 20.0), // Adjust spacing as needed
-                Text(
-                  "You have been successfully registered in ShedMedd!",
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16.0), // Adjust spacing as needed
-                Text(
-                  "Welcome! Discover now!",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(height: 24.0), // Adjust spacing as needed
-                Container(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color?>(Colors.black),
-                        fixedSize:
-                            MaterialStateProperty.all<Size>(Size(315, 60)),
-                        shape: MaterialStateProperty.all<OutlinedBorder?>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                30), // Adjust the radius for sharpness
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Get.offAll(Shop(currentIndex: 0));
-                        //if the user clicked here make him registered,
-                        //else if he clicked elsewhere and made the slider to disappear he has to log in to the account he created
-                      },
-                      child: Text(
-                        "Browse home",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      )),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
