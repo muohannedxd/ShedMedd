@@ -10,6 +10,59 @@ class ChatDatabase {
       FirebaseFirestore.instance.collection('chatgroup');
 
   /**
+   * create one group chat
+   */
+  Future<String> createGroupChat(
+      String buyer_id, String seller_id, String item_id) async {
+    DocumentReference groupChatRef = chatgroup.doc();
+    await groupChatRef.set({
+      'buyer_id': buyer_id,
+      'item_id': item_id,
+      'seller_id': seller_id,
+      'messages': []
+    });
+
+    return groupChatRef.id;
+  }
+
+  /**
+   * add a message to group chat
+   */
+  Future<void> addMessageToGroupChat(
+      String gc_id, String sender_id, String message) async {
+    DocumentReference groupChatRef = chatgroup.doc(gc_id);
+    Map<String, dynamic> messageObject = {
+      'message': message,
+      'sender_id': sender_id,
+      'created_at': Timestamp.now()
+    };
+
+    await groupChatRef.update({
+      'messages': FieldValue.arrayUnion([messageObject])
+    });
+  }
+
+  /**
+   * get the group chat id based on seller, buyer and the item
+   */
+  Future<String> getGroupChatId(
+      String seller_id, String buyer_id, String item_id) async {
+    QuerySnapshot groupChatSnapshot = await chatgroup
+        .where(Filter.and(
+            Filter('buyer_id', isEqualTo: buyer_id),
+            Filter('seller_id', isEqualTo: seller_id),
+            Filter('item_id', isEqualTo: item_id)))
+        .limit(1)
+        .get();
+
+    if (groupChatSnapshot.docs.isNotEmpty) {
+      return groupChatSnapshot.docs.first.id;
+    }
+
+    return 'null'; // Chat group not found
+  }
+
+  /**
    * get one group chat messages
    */
   Future<List<dynamic>> getGroupChatMessages(String gc_id) async {

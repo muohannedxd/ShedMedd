@@ -2,6 +2,7 @@
     <application
         android:label="shedmedd"
         android:name="${applicationName}"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">
         
