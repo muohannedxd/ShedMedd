@@ -29,6 +29,7 @@ class _DirectMessage extends State<DirectMessage> {
   String message = '';
 
   final TextEditingController _textEditingController = TextEditingController();
+  String loggedInId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +109,8 @@ class _DirectMessage extends State<DirectMessage> {
               decoration: BoxDecoration(
                 color: CustomColors.grey.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(color: CustomColors.grey.withOpacity(0.2), width: 1.0),
+                border: Border.all(
+                    color: CustomColors.grey.withOpacity(0.2), width: 1.0),
               ),
               child: Row(
                 children: [
@@ -116,14 +118,16 @@ class _DirectMessage extends State<DirectMessage> {
                     child: Container(
                       constraints: BoxConstraints(
                         maxHeight:
-                            160.0, // Set a maximum height for the container
+                            120.0, // Set a maximum height for the container
                       ),
                       child: TextField(
                         controller: _textEditingController,
                         onChanged: (value) {
                           setState(() {
-                            message = value;
-                            if (message.length != 0)
+                            /**
+                             * disallow text that is only spaces or new lines
+                             */
+                            if (_textEditingController.text.trim().isNotEmpty)
                               isShownSendingButton = true;
                             else {
                               isShownSendingButton = false;
@@ -131,21 +135,18 @@ class _DirectMessage extends State<DirectMessage> {
                           });
                         },
                         keyboardType: TextInputType.multiline,
-                        // Enable multiline input
                         maxLines: null,
-                        // Allow an unlimited number of lines
                         minLines: 1,
-                        // Ensure there's always at least one line
+                        maxLength: 2000,
                         decoration: InputDecoration(
                           hintText: 'Write your message here',
                           border: InputBorder.none,
+                          counterText: '',
                           contentPadding: const EdgeInsets.only(
                             left: 16.0,
                             right: 16.0,
                             top: 8.0,
-                            // Adjust the top padding for multiline input
                             bottom: 8.0,
-                            // Adjust the bottom padding for multiline input
                           ),
                         ),
                         style: const TextStyle(fontSize: TextSizes.regular),
@@ -155,7 +156,13 @@ class _DirectMessage extends State<DirectMessage> {
                   isShownSendingButton
                       ? IconButton(
                           onPressed: () {
-                            setState(() {});
+                            setState(() {
+                              ChatDatabase().addMessageToGroupChat(gc_id,
+                                  loggedInId, _textEditingController.text);
+                              // clear the field after the message is sent
+                              _textEditingController.clear();
+                              isShownSendingButton = false;
+                            });
                           },
                           icon: Icon(
                             Icons.send,
@@ -195,6 +202,7 @@ class _OneMessageState extends State<OneMessage> {
       isShownDateTime = !isShownDateTime;
     });
   }
+
   // on one tap
   void hideDateTime() {
     setState(() {
@@ -253,18 +261,18 @@ class _OneMessageState extends State<OneMessage> {
               ),
             ),
             Visibility(
-              visible: isShownDateTime,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(
-                '$formattedDate $formattedTime',
-                style: TextStyle(
-                  color: CustomColors.textPrimary,
-                  fontSize: TextSizes.small,
-                ),
-                textAlign: TextAlign.start,
-                            ),
-              ))
+                visible: isShownDateTime,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    '$formattedDate $formattedTime',
+                    style: TextStyle(
+                      color: CustomColors.textPrimary.withOpacity(0.6),
+                      fontSize: TextSizes.small,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ))
           ],
         ),
       ),

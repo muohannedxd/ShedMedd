@@ -26,6 +26,23 @@ class ChatDatabase {
   }
 
   /**
+   * add a message to group chat
+   */
+  Future<void> addMessageToGroupChat(
+      String gc_id, String sender_id, String message) async {
+    DocumentReference groupChatRef = chatgroup.doc(gc_id);
+    Map<String, dynamic> messageObject = {
+      'message': message,
+      'sender_id': sender_id,
+      'created_at': Timestamp.now()
+    };
+
+    await groupChatRef.update({
+      'messages': FieldValue.arrayUnion([messageObject])
+    });
+  }
+
+  /**
    * get the group chat id based on seller, buyer and the item
    */
   Future<String> getGroupChatId(

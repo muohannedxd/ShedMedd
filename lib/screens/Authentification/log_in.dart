@@ -137,7 +137,6 @@ class _LogInState extends State<LogIn> {
                       ? "Fill password field"
                       : "";
                 });
-                bool isVerified = await UsersDatabase().isUserVerified();
 
                 if (emailError.isEmpty && passwordError.isEmpty) {
                   UsersDatabase()
