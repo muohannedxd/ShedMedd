@@ -108,7 +108,7 @@ class _DirectMessage extends State<DirectMessage> {
               decoration: BoxDecoration(
                 color: CustomColors.grey.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(color: Colors.grey.shade200, width: 1.0),
+                border: Border.all(color: CustomColors.grey.withOpacity(0.2), width: 1.0),
               ),
               child: Row(
                 children: [
@@ -233,7 +233,7 @@ class _OneMessageState extends State<OneMessage> {
                     decoration: BoxDecoration(
                       color: messageOfLoggedInUser
                           ? CustomColors.textPrimary.withOpacity(0.8)
-                          : CustomColors.textGrey.withOpacity(0.3),
+                          : CustomColors.grey.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     constraints: BoxConstraints(

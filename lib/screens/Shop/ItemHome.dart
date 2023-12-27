@@ -10,6 +10,7 @@ import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
 import '../../components/errorWidget.dart';
+import '../../database/chatDB.dart';
 import '../../utilities/myBehavior.dart';
 import '../../utilities/returnAction.dart';
 import '../../constants/textSizes.dart';
@@ -25,10 +26,9 @@ class ItemHome extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<DocumentSnapshot> currentItem = ItemsDatabase().getOneItem(itemID);
 
-    String loggedInId = '';
+    String loggedInId = FirebaseAuth.instance.currentUser!.uid;
     bool isLoggedIn = false;
     if (FirebaseAuth.instance.currentUser != null) {
-      loggedInId = FirebaseAuth.instance.currentUser!.uid;
       isLoggedIn = true;
     }
 
@@ -106,10 +106,12 @@ class ItemHome extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: DirectMessageButton(
+                      item_id: itemID,
                       title: item['title'],
                       condition: item['condition'],
                       price: item['price'],
                       sellerID: item['user_id'],
+                      currentUserId: loggedInId,
                       loggedIn: isLoggedIn),
                 ),
             ],
@@ -123,18 +125,55 @@ class ItemHome extends StatelessWidget {
 class DirectMessageButton extends StatelessWidget {
   const DirectMessageButton({
     super.key,
+    required this.item_id,
     required this.title,
     required this.condition,
     required this.price,
     required this.sellerID,
+    required this.currentUserId,
     required this.loggedIn,
   });
 
+  final String item_id;
   final String title;
   final String condition;
   final int price;
   final String sellerID;
+  final String currentUserId;
   final bool loggedIn;
+
+  void navigateToChat(
+      BuildContext context, DocumentSnapshot<Object?>? user) async {
+    //String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    String gc_id =
+        await ChatDatabase().getGroupChatId(sellerID, currentUserId, item_id);
+
+    // if chat does not exist
+    if (gc_id == 'null') {
+      // create one
+      gc_id = await ChatDatabase().createGroupChat(currentUserId, sellerID, item_id);
+    }
+
+    // navigate to the chat
+    loggedIn
+        ? Navigator.pushNamed(
+            context,
+            '/message',
+            arguments: {
+              'gc_id': gc_id, // change this later
+              'title': title,
+              'condition': condition,
+              'price': price,
+              'receiverName': user?['name']
+            },
+          )
+        : Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SignUp(),
+            ),
+          );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,24 +191,8 @@ class DirectMessageButton extends StatelessWidget {
             DocumentSnapshot<Object?>? user = snapshot.data;
             if (snapshot.hasData) {
               return TextButton(
-                onPressed: () {
-                  loggedIn
-                      ? Navigator.pushNamed(
-                          context,
-                          '/message',
-                          arguments: {
-                            'title': title,
-                            'condition': condition,
-                            'price': price,
-                            'receiverName': user?['name']
-                          },
-                        )
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignUp(),
-                          ),
-                        );
+                onPressed: () async {
+                  navigateToChat(context, user);
                 },
                 child: Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 16),
