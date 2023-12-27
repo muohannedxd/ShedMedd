@@ -158,7 +158,7 @@ class _DirectMessage extends State<DirectMessage> {
                           onPressed: () {
                             setState(() {
                               ChatDatabase().addMessageToGroupChat(gc_id,
-                                  loggedInId, _textEditingController.text);
+                                  loggedInId, _textEditingController.text.trim());
                               // clear the field after the message is sent
                               _textEditingController.clear();
                               isShownSendingButton = false;
