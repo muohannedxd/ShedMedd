@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shedmedd/components/Shop/ItemNamePrice.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
@@ -8,6 +9,7 @@ import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/components/floating_button.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/controller/chat/groupChatController.dart';
 import 'package:shedmedd/database/chatDB.dart';
 import 'package:shedmedd/utilities/returnAction.dart';
 
@@ -41,8 +43,12 @@ class _DirectMessage extends State<DirectMessage> {
     price = arguments['price'] as int;
     receiverName = arguments['receiverName'] as String;
 
-    final Future<List<dynamic>> messages =
-        ChatDatabase().getGroupChatMessages(gc_id);
+    final GroupChatController groupChatController =
+        Get.put(GroupChatController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      groupChatController.updateGroupChatMessages(gc_id);
+    });
 
     return Scaffold(
       body: Column(
@@ -73,8 +79,8 @@ class _DirectMessage extends State<DirectMessage> {
           Expanded(
             child: SingleChildScrollView(
                 reverse: true,
-                child: FutureBuilder(
-                    future: messages,
+                child: Obx(() => FutureBuilder(
+                    future: groupChatController.groupChatMessages.value,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return CustomErrorWidget(
@@ -100,7 +106,7 @@ class _DirectMessage extends State<DirectMessage> {
                           child: CustomCircularProgress(),
                         );
                       }
-                    })),
+                    }))),
           ),
           Padding(
             padding: const EdgeInsets.all(15),
@@ -184,11 +190,13 @@ class _DirectMessage extends State<DirectMessage> {
 class OneMessage extends StatefulWidget {
   final Map<String, dynamic> messageObject;
   final String gc_id;
-  const OneMessage(
-      {super.key, required this.messageObject, required this.gc_id});
+  OneMessage({super.key, required this.messageObject, required this.gc_id});
 
   @override
   State<OneMessage> createState() => _OneMessageState();
+
+  final GroupChatController groupChatController =
+      Get.put(GroupChatController());
 }
 
 class _OneMessageState extends State<OneMessage> {
@@ -340,11 +348,11 @@ class _OneMessageState extends State<OneMessage> {
         // delete the message
         if (await ChatDatabase()
             .deleteMessage(widget.gc_id, widget.messageObject)) {
-          setState(() {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Message deleted successfully!"),
-            ));
-          });
+          hideDateTime();
+          widget.groupChatController.updateGroupChatMessages(widget.gc_id);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Message deleted successfully!"),
+          ));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Message could not be deleted!"),

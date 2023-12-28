@@ -146,7 +146,7 @@ class ItemsDatabase {
   }
 
   // removing an item
-  Future<void> deleteItem(String itemId, List<dynamic> imageUrls) async {
+  Future<bool> deleteItem(String itemId, List<dynamic> imageUrls) async {
     try {
       // Delete item document from Firestore collection
       await items.doc(itemId).delete();
@@ -156,9 +156,9 @@ class ItemsDatabase {
         await FirebaseStorage.instance.refFromURL(imageUrl).delete();
       }
 
-      print('Item deleted successfully.');
+      return true;
     } catch (error) {
-      print('Failed to delete item: $error');
+      return false;
     }
   }
 }

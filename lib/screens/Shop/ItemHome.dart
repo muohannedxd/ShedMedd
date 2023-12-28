@@ -151,7 +151,8 @@ class DirectMessageButton extends StatelessWidget {
     // if chat does not exist
     if (gc_id == 'null') {
       // create one
-      gc_id = await ChatDatabase().createGroupChat(currentUserId, sellerID, item_id);
+      gc_id = await ChatDatabase()
+          .createGroupChat(currentUserId, sellerID, item_id);
     }
 
     // navigate to the chat
@@ -261,8 +262,11 @@ class SettingsButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListTile(
-                      leading: Image.asset('assets/icons/edit.png',
-                          color: CustomColors.textPrimary, width: 20,),
+                      leading: Image.asset(
+                        'assets/icons/edit.png',
+                        color: CustomColors.textPrimary,
+                        width: 20,
+                      ),
                       title: Text('Edit',
                           style: TextStyle(color: CustomColors.textPrimary)),
                     ),
@@ -275,8 +279,11 @@ class SettingsButton extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () => showDeleteItemDialog(context),
                       child: ListTile(
-                        leading: Image.asset('assets/icons/delete.png',
-                            color: CustomColors.textPrimary, width: 20,),
+                        leading: Image.asset(
+                          'assets/icons/delete.png',
+                          color: CustomColors.textPrimary,
+                          width: 20,
+                        ),
                         title: Text('Delete',
                             style: TextStyle(color: CustomColors.textPrimary)),
                       ),
@@ -324,7 +331,11 @@ class SettingsButton extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await ItemsDatabase().deleteItem(itemID, imagesPaths);
+                if (await ItemsDatabase().deleteItem(itemID, imagesPaths)) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Item deleted successfully!"),
+                  ));
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -336,9 +347,7 @@ class SettingsButton extends StatelessWidget {
               child: Text(
                 'Delete',
                 style: TextStyle(
-                  fontSize: TextSizes.medium,
-                  color: CustomColors.redAlert
-                ),
+                    fontSize: TextSizes.medium, color: CustomColors.redAlert),
               ),
             ),
           ],
