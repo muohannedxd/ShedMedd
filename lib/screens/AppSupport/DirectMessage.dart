@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shedmedd/components/Shop/ItemNamePrice.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
@@ -89,9 +89,8 @@ class _DirectMessage extends State<DirectMessage> {
                         return Column(
                           children: messages
                               .map((messageInstance) => OneMessage(
-                                    message: messageInstance['message'],
-                                    sender_id: messageInstance['sender_id'],
-                                    timeSent: messageInstance['created_at'],
+                                    gc_id: gc_id,
+                                    messageObject: messageInstance,
                                   ))
                               .toList(),
                         );
@@ -157,8 +156,10 @@ class _DirectMessage extends State<DirectMessage> {
                       ? IconButton(
                           onPressed: () {
                             setState(() {
-                              ChatDatabase().addMessageToGroupChat(gc_id,
-                                  loggedInId, _textEditingController.text.trim());
+                              ChatDatabase().addMessageToGroupChat(
+                                  gc_id,
+                                  loggedInId,
+                                  _textEditingController.text.trim());
                               // clear the field after the message is sent
                               _textEditingController.clear();
                               isShownSendingButton = false;
@@ -181,14 +182,10 @@ class _DirectMessage extends State<DirectMessage> {
 }
 
 class OneMessage extends StatefulWidget {
-  final String message;
-  final String sender_id;
-  final Timestamp timeSent;
+  final Map<String, dynamic> messageObject;
+  final String gc_id;
   const OneMessage(
-      {super.key,
-      required this.message,
-      required this.sender_id,
-      required this.timeSent});
+      {super.key, required this.messageObject, required this.gc_id});
 
   @override
   State<OneMessage> createState() => _OneMessageState();
@@ -213,10 +210,11 @@ class _OneMessageState extends State<OneMessage> {
   @override
   Widget build(BuildContext context) {
     String loggedInId = FirebaseAuth.instance.currentUser!.uid;
-    bool messageOfLoggedInUser = loggedInId == widget.sender_id ? true : false;
+    bool messageOfLoggedInUser =
+        loggedInId == widget.messageObject['sender_id'] ? true : false;
 
     // formatting date and time
-    DateTime dateTime = widget.timeSent.toDate();
+    DateTime dateTime = widget.messageObject['created_at'].toDate();
     String formattedDate = DateFormat.yMMMd().format(dateTime);
     String formattedTime = DateFormat.jm().format(dateTime);
 
@@ -230,7 +228,10 @@ class _OneMessageState extends State<OneMessage> {
               : CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              onLongPress: toggleDateTime,
+              onLongPress: () {
+                toggleDateTime();
+                showPopupMenu(context, messageOfLoggedInUser);
+              },
               onTap: hideDateTime,
               child: Row(
                 mainAxisAlignment: messageOfLoggedInUser
@@ -248,7 +249,7 @@ class _OneMessageState extends State<OneMessage> {
                         maxWidth: MediaQuery.of(context).size.width * 0.65),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Text(widget.message,
+                      child: Text(widget.messageObject['message'],
                           style: TextStyle(
                               color: messageOfLoggedInUser
                                   ? CustomColors.white
@@ -277,5 +278,79 @@ class _OneMessageState extends State<OneMessage> {
         ),
       ),
     );
+  }
+
+  // pop up menu after long press on a message
+  void showPopupMenu(BuildContext context, bool messageOfLoggedInUser) async {
+    RenderBox box = context.findRenderObject() as RenderBox;
+    Offset position = box.localToGlobal(Offset.zero);
+    double y = position.dy - 100;
+
+    await showMenu(
+      surfaceTintColor: CustomColors.textGrey,
+      context: context,
+      elevation: 16.0,
+      position: RelativeRect.fromLTRB(200, y, 250, 250),
+      items: [
+        PopupMenuItem(
+          value: 'copy',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListTile(
+              leading: Image.asset(
+                'assets/icons/copy.png',
+                color: CustomColors.textPrimary,
+                width: 20,
+              ),
+              title: Text('Copy',
+                  style: TextStyle(color: CustomColors.textPrimary)),
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          enabled: messageOfLoggedInUser,
+          value: 'delete',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListTile(
+              leading: Image.asset(
+                'assets/icons/delete.png',
+                color: messageOfLoggedInUser
+                    ? CustomColors.textPrimary
+                    : CustomColors.textGrey,
+                width: 20,
+              ),
+              title: Text('Delete',
+                  style: TextStyle(
+                      color: messageOfLoggedInUser
+                          ? CustomColors.textPrimary
+                          : CustomColors.textGrey)),
+            ),
+          ),
+        ),
+      ],
+    ).then((value) async {
+      if (value == 'copy') {
+        // copy the message
+        Clipboard.setData(ClipboardData(text: widget.messageObject['message']));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Message Copied"),
+        ));
+      } else if (value == 'delete') {
+        // delete the message
+        if (await ChatDatabase()
+            .deleteMessage(widget.gc_id, widget.messageObject)) {
+          setState(() {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Message deleted successfully!"),
+            ));
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Message could not be deleted!"),
+          ));
+        }
+      }
+    });
   }
 }

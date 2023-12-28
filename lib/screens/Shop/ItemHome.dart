@@ -244,6 +244,8 @@ class SettingsButton extends StatelessWidget {
           width: 38,
           height: 38,
           child: PopupMenuButton(
+            surfaceTintColor: CustomColors.textGrey,
+            elevation: 16.0,
             icon: Icon(
               Icons.more_vert_rounded,
               color: CustomColors.textPrimary,
@@ -259,8 +261,8 @@ class SettingsButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListTile(
-                      leading: Icon(Icons.edit_outlined,
-                          color: CustomColors.textPrimary),
+                      leading: Image.asset('assets/icons/edit.png',
+                          color: CustomColors.textPrimary, width: 20,),
                       title: Text('Edit',
                           style: TextStyle(color: CustomColors.textPrimary)),
                     ),
@@ -273,8 +275,8 @@ class SettingsButton extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () => showDeleteItemDialog(context),
                       child: ListTile(
-                        leading: Icon(Icons.delete_outline,
-                            color: CustomColors.textPrimary),
+                        leading: Image.asset('assets/icons/delete.png',
+                            color: CustomColors.textPrimary, width: 20,),
                         title: Text('Delete',
                             style: TextStyle(color: CustomColors.textPrimary)),
                       ),
@@ -295,7 +297,6 @@ class SettingsButton extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Set background color to white
           title: Text(
             'Remove item',
             style: TextStyle(
@@ -336,6 +337,7 @@ class SettingsButton extends StatelessWidget {
                 'Delete',
                 style: TextStyle(
                   fontSize: TextSizes.medium,
+                  color: CustomColors.redAlert
                 ),
               ),
             ),
