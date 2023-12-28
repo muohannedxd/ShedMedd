@@ -6,6 +6,7 @@ import '../screens/Shop/Home.dart';
 
 AppBar Bar(title, subpage) {
   return AppBar(
+    surfaceTintColor: CustomColors.bgColor,
     elevation: 0,
     backgroundColor: CustomColors.bgColor,
     title: Text(
