@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/controller/auth/email_controller.dart';
 import 'package:shedmedd/screens/Authentification/email_verification/email_verification.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
 import '../../../database/usersDB.dart';
 
 import '../../constants/customColors.dart';
@@ -60,7 +62,8 @@ class _SignUpState extends State<SignUp> {
                   controller: nameController,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Your name",
                     errorText: nameError.isNotEmpty ? nameError : null,
@@ -69,14 +72,15 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(height: 20),
                 TextField(
                   controller: emailController = TextEditingController(
-                            text: _emailController.email.value,
-                          ),
-                          onChanged: (email) {
-                            _emailController.setEmail(email);
-                          },
+                    text: _emailController.email.value,
+                  ),
+                  onChanged: (email) {
+                    _emailController.setEmail(email);
+                  },
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Email address",
                     errorText: emailError.isNotEmpty ? emailError : null,
@@ -87,7 +91,8 @@ class _SignUpState extends State<SignUp> {
                   controller: passwordController,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Password",
                     errorText: passwordError.isNotEmpty ? passwordError : null,
@@ -112,7 +117,8 @@ class _SignUpState extends State<SignUp> {
                   controller: confirmPasswordController,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Confirm password",
                     errorText: confirmPasswordError.isNotEmpty
@@ -267,28 +273,64 @@ class _SignUpState extends State<SignUp> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/google_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
+                    GestureDetector(
+                      onTap: () async {
+                        try {
+                          // Call the signUpWithGoogle function
+                          String? result =
+                              await UsersDatabase().signUpWithGoogle();
+
+                          // Check the result and show appropriate messages or perform other actions
+                          if (result == "Successful signing up with Google") {
+                            // Successful sign-up
+                            print("User signed up with Google successfully");
+                            Get.offAll(Shop(currentIndex: 0));
+                            // You can navigate to another screen, show a success message, etc.
+                          } else {
+                            // Error during sign-up
+                            print("Error signing up with Google");
+                            // Show a SnackBar with the error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Failed to sign up with Google. Please try again."),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        } catch (error) {
+                          // Handle unexpected errors
+                          print("Unexpected error: $error");
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(42),
+                        child: Container(
+                          width: 42,
+                          height: 42,
+                          child: SvgPicture.asset(
+                            "assets/icons/google_icon.svg",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/facebook_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
+                    GestureDetector(
+                      onTap: () {
+                        // Call your function for Facebook icon click
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(42),
+                        child: Container(
+                          width: 42,
+                          height: 42,
+                          child: SvgPicture.asset(
+                            "assets/icons/facebook_icon.svg",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
