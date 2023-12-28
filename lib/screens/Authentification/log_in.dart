@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/controller/auth/email_controller.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
@@ -23,7 +24,7 @@ class _LogInState extends State<LogIn> {
   // Controllers for handling input values
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-    final EmailController _emailController = Get.put(EmailController());
+  final EmailController _emailController = Get.put(EmailController());
 
   @override
   @override
@@ -54,14 +55,15 @@ class _LogInState extends State<LogIn> {
               children: [
                 TextField(
                   controller: emailController = TextEditingController(
-                            text: _emailController.email.value,
-                          ),
-                          onChanged: (email) {
-                            _emailController.setEmail(email);
-                          },
+                    text: _emailController.email.value,
+                  ),
+                  onChanged: (email) {
+                    _emailController.setEmail(email);
+                  },
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Email address",
                     errorText: emailError.isNotEmpty ? emailError : null,
@@ -74,7 +76,8 @@ class _LogInState extends State<LogIn> {
                   controller: passwordController,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.buttonSecondary, width: 2.0),
+                      borderSide: BorderSide(
+                          color: CustomColors.buttonSecondary, width: 2.0),
                     ),
                     hintText: "Password",
                     errorText: passwordError.isNotEmpty ? passwordError : null,
@@ -213,28 +216,55 @@ class _LogInState extends State<LogIn> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/google_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
+                    GestureDetector(
+                      onTap: () async {
+                        String? result = await UsersDatabase().logInWithGoogle();
+
+                        if (result == "Successfull log in with Google") {
+                          // Handle successful login
+                          print(result);
+                          Get.offAll(Shop(currentIndex: 0));
+                        } else {
+                          // Handle login failure
+                          print(result);
+                          // Show a SnackBar with the error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Failed to log in with Google. Please try again."),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                        }
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(42),
+                        child: Container(
+                          width: 42,
+                          height: 42,
+                          child: SvgPicture.asset(
+                            "assets/icons/google_icon.svg",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(42),
-                      child: Container(
-                        width: 42, // Set the desired width
-                        height: 42, // Set the desired height
-                        child: Image.asset(
-                          "assets/images/facebook_icon.png",
-                          fit: BoxFit.cover, // Adjust the fit as needed
+                    GestureDetector(
+                      onTap: () {
+                        // Call your function for Facebook icon click
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(42),
+                        child: Container(
+                          width: 42,
+                          height: 42,
+                          child: SvgPicture.asset(
+                            "assets/icons/facebook_icon.svg",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

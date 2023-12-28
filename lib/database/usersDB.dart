@@ -2,6 +2,7 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../controller/auth/auth_controller.dart';
 
 class UsersDatabase {
@@ -141,7 +142,12 @@ class UsersDatabase {
 
   Future<void> logoutUser() async {
     try {
+      // Sign out of Firebase
       await FirebaseAuth.instance.signOut();
+
+      // Sign out of Google
+      await GoogleSignIn().signOut();
+
       print('Logout successful');
     } catch (e) {
       print('Error during logout: $e');
@@ -244,6 +250,88 @@ class UsersDatabase {
         print("Error sending password reset email: $e");
         return "Error sending password reset email";
       }
+    }
+  }
+
+  Future<String?> signUpWithGoogle() async {
+    try {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // User cancelled the sign-in process
+        return null;
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Retrieve user information
+      final User user = userCredential.user!;
+      final String userId = user.uid;
+      final String name = user.displayName ?? '';
+      final String emailAddress = user.email ?? '';
+
+      // Update the userData map with the obtained information
+      Map<String, dynamic> userData = {
+        'name': name,
+        'email': emailAddress,
+        'password': '', // Google sign-in doesn't provide a password
+        'isSeller': false,
+        'location': '',
+        'phone': '',
+        'profile_pic': '',
+        'rate': ''
+      };
+
+      // Add user data to the database and wait for completion
+      addUserData(userId, userData);
+      return "Successful signing up with Google";
+    } catch (error) {
+      // Handle errors
+      print("Error signing in with Google: $error");
+      // You can show a relevant error message to the user or perform other actions
+      return "Error signing in with Google";
+    }
+  }
+
+  Future<String?> logInWithGoogle() async {
+    try {
+      // begin interactive log in process
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+
+      // check if the user canceled the log-in process
+      if (gUser == null) {
+        return null; // Return null or a custom value to indicate cancellation
+      }
+
+      // obtain auth details from request
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+      // create a new credential for the user
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken,
+        idToken: gAuth.idToken,
+      );
+
+      // log in
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      return "Successfull log in with Google";
+    } catch (error) {
+      // handle the error and return a custom error message or string
+      return 'Error logging in with Google: $error';
     }
   }
 }
