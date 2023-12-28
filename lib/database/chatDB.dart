@@ -43,6 +43,20 @@ class ChatDatabase {
   }
 
   /**
+   * delete one message from groupchat
+   */
+  Future<bool> deleteMessage(String gc_id, Map<String, dynamic> message) async {
+    try {
+      chatgroup.doc(gc_id).update({
+        'messages': FieldValue.arrayRemove([message])
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * get the group chat id based on seller, buyer and the item
    */
   Future<String> getGroupChatId(
