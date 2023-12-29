@@ -13,4 +13,5 @@ class CustomColors {
   static const Color hoverColor = Color(0xFF777E90);
   static const Color backgroundForPostItem = Color(0xFFD9D9D9);
   static const Color redAlert = Color.fromARGB(255, 186, 0, 0);
+  static const Color successGreen = Color.fromARGB(255, 56, 165, 48);
 }

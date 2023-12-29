@@ -7,7 +7,7 @@ import 'package:shedmedd/screens/Shop/Discover.dart';
 import '../../components/Bar.dart';
 import '../../components/Drawer.dart';
 import '../../controller/auth/auth_controller.dart';
-import '../../controller/auth/email_controller.dart';
+//import '../../controller/auth/email_controller.dart';
 import '../../database/usersDB.dart';
 import '../Authentification/email_verification/email_verification.dart';
 import '../Post_item/post_an_new_item.dart';
@@ -30,7 +30,7 @@ class _ShopState extends State<Shop> {
 
   final AuthController authController = Get.put(AuthController());
   final bool isLoggedIn = AuthController().isLoggedIn();
-  final EmailController _emailController = Get.put(EmailController());
+  //final EmailController _emailController = Get.put(EmailController());
 
 
   @override

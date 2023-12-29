@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shedmedd/controller/auth/email_controller.dart';
 import 'package:shedmedd/screens/Authentification/password_resetting/forgot_password.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/utilities/successfulSnackBar.dart';
 import '../../constants/customColors.dart';
 import '../../database/usersDB.dart';
 import '../Shop/Home.dart';
@@ -218,7 +219,8 @@ class _LogInState extends State<LogIn> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        String? result = await UsersDatabase().logInWithGoogle();
+                        String? result =
+                            await UsersDatabase().logInWithGoogle();
 
                         if (result == "Successfull log in with Google") {
                           // Handle successful login
@@ -228,13 +230,10 @@ class _LogInState extends State<LogIn> {
                           // Handle login failure
                           print(result);
                           // Show a SnackBar with the error message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    "Failed to log in with Google. Please try again."),
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
+                          showSnackBar(
+                              context,
+                              'Failed to log in with Google. Please try again!',
+                              CustomColors.redAlert);
                         }
                       },
                       child: ClipRRect(

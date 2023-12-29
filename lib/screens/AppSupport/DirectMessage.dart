@@ -12,6 +12,7 @@ import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/controller/chat/groupChatController.dart';
 import 'package:shedmedd/database/chatDB.dart';
 import 'package:shedmedd/utilities/returnAction.dart';
+import '../../utilities/successfulSnackBar.dart';
 
 class DirectMessage extends StatefulWidget {
   const DirectMessage({super.key});
@@ -341,22 +342,18 @@ class _OneMessageState extends State<OneMessage> {
       if (value == 'copy') {
         // copy the message
         Clipboard.setData(ClipboardData(text: widget.messageObject['message']));
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Message Copied"),
-        ));
+        showSnackBar(context, 'Message Copied', CustomColors.successGreen);
       } else if (value == 'delete') {
         // delete the message
         if (await ChatDatabase()
             .deleteMessage(widget.gc_id, widget.messageObject)) {
           hideDateTime();
           widget.groupChatController.updateGroupChatMessages(widget.gc_id);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Message deleted successfully!"),
-          ));
+          showSnackBar(context, 'Message deleted successfully!',
+              CustomColors.successGreen);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Message could not be deleted!"),
-          ));
+          showSnackBar(
+              context, 'Message could not be deleted!', CustomColors.redAlert);
         }
       }
     });

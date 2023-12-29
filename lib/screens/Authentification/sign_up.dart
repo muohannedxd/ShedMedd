@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shedmedd/controller/auth/email_controller.dart';
 import 'package:shedmedd/screens/Authentification/email_verification/email_verification.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
+import 'package:shedmedd/utilities/successfulSnackBar.dart';
 import '../../../database/usersDB.dart';
 
 import '../../constants/customColors.dart';
@@ -290,13 +291,10 @@ class _SignUpState extends State<SignUp> {
                             // Error during sign-up
                             print("Error signing up with Google");
                             // Show a SnackBar with the error message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    "Failed to sign up with Google. Please try again."),
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
+                            showSnackBar(
+                                context,
+                                'Failed to sign up with Google. Please try again!',
+                                CustomColors.redAlert);
                           }
                         } catch (error) {
                           // Handle unexpected errors
