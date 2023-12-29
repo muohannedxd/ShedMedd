@@ -6,6 +6,7 @@ import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/utilities/successfulSnackBar.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
@@ -332,9 +333,8 @@ class SettingsButton extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 if (await ItemsDatabase().deleteItem(itemID, imagesPaths)) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Item deleted successfully!"),
-                  ));
+                  showSnackBar(context, 'Item deleted successfully!',
+                      CustomColors.successGreen);
                 }
                 Navigator.push(
                   context,
