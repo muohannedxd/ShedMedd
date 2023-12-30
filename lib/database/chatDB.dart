@@ -77,18 +77,76 @@ class ChatDatabase {
   }
 
   /**
-   * get one group chat messages
+   * for realtime messages fetching
    */
-  Future<List<dynamic>> getGroupChatMessages(String gc_id) async {
-    DocumentSnapshot groupChatSnapshot = await chatgroup.doc(gc_id).get();
-    List<dynamic> messages = groupChatSnapshot['messages'];
-    return messages;
+
+  Stream<List<dynamic>> listenToGroupChatMessages(String gc_id) {
+    return FirebaseFirestore.instance
+        .collection('chatgroup')
+        .doc(gc_id)
+        .snapshots()
+        .map((snapshot) => snapshot.data()?['messages']);
   }
 
   /**
    * get all chat groups for the logged in user
    */
-  Future<List<InboxGroupChat>> getInboxGroupChats() async {
+
+  Stream<List<InboxGroupChat>> listenToChatInbox() {
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection('chatgroup')
+        .where(
+          Filter.or(Filter('seller_id', isEqualTo: currentUserId),
+              Filter('buyer_id', isEqualTo: currentUserId)),
+        )
+        .where('messages', isNotEqualTo: [])
+        .snapshots()
+        .asyncMap((snapshot) => Future.wait(snapshot.docs
+            .map((doc) => _createInboxGroupChatFromDoc(doc))
+            .toList()))
+        .map((inboxChats) => inboxChats
+          ..sort((a, b) => b.lastTimeSent.compareTo(a.lastTimeSent)));
+  }
+
+  Future<InboxGroupChat> _createInboxGroupChatFromDoc(
+      DocumentSnapshot doc) async {
+    String item_id = doc['item_id'];
+    String sellerId = doc['seller_id'];
+    String buyerId = doc['buyer_id'];
+    List<dynamic> messages = doc['messages'];
+
+    // get the id of the other user
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    String otherPartyId = sellerId == currentUserId ? buyerId : sellerId;
+
+    // Query the `items` collection for the document with the matching `item_id`.
+    DocumentSnapshot itemSnapshot = await ItemsDatabase().getOneItem(item_id);
+
+    // Query the `users` collection for the document with the matching `seller_id`.
+    DocumentSnapshot otherPartySnapshot =
+        await UsersDatabase().getOneUser(otherPartyId);
+
+    Timestamp lastMessageTimestamp = messages.isNotEmpty
+        ? messages[messages.length - 1]['created_at']
+        : Timestamp.now();
+    ;
+
+    InboxGroupChat inboxItem = InboxGroupChat(
+        doc.id,
+        otherPartySnapshot['name'],
+        itemSnapshot['title'],
+        itemSnapshot['condition'],
+        itemSnapshot['price'],
+        itemSnapshot['images'][0],
+        lastMessageTimestamp);
+
+    return inboxItem;
+  }
+
+  /*
+  Stream<List<InboxGroupChat>> listenToChatInbox() async {
     // Get the current user's ID.
     String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -145,5 +203,5 @@ class ChatDatabase {
     inboxGroupChats.sort((a, b) => b.lastTimeSent.compareTo(a.lastTimeSent));
 
     return inboxGroupChats;
-  }
+  }*/
 }
