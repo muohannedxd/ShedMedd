@@ -44,7 +44,6 @@ class _DirectMessage extends State<DirectMessage> {
       if (_scrollController.position.atEdge) {
         if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
-          print('scrolling up');
           setState(() {
             messagesLength += 20;
           });
