@@ -77,15 +77,19 @@ class ChatDatabase {
   }
 
   /**
-   * for realtime messages fetching
+   * for realtime messagres fetching
    */
 
-  Stream<List<dynamic>> listenToGroupChatMessages(String gc_id) {
+  Stream<List<dynamic>> listenToGroupChatMessages(String gc_id, int length) {
     return FirebaseFirestore.instance
         .collection('chatgroup')
         .doc(gc_id)
         .snapshots()
-        .map((snapshot) => snapshot.data()?['messages']);
+        .map((snapshot) {
+      List<dynamic> messages = snapshot.data()?['messages'];
+      int startIndex = messages.length > length ? messages.length - length : 0;
+      return messages.sublist(startIndex);
+    });
   }
 
   /**
@@ -144,5 +148,4 @@ class ChatDatabase {
 
     return inboxItem;
   }
-
 }
