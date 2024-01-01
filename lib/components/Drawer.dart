@@ -53,10 +53,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/home_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/home.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 0 ? true : false,
                   action: () {
@@ -78,10 +80,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/search_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/search.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 1 ? true : false,
                   action: () {
@@ -103,10 +107,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/profile_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/profile.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 4 ? true : false,
                   action: () {
@@ -137,6 +143,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/settings.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 5 ? true : false,
                   action: () {
@@ -157,6 +164,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/termsofuse.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 6 ? true : false,
                   action: () {
@@ -177,6 +185,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/aboutus.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 7 ? true : false,
                   action: () {
@@ -199,6 +208,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     icon: Image.asset(
                       'assets/icons/signup.png',
                       width: 20,
+                      color: CustomColors.textGrey
                     ),
                     current: widget.current == 8 ? true : false,
                     action: () {
