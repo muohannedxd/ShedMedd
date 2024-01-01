@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 
+import 'customCircularProg.dart';
 import 'profileShimmer.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -51,10 +53,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/home_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/home.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 0 ? true : false,
                   action: () {
@@ -76,10 +80,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/search_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/search.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 1 ? true : false,
                   action: () {
@@ -101,10 +107,12 @@ class _AppDrawerState extends State<AppDrawer> {
                       ? Image.asset(
                           'assets/icons/profile_filled.png',
                           width: 20,
+                          color: CustomColors.textPrimary
                         )
                       : Image.asset(
                           'assets/icons/profile.png',
                           width: 20,
+                          color: CustomColors.textGrey
                         ),
                   current: widget.current == 4 ? true : false,
                   action: () {
@@ -135,6 +143,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/settings.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 5 ? true : false,
                   action: () {
@@ -155,6 +164,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/termsofuse.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 6 ? true : false,
                   action: () {
@@ -175,6 +185,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   icon: Image.asset(
                     'assets/icons/aboutus.png',
                     width: 20,
+                    color: CustomColors.textGrey
                   ),
                   current: widget.current == 7 ? true : false,
                   action: () {
@@ -197,6 +208,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     icon: Image.asset(
                       'assets/icons/signup.png',
                       width: 20,
+                      color: CustomColors.textGrey
                     ),
                     current: widget.current == 8 ? true : false,
                     action: () {
@@ -258,15 +270,13 @@ class LoggedInUser extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: CustomColors.grey,
                         child: ClipOval(
-                          child: imageUrl.isNotEmpty
-                              ? Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.cover,
-                                  width: 60,
-                                  height: 60,
-                                )
-                              : Text(initials),
-                        ),
+                            child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(child: CustomCircularProgress()),
+                          errorWidget: (context, url, error) => Text(initials),
+                        )),
                       ),
                     ),
                     SizedBox(

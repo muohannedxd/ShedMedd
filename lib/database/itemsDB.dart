@@ -111,38 +111,39 @@ class ItemsDatabase {
   // adding a new item
   Future<void> addAnItemData(
       Map<String, dynamic> itemData, List<String> imagePaths) async {
-    List<String> imageUrls = [];
+    CollectionReference itemsCollection =
+        FirebaseFirestore.instance.collection('items');
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    DocumentReference itemDocRef = itemsCollection.doc();
+    batch.set(itemDocRef, itemData);
+
+    List<Future<void>> uploadTasks = [];
 
     for (int i = 0; i < imagePaths.length; i++) {
       String imagePath = imagePaths[i];
-      // to generate a unique identifier
       String uuid = Uuid().v4();
       Reference storageReference =
           FirebaseStorage.instance.ref().child('images/items/$uuid');
       UploadTask uploadTask = storageReference.putFile(File(imagePath));
 
-      await uploadTask.whenComplete(() async {
+      Future<void> uploadFuture = uploadTask.then((_) async {
         String imageUrl = await storageReference.getDownloadURL();
-        imageUrls.add(imageUrl);
+        batch.update(itemDocRef, {
+          'images': FieldValue.arrayUnion([imageUrl])
+        });
       });
+
+      uploadTasks.add(uploadFuture);
     }
 
-    // Now 'imageUrls' contains the download URLs of the uploaded images
-    print('Image URLs: $imageUrls');
-
-    // Add the image URLs to the item data
-    itemData["images"] = imageUrls;
-
-    // Reference to the Firebase Firestore collection 'items'
-    CollectionReference itemsCollection =
-        FirebaseFirestore.instance.collection('items');
-
-    // Add data to the 'items' collection
-    itemsCollection.add(itemData).then((DocumentReference docRef) {
-      print('Item added successfully with ID: ${docRef.id}');
-    }).catchError((error) {
+    try {
+      await Future.wait(uploadTasks);
+      await batch.commit();
+      print('Item added successfully with ID: ${itemDocRef.id}');
+    } catch (error) {
       print('Failed to add item data: $error');
-    });
+    }
   }
 
   // removing an item

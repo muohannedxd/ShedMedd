@@ -32,7 +32,6 @@ class _ShopState extends State<Shop> {
   final bool isLoggedIn = AuthController().isLoggedIn();
   //final EmailController _emailController = Get.put(EmailController());
 
-
   @override
   void initState() {
     super.initState();
@@ -117,30 +116,35 @@ class _ShopState extends State<Shop> {
                       activeIcon: Image.asset(
                         'assets/icons/home_filled.png',
                         width: 22,
+                        color: CustomColors.textPrimary,
                       ),
                       icon: Image.asset(
                         'assets/icons/home.png',
                         width: 20,
+                        color: CustomColors.textGrey,
                       ),
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      activeIcon: Image.asset('assets/icons/search_filled.png',
-                          width: 26),
-                      icon: Image.asset(
-                        'assets/icons/search.png',
-                        width: 24,
+                      activeIcon: Image.asset(
+                        'assets/icons/search_filled.png',
+                        width: 22,
+                        color: CustomColors.textPrimary,
                       ),
+                      icon: Image.asset('assets/icons/search.png',
+                          width: 20, color: CustomColors.textGrey),
                       label: 'Discover',
                     ),
                     BottomNavigationBarItem(
                       activeIcon: Image.asset(
-                        'assets/icons/post_filled.png',
+                        'assets/icons/post.png',
                         width: 22,
+                        color: CustomColors.textPrimary
                       ),
                       icon: Image.asset(
                         'assets/icons/post.png',
                         width: 20,
+                        color: CustomColors.textGrey
                       ),
                       label: 'Add',
                     ),
@@ -148,10 +152,12 @@ class _ShopState extends State<Shop> {
                       activeIcon: Image.asset(
                         'assets/icons/inbox_filled.png',
                         width: 24,
+                        color: CustomColors.textPrimary
                       ),
                       icon: Image.asset(
                         'assets/icons/inbox.png',
                         width: 22,
+                        color: CustomColors.textGrey
                       ),
                       label: 'Inbox',
                     ),
@@ -159,10 +165,12 @@ class _ShopState extends State<Shop> {
                       activeIcon: Image.asset(
                         'assets/icons/profile_filled.png',
                         width: 22,
+                        color: CustomColors.textPrimary
                       ),
                       icon: Image.asset(
                         'assets/icons/profile.png',
                         width: 20,
+                        color: CustomColors.textGrey
                       ),
                       label: 'Profile',
                     ),

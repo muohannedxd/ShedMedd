@@ -32,6 +32,26 @@ class _DirectMessage extends State<DirectMessage> {
   final TextEditingController _textEditingController = TextEditingController();
   String loggedInId = FirebaseAuth.instance.currentUser!.uid;
 
+  /**
+   * paginating the messages
+   */
+  final ScrollController _scrollController = ScrollController();
+  int messagesLength = 20;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          setState(() {
+            messagesLength += 20;
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -70,9 +90,11 @@ class _DirectMessage extends State<DirectMessage> {
           Divider(),
           Expanded(
             child: SingleChildScrollView(
+                controller: _scrollController,
                 reverse: true,
                 child: StreamBuilder(
-                    stream: ChatDatabase().listenToGroupChatMessages(gc_id),
+                    stream: ChatDatabase()
+                        .listenToGroupChatMessages(gc_id, messagesLength),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return CustomErrorWidget(
@@ -186,7 +208,6 @@ class OneMessage extends StatefulWidget {
 
   @override
   State<OneMessage> createState() => _OneMessageState();
-
 }
 
 class _OneMessageState extends State<OneMessage> {
