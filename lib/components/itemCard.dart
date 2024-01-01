@@ -50,6 +50,7 @@ class ItemCard extends StatelessWidget {
                     return CustomErrorWidget(
                         errorText: 'An error occured. Try again later');
                   } else {
+                    String initials = name.toUpperCase().substring(0, 2);
                     String downloadUrl = snapshot.data!;
                     return Container(
                       decoration: BoxDecoration(
@@ -59,10 +60,14 @@ class ItemCard extends StatelessWidget {
                       width: 136,
                       height: 180,
                       clipBehavior: Clip.antiAlias,
-                      child: Image.network(
-                        downloadUrl,
-                        fit: BoxFit.cover,
-                      ),
+                      child: downloadUrl.isNotEmpty
+                          ? Image.network(
+                              downloadUrl,
+                              fit: BoxFit.cover,
+                              width: 60,
+                              height: 60,
+                            )
+                          : Text(initials),
                     );
                   }
                 }),

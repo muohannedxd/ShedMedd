@@ -138,7 +138,7 @@ class ChatInbox extends StatelessWidget {
   }
 
   Widget buildInboxItem(BuildContext context, InboxGroupChat groupchat) {
-    String initials = groupchat.username.toUpperCase().substring(0, 2);
+    String initials = groupchat.itemName.toUpperCase().substring(0, 2);
     Timestamp currentTime = Timestamp.now();
     Duration difference =
         currentTime.toDate().difference(groupchat.lastTimeSent.toDate());

@@ -45,10 +45,14 @@ class Pictures extends StatelessWidget {
                     String downloadUrl = snapshot.data!;
                     return InstaImageViewer(
                       backgroundIsTransparent: true,
-                      child: Image.network(
-                        downloadUrl,
-                        fit: BoxFit.cover,
-                      ),
+                      child: downloadUrl.isNotEmpty
+                          ? Image.network(
+                              downloadUrl,
+                              fit: BoxFit.cover,
+                              width: 60,
+                              height: 60,
+                            )
+                          : Text('IM'),
                     );
                   }
                 }));
