@@ -180,15 +180,15 @@ class ChatInbox extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: CustomColors.grey,
                       child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: groupchat.profileImage,
-                          fit: BoxFit.cover,
-                          progressIndicatorBuilder: (context, url, progress) =>
-                              Center(child: CustomCircularProgress()),
-                          errorWidget: (context, url, error) =>
-                              Text(initials),
-                        )
-                      ),
+                          child: CachedNetworkImage(
+                        imageUrl: groupchat.profileImage,
+                        fit: BoxFit.cover,
+                        width: 60,
+                        height: 60,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(child: CustomCircularProgress()),
+                        errorWidget: (context, url, error) => Text(initials),
+                      )),
                     ),
                   ),
                   SizedBox(
