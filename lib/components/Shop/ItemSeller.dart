@@ -43,6 +43,8 @@ class Seller extends StatelessWidget {
                         child: CachedNetworkImage(
                       imageUrl: imageUrl,
                       fit: BoxFit.cover,
+                      width: 60,
+                      height: 60,
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(child: CustomCircularProgress()),
                       errorWidget: (context, url, error) => Text(initials),

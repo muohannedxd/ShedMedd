@@ -6,7 +6,6 @@ import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
-import 'package:shedmedd/utilities/successfulSnackBar.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
@@ -27,10 +26,11 @@ class ItemHome extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<DocumentSnapshot> currentItem = ItemsDatabase().getOneItem(itemID);
 
-    String loggedInId = FirebaseAuth.instance.currentUser!.uid;
+    String loggedInId = "";
     bool isLoggedIn = false;
     if (FirebaseAuth.instance.currentUser != null) {
       isLoggedIn = true;
+      loggedInId = FirebaseAuth.instance.currentUser!.uid;
     }
 
     return Scaffold(
@@ -259,6 +259,21 @@ class SettingsButton extends StatelessWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem<String>(
+                  value: 'Mark as Sold',
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListTile(
+                      leading: Image.asset(
+                        'assets/icons/sold_out.png',
+                        color: CustomColors.textPrimary,
+                        width: 20,
+                      ),
+                      title: Text('Mark as Sold',
+                          style: TextStyle(color: CustomColors.textPrimary)),
+                    ),
+                  ),
+                ),
+                PopupMenuItem<String>(
                   value: 'delete',
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -318,8 +333,9 @@ class SettingsButton extends StatelessWidget {
             TextButton(
               onPressed: () async {
                 if (await ItemsDatabase().deleteItem(itemID, imagesPaths)) {
-                  showSnackBar(context, 'Item deleted successfully!',
-                      CustomColors.successGreen);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Item deleted successfully!"),
+                  ));
                 }
                 Navigator.push(
                   context,
