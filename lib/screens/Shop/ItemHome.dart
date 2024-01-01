@@ -259,21 +259,6 @@ class SettingsButton extends StatelessWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem<String>(
-                  value: 'edit',
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/icons/edit.png',
-                        color: CustomColors.textPrimary,
-                        width: 20,
-                      ),
-                      title: Text('Edit',
-                          style: TextStyle(color: CustomColors.textPrimary)),
-                    ),
-                  ),
-                ),
-                PopupMenuItem<String>(
                   value: 'delete',
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
