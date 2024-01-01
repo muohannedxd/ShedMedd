@@ -110,39 +110,41 @@ class ItemsDatabase {
 
   // adding a new item
   Future<void> addAnItemData(
-    Map<String, dynamic> itemData, List<String> imagePaths) async {
-  CollectionReference itemsCollection =
-      FirebaseFirestore.instance.collection('items');
+      Map<String, dynamic> itemData, List<String> imagePaths) async {
+    CollectionReference itemsCollection =
+        FirebaseFirestore.instance.collection('items');
 
-  WriteBatch batch = FirebaseFirestore.instance.batch();
-  DocumentReference itemDocRef = itemsCollection.doc();
-  batch.set(itemDocRef, itemData);
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    DocumentReference itemDocRef = itemsCollection.doc();
+    batch.set(itemDocRef, itemData);
 
-  List<Future<void>> uploadTasks = [];
+    List<Future<void>> uploadTasks = [];
 
-  for (int i = 0; i < imagePaths.length; i++) {
-    String imagePath = imagePaths[i];
-    String uuid = Uuid().v4();
-    Reference storageReference =
-        FirebaseStorage.instance.ref().child('images/items/$uuid');
-    UploadTask uploadTask = storageReference.putFile(File(imagePath));
+    for (int i = 0; i < imagePaths.length; i++) {
+      String imagePath = imagePaths[i];
+      String uuid = Uuid().v4();
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('images/items/$uuid');
+      UploadTask uploadTask = storageReference.putFile(File(imagePath));
 
-    Future<void> uploadFuture = uploadTask.then((_) async {
-      String imageUrl = await storageReference.getDownloadURL();
-      batch.update(itemDocRef, {'images': FieldValue.arrayUnion([imageUrl])});
-    });
+      Future<void> uploadFuture = uploadTask.then((_) async {
+        String imageUrl = await storageReference.getDownloadURL();
+        batch.update(itemDocRef, {
+          'images': FieldValue.arrayUnion([imageUrl])
+        });
+      });
 
-    uploadTasks.add(uploadFuture);
+      uploadTasks.add(uploadFuture);
+    }
+
+    try {
+      await Future.wait(uploadTasks);
+      await batch.commit();
+      print('Item added successfully with ID: ${itemDocRef.id}');
+    } catch (error) {
+      print('Failed to add item data: $error');
+    }
   }
-
-  try {
-    await Future.wait(uploadTasks);
-    await batch.commit();
-    print('Item added successfully with ID: ${itemDocRef.id}');
-  } catch (error) {
-    print('Failed to add item data: $error');
-  }
-}
 
   // removing an item
   Future<bool> deleteItem(String itemId, List<dynamic> imageUrls) async {

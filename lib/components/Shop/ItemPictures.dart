@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
@@ -40,16 +41,21 @@ class Pictures extends StatelessWidget {
                     return Center(child: CustomCircularProgress());
                   } else if (snapshot.hasError) {
                     return CustomErrorWidget(
-                                errorText: 'An error occured. Try again later');
+                        errorText: 'An error occured. Try again later');
                   } else {
                     String downloadUrl = snapshot.data!;
                     return InstaImageViewer(
-                      backgroundIsTransparent: true,
-                      child: downloadUrl.isNotEmpty ? Image.network(
-                        downloadUrl,
-                        fit: BoxFit.cover,
-                      ) : Text('IM'),
-                    );
+                        backgroundIsTransparent: true,
+                        child: CachedNetworkImage(
+                          imageUrl: downloadUrl,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(child: CustomCircularProgress()),
+                          errorWidget: (context, url, error) =>
+                              CustomErrorWidget(
+                                  errorText:
+                                      'An error occured. Try again later'),
+                        ));
                   }
                 }));
       }).toList(),

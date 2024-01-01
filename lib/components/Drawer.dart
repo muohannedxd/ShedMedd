@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import 'package:shedmedd/screens/Settings/settings.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 
+import 'customCircularProg.dart';
 import 'profileShimmer.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -258,15 +260,13 @@ class LoggedInUser extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: CustomColors.grey,
                         child: ClipOval(
-                          child: imageUrl.isNotEmpty
-                              ? Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.cover,
-                                  width: 60,
-                                  height: 60,
-                                )
-                              : Text(initials),
-                        ),
+                            child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(child: CustomCircularProgress()),
+                          errorWidget: (context, url, error) => Text(initials),
+                        )),
                       ),
                     ),
                     SizedBox(

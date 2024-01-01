@@ -1,11 +1,13 @@
 // ChatInbox.dart
 // ignore_for_file: must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/emptyListWidget.dart';
 import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/components/profileShimmer.dart';
 import 'package:shedmedd/utilities/inboxGroupChat.dart';
+import '../../components/customCircularProg.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../database/chatDB.dart';
@@ -178,14 +180,14 @@ class ChatInbox extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: CustomColors.grey,
                       child: ClipOval(
-                        child: groupchat.profileImage.isNotEmpty
-                            ? Image.network(
-                                groupchat.profileImage,
-                                fit: BoxFit.cover,
-                                width: 60,
-                                height: 60,
-                              )
-                            : Text(initials),
+                        child: CachedNetworkImage(
+                          imageUrl: groupchat.profileImage,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(child: CustomCircularProgress()),
+                          errorWidget: (context, url, error) =>
+                              Text(initials),
+                        )
                       ),
                     ),
                   ),

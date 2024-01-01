@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/profileShimmer.dart';
 import '../../constants/customColors.dart';
 import '../../constants/textSizes.dart';
 import '../../database/usersDB.dart';
+import '../customCircularProg.dart';
 import '../errorWidget.dart';
 
 class Seller extends StatelessWidget {
@@ -38,15 +40,13 @@ class Seller extends StatelessWidget {
                 child: CircleAvatar(
                     backgroundColor: CustomColors.grey,
                     child: ClipOval(
-                      child: imageUrl.isNotEmpty
-                          ? Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              width: 60,
-                              height: 60,
-                            )
-                          : Text(initials),
-                    )),
+                        child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(child: CustomCircularProgress()),
+                      errorWidget: (context, url, error) => Text(initials),
+                    ))),
               ),
               SizedBox(
                 width: 20,

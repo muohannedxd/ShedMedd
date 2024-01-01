@@ -30,10 +30,12 @@ class PostAnItem extends StatefulWidget {
 class _PostAnItemState extends State<PostAnItem> {
   final ImageListController imageListController =
       Get.put(ImageListController(), permanent: true);
-  final TitleController _titleController = Get.put(TitleController(), permanent: true);
+  final TitleController _titleController =
+      Get.put(TitleController(), permanent: true);
   final DescriptionController _descriptionController =
       Get.put(DescriptionController(), permanent: true);
-  final PriceController _priceController = Get.put(PriceController(), permanent: true);
+  final PriceController _priceController =
+      Get.put(PriceController(), permanent: true);
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -44,12 +46,16 @@ class _PostAnItemState extends State<PostAnItem> {
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 75,
+        maxHeight: 800,
+        maxWidth: 600,
+        );
 
     if (pickedImage != null) {
       setState(() {
         imageListController.addImage(pickedImage);
-        print(imageListController);
       });
     }
   }
@@ -332,7 +338,6 @@ class _PostAnItemState extends State<PostAnItem> {
                               _titleController.updateTitle(title);
                             },
                             decoration: InputDecoration(
-                              
                                 hintText: "e.g. White t-shirt",
                                 hintStyle: TextStyle(color: Color(0xFF4F4F4F)),
                                 focusedBorder: UnderlineInputBorder(
@@ -493,10 +498,13 @@ class _PostAnItemState extends State<PostAnItem> {
                             width: double.infinity,
                             height: 38,
                             alignment: Alignment.center,
-                            child: Text("Upload item", style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),),
+                            child: Text(
+                              "Upload item",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
                       ),

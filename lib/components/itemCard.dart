@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
@@ -53,22 +54,21 @@ class ItemCard extends StatelessWidget {
                     String initials = name.toUpperCase().substring(0, 2);
                     String downloadUrl = snapshot.data!;
                     return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      width: 136,
-                      height: 180,
-                      clipBehavior: Clip.antiAlias,
-                      child: downloadUrl.isNotEmpty
-                          ? Image.network(
-                              downloadUrl,
-                              fit: BoxFit.cover,
-                              width: 60,
-                              height: 60,
-                            )
-                          : Text(initials),
-                    );
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        width: 136,
+                        height: 180,
+                        clipBehavior: Clip.antiAlias,
+                        child: CachedNetworkImage(
+                          imageUrl: downloadUrl,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(child: CustomCircularProgress()),
+                          errorWidget: (context, url, error) =>
+                              Text(initials),
+                        ));
                   }
                 }),
             SizedBox(
@@ -88,16 +88,17 @@ class ItemCard extends StatelessWidget {
             ),
             Container(
                 width: 120,
-                child: !isSold ? Text('${price} DZD',
-                    style: TextStyle(
-                        color: CustomColors.textPrimary,
-                        fontSize: TextSizes.regular,
-                        fontWeight: FontWeight.bold)) : 
-                        Text('Sold',
-                    style: TextStyle(
-                        color: CustomColors.textPrimary,
-                        fontSize: TextSizes.regular,
-                        fontWeight: FontWeight.bold))),
+                child: !isSold
+                    ? Text('${price} DZD',
+                        style: TextStyle(
+                            color: CustomColors.textPrimary,
+                            fontSize: TextSizes.regular,
+                            fontWeight: FontWeight.bold))
+                    : Text('Sold',
+                        style: TextStyle(
+                            color: CustomColors.textPrimary,
+                            fontSize: TextSizes.regular,
+                            fontWeight: FontWeight.bold))),
           ],
         ),
       ),
