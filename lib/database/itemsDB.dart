@@ -162,4 +162,16 @@ class ItemsDatabase {
       return false;
     }
   }
+
+  /**
+   * marking an item as sold
+   */
+  Future<bool> markItemAsSold(String itemId) async {
+    try {
+      await items.doc(itemId).update({'isSold': true});
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
