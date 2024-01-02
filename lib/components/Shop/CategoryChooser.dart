@@ -11,8 +11,40 @@ class CategoryChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Obx(() => Column(
+              children: [
+                Container(
+                    width: 50,
+                    height: 50,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.updateCategoryChooser('All');
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: controller.category.value == "All"
+                            ? CustomColors.textSecondary
+                            : CustomColors.grey.withOpacity(0.3),
+                        child: Icon(Icons.shopping_bag_outlined,
+                            size: 36,
+                            color: controller.category.value == "All"
+                                ? CustomColors.white
+                                : CustomColors.textPrimary.withOpacity(0.3)),
+                      ),
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'All',
+                  style: TextStyle(
+                      color: controller.category.value == "All"
+                          ? CustomColors.textPrimary
+                          : CustomColors.textPrimary.withOpacity(0.3)),
+                )
+              ],
+            )),
         Obx(() => Column(
               children: [
                 Container(
@@ -45,9 +77,6 @@ class CategoryChooser extends StatelessWidget {
                 )
               ],
             )),
-        SizedBox(
-          width: 40,
-        ),
         Obx(() => Column(
               children: [
                 Container(
@@ -81,9 +110,6 @@ class CategoryChooser extends StatelessWidget {
                 )
               ],
             )),
-        SizedBox(
-          width: 40,
-        ),
         Obx(
           () => Column(
             children: [
