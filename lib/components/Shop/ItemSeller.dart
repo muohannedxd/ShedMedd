@@ -47,7 +47,7 @@ class Seller extends StatelessWidget {
                       height: 60,
                       progressIndicatorBuilder: (context, url, progress) =>
                           Center(child: CustomCircularProgress()),
-                      errorWidget: (context, url, error) => Text(initials),
+                      errorWidget: (context, url, error) => Center(child: Text(initials)),
                     ))),
               ),
               SizedBox(
