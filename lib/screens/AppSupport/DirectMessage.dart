@@ -352,7 +352,7 @@ class _OneMessageState extends State<OneMessage> {
       if (value == 'copy') {
         // copy the message
         Clipboard.setData(ClipboardData(text: widget.messageObject['message']));
-        showSnackBar(context, 'Message Copied', CustomColors.successGreen);
+        showSnackBar(context, 'Message Copied!', CustomColors.successGreen);
       } else if (value == 'delete') {
         // delete the message
         if (await ChatDatabase()

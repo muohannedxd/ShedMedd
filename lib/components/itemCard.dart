@@ -67,7 +67,7 @@ class ItemCard extends StatelessWidget {
                           progressIndicatorBuilder: (context, url, progress) =>
                               Center(child: CustomCircularProgress()),
                           errorWidget: (context, url, error) =>
-                              Text(initials),
+                              Center(child: Text(initials)),
                         ));
                   }
                 }),

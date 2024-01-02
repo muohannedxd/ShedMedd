@@ -6,6 +6,7 @@ import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/database/itemsDB.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
+import 'package:shedmedd/utilities/successfulSnackBar.dart';
 import '../../components/Shop/ItemInformation.dart';
 import '../../components/Shop/ItemPictures.dart';
 import '../../components/Shop/ItemSeller.dart';
@@ -99,6 +100,7 @@ class ItemHome extends StatelessWidget {
                   child: SettingsButton(
                     itemID: item.id,
                     imagesPaths: item['images'],
+                    isSold: item['isSold'],
                   ),
                 ),
               if (item['user_id'] != loggedInId)
@@ -229,8 +231,12 @@ class DirectMessageButton extends StatelessWidget {
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton(
-      {super.key, required this.itemID, required this.imagesPaths});
+      {super.key,
+      required this.itemID,
+      required this.imagesPaths,
+      this.isSold = false});
   final itemID;
+  final bool isSold;
   final imagesPaths;
 
   @override
@@ -259,17 +265,27 @@ class SettingsButton extends StatelessWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem<String>(
+                  enabled: !isSold,
                   value: 'Mark as Sold',
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ListTile(
-                      leading: Image.asset(
-                        'assets/icons/sold_out.png',
-                        color: CustomColors.textPrimary,
-                        width: 20,
+                    child: GestureDetector(
+                      onTap: () =>
+                          !isSold ? showMarkAsSoldDialog(context) : null,
+                      child: ListTile(
+                        leading: Image.asset(
+                          'assets/icons/sold_out.png',
+                          color: !isSold
+                              ? CustomColors.textPrimary
+                              : CustomColors.textGrey,
+                          width: 20,
+                        ),
+                        title: Text('Mark as Sold',
+                            style: TextStyle(
+                                color: !isSold
+                                    ? CustomColors.textPrimary
+                                    : CustomColors.textGrey)),
                       ),
-                      title: Text('Mark as Sold',
-                          style: TextStyle(color: CustomColors.textPrimary)),
                     ),
                   ),
                 ),
@@ -308,15 +324,14 @@ class SettingsButton extends StatelessWidget {
           title: Text(
             'Remove item',
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: CustomColors.textPrimary),
           ),
           content: Text(
             'Are you sure you want to delete this product?',
             style: TextStyle(
-              fontSize: TextSizes.medium,
-            ),
+                fontSize: TextSizes.medium, color: CustomColors.textPrimary),
           ),
           actions: [
             TextButton(
@@ -326,29 +341,89 @@ class SettingsButton extends StatelessWidget {
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                  fontSize: TextSizes.medium,
-                ),
+                    fontSize: TextSizes.medium,
+                    color: CustomColors.textPrimary),
               ),
             ),
             TextButton(
               onPressed: () async {
                 if (await ItemsDatabase().deleteItem(itemID, imagesPaths)) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Item deleted successfully!"),
-                  ));
+                  showSnackBar(context, 'Item Deleted Successfully:',
+                      CustomColors.successGreen);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Shop(currentIndex: 4),
+                    ),
+                  );
+                } else {
+                  showSnackBar(context, 'Item Could not be deleted!',
+                      CustomColors.redAlert);
                 }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Shop(currentIndex: 4),
-                  ),
-                );
-                ;
               },
               child: Text(
                 'Delete',
                 style: TextStyle(
                     fontSize: TextSizes.medium, color: CustomColors.redAlert),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showMarkAsSoldDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Mark As Sold',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: CustomColors.textPrimary),
+          ),
+          content: Text(
+            'Marking an item as Sold is a permanent action. You will not be able to change its status back.',
+            style: TextStyle(
+                fontSize: TextSizes.medium, color: CustomColors.textPrimary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                    fontSize: TextSizes.medium,
+                    color: CustomColors.textPrimary),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (await ItemsDatabase().markItemAsSold(itemID)) {
+                  showSnackBar(context, 'Item is marked Sold!',
+                      CustomColors.successGreen);
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Shop(currentIndex: 4),
+                    ),
+                  );
+                } else {
+                  showSnackBar(context, 'An error occured, try again later!',
+                      CustomColors.redAlert);
+                }
+              },
+              child: Text(
+                'Mark as Sold',
+                style: TextStyle(
+                    fontSize: TextSizes.medium,
+                    color: CustomColors.textPrimary),
               ),
             ),
           ],

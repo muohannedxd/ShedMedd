@@ -11,7 +11,7 @@ class ItemsDatabase {
   // get all items
   Future<List<DocumentSnapshot>> getAllItems() async {
     //await Future.delayed(Duration(seconds: 1));
-    QuerySnapshot snapshot = await items.get();
+    QuerySnapshot snapshot = await items.limit(6).get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
 
@@ -25,7 +25,7 @@ class ItemsDatabase {
   // get all items of a certain category
   Future<List<DocumentSnapshot>> getCategoryItems(String category) async {
     QuerySnapshot snapshot =
-        await items.where('category', isEqualTo: category).get();
+        await items.where('category', isEqualTo: category).limit(6).get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
 
@@ -157,6 +157,18 @@ class ItemsDatabase {
         await FirebaseStorage.instance.refFromURL(imageUrl).delete();
       }
 
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /**
+   * marking an item as sold
+   */
+  Future<bool> markItemAsSold(String itemId) async {
+    try {
+      await items.doc(itemId).update({'isSold': true});
       return true;
     } catch (error) {
       return false;

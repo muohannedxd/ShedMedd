@@ -49,8 +49,6 @@ class _PostAnItemState extends State<PostAnItem> {
     final pickedImage = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 75,
-        maxHeight: 1000,
-        maxWidth: 800,
         );
 
     if (pickedImage != null) {

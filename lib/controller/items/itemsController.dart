@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../database/itemsDB.dart';
 
 class ItemsController extends GetxController {
-  final category = 'Women'.obs;
+  final category = 'All'.obs;
   final subCategory = 'Tops'.obs;
   final condition = 'Very good'.obs;
   final minPrice = 0.obs;
@@ -17,7 +17,11 @@ class ItemsController extends GetxController {
 
   void updateCategoryChooser(String categoryName) {
     category.value = categoryName;
-    categoriedItems.value = ItemsDatabase().getCategoryItems(categoryName);
+    if (categoryName == 'All') {
+      categoriedItems.value = ItemsDatabase().getAllItems();
+    } else {
+      categoriedItems.value = ItemsDatabase().getCategoryItems(categoryName);
+    }
   }
 
   void filterItems({

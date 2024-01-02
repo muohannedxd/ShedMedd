@@ -52,9 +52,11 @@ class Pictures extends StatelessWidget {
                           progressIndicatorBuilder: (context, url, progress) =>
                               Center(child: CustomCircularProgress()),
                           errorWidget: (context, url, error) =>
-                              CustomErrorWidget(
-                                  errorText:
-                                      'An error occured. Try again later'),
+                              Center(
+                                child: CustomErrorWidget(
+                                    errorText:
+                                        'An error occured. Try again later'),
+                              ),
                         ));
                   }
                 }));
