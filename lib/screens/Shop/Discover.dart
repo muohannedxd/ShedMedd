@@ -42,13 +42,14 @@ class _DiscoverState extends State<Discover> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
-            (route) => false);
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => Shop(currentIndex: 0,),
+          ),
+        );
       },
       child: ScrollConfiguration(
         behavior: BehaviorOfScroll(),
@@ -92,7 +93,8 @@ class _DiscoverState extends State<Discover> {
                         width: 22,
                         color: CustomColors.textPrimary,
                       ),
-                      onPressed: () => submitSearch(searchController), // Or call submitSearch directly here
+                      onPressed: () => submitSearch(
+                          searchController), // Or call submitSearch directly here
                     ),
                   ],
                 ),

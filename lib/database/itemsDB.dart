@@ -11,7 +11,10 @@ class ItemsDatabase {
   // get all items
   Future<List<DocumentSnapshot>> getAllItems() async {
     //await Future.delayed(Duration(seconds: 1));
-    QuerySnapshot snapshot = await items.limit(6).get(); // limit intentional for homepage slider
+    QuerySnapshot snapshot = await items
+        .orderBy('created_at', descending: true)
+        .limit(6)
+        .get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
 
@@ -24,8 +27,11 @@ class ItemsDatabase {
 
   // get all items of a certain category
   Future<List<DocumentSnapshot>> getCategoryItems(String category) async {
-    QuerySnapshot snapshot =
-        await items.where('category', isEqualTo: category).limit(6).get(); // limit intentional for homepage slider
+    QuerySnapshot snapshot = await items
+        .where('category', isEqualTo: category)
+        .orderBy('created_at', descending: true)
+        .limit(6)
+        .get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
 
