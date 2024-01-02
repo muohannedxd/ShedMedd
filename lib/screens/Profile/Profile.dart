@@ -20,13 +20,16 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
-            (route) => false);
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => Shop(
+              currentIndex: 0,
+            ),
+          ),
+        );
       },
       child: Scaffold(
         drawer: Drawer(),
@@ -184,7 +187,7 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _signOut() async {
     try {
-      UsersDatabase().logoutUser();              
+      UsersDatabase().logoutUser();
       Navigator.of(context).pop();
       Get.offAll(Shop(currentIndex: 0));
     } catch (e) {

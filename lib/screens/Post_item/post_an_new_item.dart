@@ -47,9 +47,9 @@ class _PostAnItemState extends State<PostAnItem> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 75,
-        );
+      source: ImageSource.gallery,
+      imageQuality: 75,
+    );
 
     if (pickedImage != null) {
       setState(() {
@@ -148,13 +148,16 @@ class _PostAnItemState extends State<PostAnItem> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
-            (route) => false);
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => Shop(
+              currentIndex: 0,
+            ),
+          ),
+        );
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
