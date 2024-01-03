@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shedmedd/components/floating_button.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
@@ -34,92 +35,99 @@ class ItemHome extends StatelessWidget {
       loggedInId = FirebaseAuth.instance.currentUser!.uid;
     }
 
-    return Scaffold(
-      body: FutureBuilder<DocumentSnapshot>(
-        future: currentItem,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CustomCircularProgress(),
-            );
-          } else if (snapshot.hasError) {
-            return CustomErrorWidget(
-              errorText: 'An error occured. Try again later',
-            );
-          } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return CustomErrorWidget(errorText: 'Item does not exist!');
-          }
-
-          DocumentSnapshot<Object?>? item = snapshot.data;
-
-          return Stack(
-            children: [
-              Center(
-                child: ScrollConfiguration(
-                  behavior: BehaviorOfScroll(),
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, top: 10, bottom: 10),
-                        child: Pictures(images: item!['images']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 10, bottom: 10),
-                        child: Seller(sellerID: item['user_id']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 10, bottom: 20),
-                        child: ItemInformation(
-                          title: item['title'],
-                          category: item['category'],
-                          subcategory: item['subcategory'],
-                          condition: item['condition'],
-                          price: item['price'],
-                          isSold: item['isSold'],
-                          description: item['description'],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: CustomColors.bgColor, // Set the color you want
+          statusBarIconBrightness:
+              Brightness.dark, // Use dark icons for better visibility
+        ),
+      child: Scaffold(
+        body: FutureBuilder<DocumentSnapshot>(
+          future: currentItem,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CustomCircularProgress(),
+              );
+            } else if (snapshot.hasError) {
+              return CustomErrorWidget(
+                errorText: 'An error occured. Try again later',
+              );
+            } else if (!snapshot.hasData || !snapshot.data!.exists) {
+              return CustomErrorWidget(errorText: 'Item does not exist!');
+            }
+      
+            DocumentSnapshot<Object?>? item = snapshot.data;
+      
+            return Stack(
+              children: [
+                Center(
+                  child: ScrollConfiguration(
+                    behavior: BehaviorOfScroll(),
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 10, bottom: 10),
+                          child: Pictures(images: item!['images']),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 10, bottom: 10),
+                          child: Seller(sellerID: item['user_id']),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 10, bottom: 20),
+                          child: ItemInformation(
+                            title: item['title'],
+                            category: item['category'],
+                            subcategory: item['subcategory'],
+                            condition: item['condition'],
+                            price: item['price'],
+                            isSold: item['isSold'],
+                            description: item['description'],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.04,
-                left: MediaQuery.of(context).size.width * 0.04,
-                child: FloatingButton(
-                  action: returnToPreviousPage,
-                ),
-              ),
-              if (item['user_id'] == loggedInId)
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.04,
-                  right: MediaQuery.of(context).size.width * 0.095,
-                  child: SettingsButton(
-                    itemID: item.id,
-                    imagesPaths: item['images'],
-                    isSold: item['isSold'],
+                  left: MediaQuery.of(context).size.width * 0.04,
+                  child: FloatingButton(
+                    action: returnToPreviousPage,
                   ),
                 ),
-              if (item['user_id'] != loggedInId)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: DirectMessageButton(
-                      item_id: itemID,
-                      title: item['title'],
-                      condition: item['condition'],
-                      price: item['price'],
-                      sellerID: item['user_id'],
-                      currentUserId: loggedInId,
-                      loggedIn: isLoggedIn),
-                ),
-            ],
-          );
-        },
+                if (item['user_id'] == loggedInId)
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.04,
+                    right: MediaQuery.of(context).size.width * 0.095,
+                    child: SettingsButton(
+                      itemID: item.id,
+                      imagesPaths: item['images'],
+                      isSold: item['isSold'],
+                    ),
+                  ),
+                if (item['user_id'] != loggedInId)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: DirectMessageButton(
+                        item_id: itemID,
+                        title: item['title'],
+                        condition: item['condition'],
+                        price: item['price'],
+                        sellerID: item['user_id'],
+                        currentUserId: loggedInId,
+                        loggedIn: isLoggedIn),
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
