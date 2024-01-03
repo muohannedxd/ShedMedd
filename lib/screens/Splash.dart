@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import '../utilities/animatedPageRouteBuilder.dart';
 import '../constants/customColors.dart';
@@ -24,14 +25,21 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.bgColor,
-      body: Center(
-        child: Image.asset(
-          'assets/icons/logo_large.png',
-          width: 160,
-          height: 160,
-          color: CustomColors.textPrimary.withOpacity(0.86),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: CustomColors.bgColor, // Set the color you want
+          statusBarIconBrightness:
+              Brightness.dark, // Use dark icons for better visibility
+        ),
+      child: Scaffold(
+        backgroundColor: CustomColors.bgColor,
+        body: Center(
+          child: Image.asset(
+            'assets/icons/logo_large.png',
+            width: 160,
+            height: 160,
+            color: CustomColors.textPrimary.withOpacity(0.86),
+          ),
         ),
       ),
     );
