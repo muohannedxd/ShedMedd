@@ -24,7 +24,8 @@ class ItemsController extends GetxController {
     }
   }
 
-  void filterItems({
+  void filterItems(
+    int itemsLength, {
     String category = 'All',
     String subcategory = 'All',
     String condition = 'All',
@@ -38,10 +39,12 @@ class ItemsController extends GetxController {
       'minPrice': minPrice,
       'maxPrice': maxPrice,
     };
-    filteredItems.value = ItemsDatabase().getFilteredItems(filters);
+    filteredItems.value =
+        ItemsDatabase().getFilteredItems(filters, itemsLength);
   }
 
-  void searchItems({
+  void searchItems(
+    int itemsLength, {
     String title = 'All',
     String category = 'All',
     String subcategory = 'All',
@@ -57,10 +60,11 @@ class ItemsController extends GetxController {
       'minPrice': minPrice,
       'maxPrice': maxPrice,
     };
-    specificItems.value = ItemsDatabase().getSpecificItems(filters);
+    specificItems.value =
+        ItemsDatabase().getSpecificItems(filters, itemsLength);
   }
 
-  void getMyProducts(String user_id) {
-    myProducts.value = ItemsDatabase().getUserItems(user_id);
+  void getMyProducts(String user_id, int itemsLength) {
+    myProducts.value = ItemsDatabase().getUserItems(user_id, itemsLength);
   }
 }
