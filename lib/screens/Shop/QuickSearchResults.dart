@@ -351,7 +351,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Found items',
+                                          'Items found',
                                           style: TextStyle(
                                               color: CustomColors.textPrimary,
                                               fontSize: TextSizes.medium,
