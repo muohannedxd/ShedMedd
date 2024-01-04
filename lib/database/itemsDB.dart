@@ -13,7 +13,7 @@ class ItemsDatabase {
     //await Future.delayed(Duration(seconds: 1));
     QuerySnapshot snapshot = await items
         .orderBy('created_at', descending: true)
-        .limit(6)
+        .limit(8)
         .get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
@@ -30,14 +30,14 @@ class ItemsDatabase {
     QuerySnapshot snapshot = await items
         .where('category', isEqualTo: category)
         .orderBy('created_at', descending: true)
-        .limit(6)
+        .limit(8)
         .get(); // limit intentional for homepage slider
     return snapshot.docs;
   }
 
   // get filtered items
   Future<List<DocumentSnapshot>> getFilteredItems(
-      Map<String, dynamic> appliedFilters) async {
+      Map<String, dynamic> appliedFilters, int itemsLength) async {
     Map<String, dynamic> filters = appliedFilters;
     Query filteredQuery = items;
 
@@ -57,12 +57,13 @@ class ItemsDatabase {
         isGreaterThanOrEqualTo: filters['minPrice'],
         isLessThanOrEqualTo: filters['maxPrice']);
 
-    QuerySnapshot snapshot = await filteredQuery.get();
+    QuerySnapshot snapshot = await filteredQuery.limit(itemsLength).get();
     return snapshot.docs;
   }
 
   Future<List<DocumentSnapshot>> getSpecificItems(
     Map<String, dynamic> appliedFilters,
+    int itemsLength
   ) async {
     Map<String, dynamic> filters = appliedFilters;
     Query filteredQuery = items;
@@ -85,7 +86,7 @@ class ItemsDatabase {
         isLessThanOrEqualTo: filters['maxPrice']);
 
     // Fetch all documents
-    QuerySnapshot snapshot = await filteredQuery.get();
+    QuerySnapshot snapshot = await filteredQuery.limit(itemsLength).get();
 
     // Search by name or description
     String searchKey = filters['title'];
@@ -105,11 +106,12 @@ class ItemsDatabase {
   }
 
   // get items of a user
-  Future<List<DocumentSnapshot>> getUserItems(String user_id) async {
+  Future<List<DocumentSnapshot>> getUserItems(String user_id, int itemsLength) async {
     //await Future.delayed(Duration(seconds: 1));
     QuerySnapshot snapshot = await items
         .where('user_id', isEqualTo: user_id)
         .orderBy('created_at', descending: true)
+        .limit(itemsLength)
         .get();
     return snapshot.docs;
   }

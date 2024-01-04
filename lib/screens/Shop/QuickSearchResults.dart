@@ -35,7 +35,9 @@ class _QuickSearchResults extends State<QuickSearchResults> {
   Future<Null> refreshPage() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(milliseconds: 500));
-    setState(() {});
+    setState(() {
+      itemsLength = 8;
+    });
     return null;
   }
 
@@ -128,6 +130,32 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
   final ItemsController itemsController = Get.put(ItemsController());
 
+  /**
+   * paginating the messages
+   */
+  final ScrollController _scrollController = ScrollController();
+  int itemsLength = 8;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
+        setState(() {
+          itemsLength += 8;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -142,7 +170,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     final isSeller = arguments.seller;
     if (isSeller) {
       AuthController().getCurrentUserId().then((userId) {
-        itemsController.getMyProducts(userId!);
+        itemsController.getMyProducts(userId!, itemsLength);
       });
     } else {
       //Map<String, dynamic> items = itemsController.items;
@@ -157,6 +185,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
       if (searchBar) {
         itemsController.searchItems(
+          itemsLength,
           title: filters['title'],
           category: filters['category'],
           subcategory: filters['subcategory'],
@@ -166,6 +195,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
         );
       } else {
         itemsController.filterItems(
+          itemsLength,
           category: filters['category'],
           subcategory: filters['subcategory'],
           condition: filters['condition'],
@@ -176,11 +206,11 @@ class _QuickSearchResults extends State<QuickSearchResults> {
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          statusBarColor: CustomColors.bgColor, // Set the color you want
-          statusBarIconBrightness:
-              Brightness.dark, // Use dark icons for better visibility
-        ),
+      value: SystemUiOverlayStyle(
+        statusBarColor: CustomColors.bgColor, // Set the color you want
+        statusBarIconBrightness:
+            Brightness.dark, // Use dark icons for better visibility
+      ),
       child: ScrollConfiguration(
           behavior: BehaviorOfScroll(),
           child: RefreshIndicator(
@@ -203,24 +233,27 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                       return CustomErrorWidget(
                           errorText: 'An error occured. Try again later');
                     } else if (snapshot.hasData) {
-                      List<DocumentSnapshot<Object?>>? itemsList = snapshot.data;
+                      List<DocumentSnapshot<Object?>>? itemsList =
+                          snapshot.data;
                       if (itemsList!.isEmpty) {
                         return ListView(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                   bottom: 20),
+                              padding: const EdgeInsets.only(bottom: 20),
                               child: FloatingButton(
-                                action: returnToPreviousPage, title: searchKey),
+                                  action: returnToPreviousPage,
+                                  title: searchKey),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 30, right: 30, top: 10, bottom: 10),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Found',
@@ -267,8 +300,8 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                                         style: TextStyle(
                                                             color: CustomColors
                                                                 .textPrimary,
-                                                            fontSize:
-                                                                TextSizes.small)),
+                                                            fontSize: TextSizes
+                                                                .small)),
                                                     SizedBox(
                                                       width: 6,
                                                     ),
@@ -297,24 +330,27 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                         );
                       } else {
                         return ListView(
+                          controller: _scrollController,
                           children: [
                             // return button
                             Padding(
-                              padding: const EdgeInsets.only(
-                                   bottom: 20),
+                              padding: const EdgeInsets.only(bottom: 20),
                               child: FloatingButton(
-                                action: returnToPreviousPage, title: searchKey),
+                                  action: returnToPreviousPage,
+                                  title: searchKey),
                             ),
-      
+
                             // Header
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 30, right: 30, top: 10, bottom: 10),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Found',
@@ -350,19 +386,21 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                                       color: CustomColors.grey),
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 18,
-                                                      right: 10,
-                                                      top: 6,
-                                                      bottom: 6),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 18,
+                                                          right: 10,
+                                                          top: 6,
+                                                          bottom: 6),
                                                   child: Row(
                                                     children: [
                                                       Text('Filter',
                                                           style: TextStyle(
                                                               color: CustomColors
                                                                   .textPrimary,
-                                                              fontSize: TextSizes
-                                                                  .small)),
+                                                              fontSize:
+                                                                  TextSizes
+                                                                      .small)),
                                                       SizedBox(
                                                         width: 6,
                                                       ),
@@ -382,7 +420,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                 ],
                               ),
                             ),
-      
+
                             Padding(
                                 padding: const EdgeInsets.only(
                                     left: 30, right: 30, top: 20, bottom: 10),
@@ -422,7 +460,7 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                     ],
                                   ),
                                 )),
-      
+
                             SizedBox(
                               height: 20,
                             )
@@ -659,44 +697,6 @@ class _QuickSearchResults extends State<QuickSearchResults> {
 
         // validation buttons
       ),
-    );
-  }
-}
-
-class ReturnButton extends StatelessWidget {
-  const ReturnButton({
-    super.key,
-    required this.searchKey,
-  });
-
-  final String searchKey;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 18,
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              searchKey,
-              style: TextStyle(
-                color: CustomColors.textPrimary,
-                fontSize: TextSizes.medium,
-                fontWeight: FontWeight.bold,
-              ),
-              overflow: TextOverflow.visible,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
