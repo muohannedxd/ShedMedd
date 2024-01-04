@@ -251,25 +251,21 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Found',
-                                        style: TextStyle(
-                                            color: CustomColors.textPrimary,
-                                            fontSize: TextSizes.medium,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${itemsList.length} results',
-                                        style: TextStyle(
-                                            color: CustomColors.textPrimary,
-                                            fontSize: TextSizes.medium,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  Visibility(
+                                    visible: !isSeller,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'No items Found',
+                                          style: TextStyle(
+                                              color: CustomColors.textPrimary,
+                                              fontSize: TextSizes.medium,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 20,
@@ -348,25 +344,40 @@ class _QuickSearchResults extends State<QuickSearchResults> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Found',
-                                        style: TextStyle(
-                                            color: CustomColors.textPrimary,
-                                            fontSize: TextSizes.medium,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '${itemsList.length} results',
-                                        style: TextStyle(
-                                            color: CustomColors.textPrimary,
-                                            fontSize: TextSizes.medium,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                  Visibility(
+                                    visible: !isSeller,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Found items',
+                                          style: TextStyle(
+                                              color: CustomColors.textPrimary,
+                                              fontSize: TextSizes.medium,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Visibility(
+                                          visible: itemsList.length > 6,
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5,
+                                            ),
+                                            child: Text(
+                                              'scroll down, you will find interesting items for you.',
+                                              style: TextStyle(
+                                                  color: CustomColors.textGrey,
+                                                  fontSize: TextSizes.small,
+                                                  fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 20,
