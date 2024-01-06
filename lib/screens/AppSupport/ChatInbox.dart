@@ -3,7 +3,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shedmedd/components/emptyListWidget.dart';
 import 'package:shedmedd/components/errorWidget.dart';
 import 'package:shedmedd/components/profileShimmer.dart';
@@ -15,7 +14,15 @@ import '../../database/chatDB.dart';
 import '../../utilities/displayTimeAgo.dart';
 import '../Shop/Home.dart';
 
-class ChatInbox extends StatelessWidget {
+class ChatInbox extends StatefulWidget {
+  @override
+  State<ChatInbox> createState() => _ChatInboxState();
+}
+
+class _ChatInboxState extends State<ChatInbox> {
+  TextEditingController _searchController = TextEditingController();
+  String searchKey = '';
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -29,93 +36,106 @@ class ChatInbox extends StatelessWidget {
           ),
         );
       },
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          statusBarColor: CustomColors.bgColor, // Set the color you want
-          statusBarIconBrightness:
-              Brightness.dark, // Use dark icons for better visibility
-        ),
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 25),
-        
-                // Search Bar
-                Padding(
-                  padding: EdgeInsets.only(left: 15, right: 15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: CustomColors.grey.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search',
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(
-                                  left: 20, top: 10, bottom: 10, right: 20),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Image.asset(
-                            'assets/icons/search_filled.png',
-                            width: 22,
-                            color: CustomColors.textPrimary,
-                          ),
-                          onPressed: () {
-                            // Handle search action
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 25),
+
+              // Search Bar
+              Padding(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: CustomColors.grey.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          onEditingComplete: () {
+                            setState(() {
+                              searchKey = _searchController.text;
+                            });
                           },
+                          decoration: InputDecoration(
+                            hintText: 'Search',
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.only(
+                                left: 20, top: 10, bottom: 10, right: 20),
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        icon: Image.asset(
+                          'assets/icons/search_filled.png',
+                          width: 22,
+                          color: CustomColors.textPrimary,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            searchKey = _searchController.text;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
-        
-                SizedBox(height: 20.0), // Spacer
-        
-                // Line with light grey
-                Container(
-                  height: 1.0,
-                  color: CustomColors.grey.withOpacity(0.2),
-                ),
-                SizedBox(height: 5), // Spacer
-        
-                StreamBuilder(
-                    stream: ChatDatabase().listenToChatInbox(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        print(snapshot.error);
-                        return /*CustomErrorWidget(errorText: 'An error occured!')*/
-                            Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Column(
-                                  children: [
-                                    CustomErrorWidget(
-                                      errorText: 'An error occured!',
-                                    ),
-                                    Text('${snapshot.error}')
-                                  ],
-                                ));
-                      } else if (snapshot.hasData) {
-                        List<InboxGroupChat> inboxItems = snapshot.data!;
-                        return inboxItems.isNotEmpty
+              ),
+
+              SizedBox(height: 20.0), // Spacer
+
+              // Line with light grey
+              Container(
+                height: 1.0,
+                color: CustomColors.grey.withOpacity(0.2),
+              ),
+              SizedBox(height: 5),
+
+              StreamBuilder(
+                  stream: ChatDatabase().listenToChatInbox(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            children: [
+                              CustomErrorWidget(
+                                errorText: 'An error occured!',
+                              ),
+                              Text('${snapshot.error}')
+                            ],
+                          ));
+                    } else if (snapshot.hasData) {
+                      List<InboxGroupChat> inboxItems = snapshot.data!;
+
+                      if (inboxItems.isEmpty) {
+                        return EmptyListWidget(
+                            emptyError: 'You have no previous messages yet!');
+                      } else {
+                        // filter based on search key
+                        List<InboxGroupChat> filteredInboxItems = inboxItems
+                            .where((inboxItem) =>
+                                inboxItem.itemName.contains(searchKey) ||
+                                inboxItem.username.contains(searchKey))
+                            .toList();
+
+                        return filteredInboxItems.isNotEmpty
                             ? Flexible(
                                 child: ListView.builder(
-                                  itemCount: inboxItems.length,
+                                  itemCount: filteredInboxItems.length,
                                   itemBuilder: (context, index) {
                                     return Column(
                                       children: [
                                         buildInboxItem(
-                                            context, inboxItems[index]),
-                                        if (index < inboxItems.length - 1)
+                                            context, filteredInboxItems[index]),
+                                        if (index <
+                                            filteredInboxItems.length - 1)
                                           SizedBox(height: 2),
                                       ],
                                     );
@@ -123,27 +143,28 @@ class ChatInbox extends StatelessWidget {
                                 ),
                               )
                             : EmptyListWidget(
-                                emptyError: 'You have no previous messages yet!');
-                      } else {
-                        return /*CustomErrorWidget(errorText: 'An error occured!')*/
-                            Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Column(
-                            children: [
-                              ProfileShimmer(),
-                              SizedBox(height: 20),
-                              ProfileShimmer(),
-                              SizedBox(height: 20),
-                              ProfileShimmer(),
-                              SizedBox(height: 20),
-                              ProfileShimmer()
-                            ],
-                          ),
-                        );
+                                emptyError:
+                                    'No matching group chats found!');
                       }
-                    })
-              ],
-            ),
+                    } else {
+                      return /*CustomErrorWidget(errorText: 'An error occured!')*/
+                          Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer(),
+                            SizedBox(height: 20),
+                            ProfileShimmer()
+                          ],
+                        ),
+                      );
+                    }
+                  })
+            ],
           ),
         ),
       ),
