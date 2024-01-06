@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
-import 'package:shedmedd/database/firebaseMessagingAPI.dart';
 import 'package:shedmedd/database/firebase_options.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
@@ -21,6 +21,9 @@ void main() async {
   // firebase configurations
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // dotenv
+  await dotenv.load(fileName: '.env');
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
     statusBarColor: CustomColors.bgColor, // Set the status bar color to white
@@ -44,7 +47,6 @@ class _MyAppState extends State<MyApp> {
         print('User is currently signed out!');
       } else {
         print('User is signed in!');
-        await FirebaseMessagingApi().initNotifications();
       }
     });
     super.initState();

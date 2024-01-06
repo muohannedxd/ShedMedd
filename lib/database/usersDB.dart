@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../controller/auth/auth_controller.dart';
+import 'firebaseMessagingAPI.dart';
 
 class UsersDatabase {
   // get collection of users
@@ -32,6 +33,21 @@ class UsersDatabase {
     String? user_id = await authController.getCurrentUserId();
     DocumentSnapshot logged_in_user = await users.doc(user_id).get();
     return logged_in_user;
+  }
+
+  // get the firstname of the user
+  Future<String> getNameOfUser(String user_id) async {
+    DocumentSnapshot<Object?> user = await getOneUser(user_id);
+    String fullname = user['name'];
+    return fullname;
+  }
+
+  // getting token of the current logged in user
+  // get the firstname of the user
+  Future<String> getUserToken(String user_id) async {
+    DocumentSnapshot<Object?> user = await getOneUser(user_id);
+    String token = user['fcmToken'];
+    return token;
   }
 
   Future<String> signUpUser({
@@ -120,6 +136,7 @@ class UsersDatabase {
 
       if (user != null) {
         print('Login successful for user with ID: ${user.uid}');
+        await FirebaseMessagingApi().initNotifications();
         return 'Login successful!';
       } else {
         print('User is not authenticated');
@@ -194,6 +211,7 @@ class UsersDatabase {
     if (user != null) {
       await user.reload();
       user = FirebaseAuth.instance.currentUser;
+      await FirebaseMessagingApi().initNotifications();
       return user!.emailVerified;
     }
 

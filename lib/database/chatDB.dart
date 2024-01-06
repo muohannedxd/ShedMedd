@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shedmedd/database/firebaseMessagingAPI.dart';
 import 'package:shedmedd/database/itemsDB.dart';
 import 'package:shedmedd/database/usersDB.dart';
 import 'package:shedmedd/utilities/inboxGroupChat.dart';
@@ -40,6 +41,8 @@ class ChatDatabase {
     await groupChatRef.update({
       'messages': FieldValue.arrayUnion([messageObject])
     });
+
+    FirebaseMessagingApi().sendMessageNotification(sender_id, message, gc_id);
   }
 
   /**
