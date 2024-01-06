@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/database/firebaseMessagingAPI.dart';
 import 'package:shedmedd/database/firebase_options.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
@@ -17,7 +18,7 @@ import 'package:shedmedd/screens/Profile/Profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  // firebase
+  // firebase configurations
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -38,12 +39,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   void initState() {
-    
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         print('User is currently signed out!');
       } else {
         print('User is signed in!');
+        await FirebaseMessagingApi().initNotifications();
       }
     });
     super.initState();

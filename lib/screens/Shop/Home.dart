@@ -95,7 +95,7 @@ class _ShopState extends State<Shop> {
                 topRight: Radius.circular(24.0),
               ),
               child: SizedBox(
-                height: 80,
+                height: 60,
                 child: BottomNavigationBar(
                   backgroundColor: CustomColors.bgColor,
                   type: BottomNavigationBarType.fixed,
