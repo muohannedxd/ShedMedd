@@ -27,15 +27,15 @@ class _ChatInboxState extends State<ChatInbox> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => Shop(
-              currentIndex: 0,
-            ),
-          ),
+      onPopInvoked: (bool didPop) async {
+        if (didPop) return;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+          (route) => false,
         );
       },
+      
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
