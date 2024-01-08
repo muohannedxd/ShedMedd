@@ -44,13 +44,25 @@ class _DiscoverState extends State<Discover> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => Shop(currentIndex: 0,),
-          ),
+      onPopInvoked: (bool didPop) async {
+        if (didPop) return;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+          (route) => false,
         );
       },
+
+      //WillPopScope(
+      //  onWillPop: () async {
+      //    Navigator.pushAndRemoveUntil(
+      //      context,
+      //      MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
+      //      (route) => false,
+      //    );
+      //    return false; // Prevents the default back button behavior// Prevents the default back button behavior
+      //  },
+      
       child: ScrollConfiguration(
         behavior: BehaviorOfScroll(),
         child: Scaffold(
