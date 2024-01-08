@@ -107,6 +107,8 @@ class _ShopState extends State<Shop> {
                     setState(() {
                       if (index == 2) {
                         isShownBottomBar = false;
+                      } else if ((index == 3 || index == 4) && !isLoggedIn) {
+                        isShownBottomBar = false;
                       }
                       currentPageIndex = index;
                     });
@@ -136,42 +138,24 @@ class _ShopState extends State<Shop> {
                       label: 'Discover',
                     ),
                     BottomNavigationBarItem(
-                      activeIcon: Image.asset(
-                        'assets/icons/post.png',
-                        width: 22,
-                        color: CustomColors.textPrimary
-                      ),
-                      icon: Image.asset(
-                        'assets/icons/post.png',
-                        width: 20,
-                        color: CustomColors.textGrey
-                      ),
+                      activeIcon: Image.asset('assets/icons/post.png',
+                          width: 22, color: CustomColors.textPrimary),
+                      icon: Image.asset('assets/icons/post.png',
+                          width: 20, color: CustomColors.textGrey),
                       label: 'Add',
                     ),
                     BottomNavigationBarItem(
-                      activeIcon: Image.asset(
-                        'assets/icons/inbox_filled.png',
-                        width: 24,
-                        color: CustomColors.textPrimary
-                      ),
-                      icon: Image.asset(
-                        'assets/icons/inbox.png',
-                        width: 22,
-                        color: CustomColors.textGrey
-                      ),
+                      activeIcon: Image.asset('assets/icons/inbox_filled.png',
+                          width: 24, color: CustomColors.textPrimary),
+                      icon: Image.asset('assets/icons/inbox.png',
+                          width: 22, color: CustomColors.textGrey),
                       label: 'Inbox',
                     ),
                     BottomNavigationBarItem(
-                      activeIcon: Image.asset(
-                        'assets/icons/profile_filled.png',
-                        width: 22,
-                        color: CustomColors.textPrimary
-                      ),
-                      icon: Image.asset(
-                        'assets/icons/profile.png',
-                        width: 20,
-                        color: CustomColors.textGrey
-                      ),
+                      activeIcon: Image.asset('assets/icons/profile_filled.png',
+                          width: 22, color: CustomColors.textPrimary),
+                      icon: Image.asset('assets/icons/profile.png',
+                          width: 20, color: CustomColors.textGrey),
                       label: 'Profile',
                     ),
                   ],
