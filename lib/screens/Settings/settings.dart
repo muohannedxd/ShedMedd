@@ -4,7 +4,9 @@ import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
 import 'package:shedmedd/screens/Settings/Aboutus.dart';
 import 'package:shedmedd/screens/Settings/terms_of_use.dart';
-import 'package:shedmedd/components/BarWithReturn.dart';
+
+import '../../components/floating_button.dart';
+import '../../utilities/returnAction.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -14,19 +16,23 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  int selectedBoxIndex = -1; // Index of the selected box, -1 means none selected
+  int selectedBoxIndex =
+      -1; // Index of the selected box, -1 means none selected
   late Timer _timer;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BarWithReturn(context, 'Settings'),
-      
       backgroundColor: CustomColors.bgColor,
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         children: [
-          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child:
+                FloatingButton(action: returnToPreviousPage, title: 'Settings'),
+          ),
+          SizedBox(height: 40),
           _buildSettingsItem(Icons.language, 'Language', 0),
           _buildSettingsItem(Icons.description, 'Terms of Use', 1),
           _buildSettingsItem(Icons.privacy_tip, 'About us', 2),
@@ -54,8 +60,8 @@ class _SettingsPageState extends State<SettingsPage> {
           // Navigate to the screen where you confirm the account deletion
           _showDeleteAccountConfirmationDialog();
         } else if (text == 'Language') {
-              _showLanguageSelectionDialog();
-            } else {
+          _showLanguageSelectionDialog();
+        } else {
           setState(() {
             selectedBoxIndex = index;
             _startTimer();
@@ -63,82 +69,85 @@ class _SettingsPageState extends State<SettingsPage> {
         }
         // Additional handling, if needed
       },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: selectedBoxIndex == index
-              ? Color.fromARGB(255, 137, 137, 137) // Dark grey when selected
-              : Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: const Color.fromARGB(255, 213, 210, 210), // Grey border color
-            width: 1.0, // Border width
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: CustomColors.textPrimary),
-                SizedBox(width: 15),
-                Text(
-                  text,
-                  style: TextStyle(
-                    color: CustomColors.textPrimary,
-                    fontSize: TextSizes.subtitle,
-                  ),
-                ),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          margin: EdgeInsets.only(bottom: 10),
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: selectedBoxIndex == index
+                ? Color.fromARGB(255, 137, 137, 137) // Dark grey when selected
+                : Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color:
+                  const Color.fromARGB(255, 213, 210, 210), // Grey border color
+              width: 1.0, // Border width
             ),
-            Icon(Icons.arrow_forward_ios, color: CustomColors.textGrey),
-          ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, color: CustomColors.textPrimary),
+                  SizedBox(width: 15),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      color: CustomColors.textPrimary,
+                      fontSize: TextSizes.subtitle,
+                    ),
+                  ),
+                ],
+              ),
+              Icon(Icons.arrow_forward_ios, color: CustomColors.textGrey),
+            ],
+          ),
         ),
       ),
     );
   }
 
-void _showLanguageSelectionDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      String selectedLanguage = 'English'; // Set the default language
+  void _showLanguageSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String selectedLanguage = 'English'; // Set the default language
 
-      return Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.9, // Set the desired width
-          child: SimpleDialog(
-            title: Text('Select Language'),
-            children: [
-              _buildLanguageTile('English', selectedLanguage == 'English'),
-              _buildLanguageTile('French', selectedLanguage == 'French'),
-              // Add more languages as needed
-            ],
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width *
+                0.9, // Set the desired width
+            child: SimpleDialog(
+              title: Text('Select Language'),
+              children: [
+                _buildLanguageTile('English', selectedLanguage == 'English'),
+                _buildLanguageTile('French', selectedLanguage == 'French'),
+                // Add more languages as needed
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
-Widget _buildLanguageTile(String language, bool isSelected) {
-  return ListTile(
-    title: Text(
-      language,
-      style: TextStyle(
-        color: isSelected ? Color.fromARGB(255, 116, 24, 12) : Colors.black,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+  Widget _buildLanguageTile(String language, bool isSelected) {
+    return ListTile(
+      title: Text(
+        language,
+        style: TextStyle(
+          color: isSelected ? Color.fromARGB(255, 116, 24, 12) : Colors.black,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
       ),
-    ),
-    onTap: () {
-      setState(() {
-        
-      });
-      Navigator.of(context).pop();
-    },
-  );
-}
+      onTap: () {
+        setState(() {});
+        Navigator.of(context).pop();
+      },
+    );
+  }
 
   void _startTimer() {
     _timer = Timer(Duration(milliseconds: 200), () {
@@ -153,7 +162,7 @@ Widget _buildLanguageTile(String language, bool isSelected) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: CustomColors.white,
           title: Text(
             'Delete Account',
             style: TextStyle(
