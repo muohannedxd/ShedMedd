@@ -60,7 +60,7 @@ class FirebaseMessagingApi {
             },
             body: jsonEncode(body));
 
-        // ensuring the messaging of the notification
+        // ensuring the messaging of the notifications
         print('response: ${res.statusCode}');
         print('body: ${res.body}');
       }
