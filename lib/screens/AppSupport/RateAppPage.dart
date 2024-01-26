@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/components/button.dart';
 import 'package:shedmedd/constants/customColors.dart';
+import 'package:shedmedd/database/usersDB.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
+import 'package:shedmedd/controller/auth/auth_controller.dart';
+
 
 class RateAppPage extends StatefulWidget {
   const RateAppPage({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class RateAppPage extends StatefulWidget {
 
 class _RateAppPageState extends State<RateAppPage> {
   double rating = 0.0;
+  final AuthController authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,6 @@ class _RateAppPageState extends State<RateAppPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Display a big text asking user satisfaction
               Text(
                 'Are you satisfied with ShedMedd services?',
                 style: TextStyle(
@@ -35,7 +38,6 @@ class _RateAppPageState extends State<RateAppPage> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
-              // Display stars for rating
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) {
@@ -48,13 +50,12 @@ class _RateAppPageState extends State<RateAppPage> {
                     icon: Icon(
                       index < rating.floor() ? Icons.star : Icons.star_border,
                       color: Colors.yellow[700],
-                      size: 40, // Set custom size for stars
+                      size: 40,
                     ),
                   );
                 }),
               ),
               SizedBox(height: 20),
-              // Display rating text based on the selected rating
               Text(
                 _getRatingText(),
                 style: TextStyle(
@@ -63,7 +64,6 @@ class _RateAppPageState extends State<RateAppPage> {
                 ),
               ),
               SizedBox(height: 20),
-              // Add a button to submit the rating or perform further actions
               Button(
                 action: _submitRating,
                 title: 'Submit',
@@ -76,17 +76,23 @@ class _RateAppPageState extends State<RateAppPage> {
     );
   }
 
-  void _submitRating() {
+  void _submitRating() async {
+    // Get the current user ID
+    String? userId = await authController.getCurrentUserId();
+
+    if (userId != null) {
+      // Update the user's rating in the database
+      await UsersDatabase().updateUserRating(userId, rating);
+    }
+
+    // Show the thank you dialog
     _showThankYouDialogWithDelay();
   }
 
   void _showThankYouDialogWithDelay() async {
-    await Future.delayed(Duration(seconds: 0)); // Delay for 2 seconds
-
-    // Show the thank you dialog
+    await Future.delayed(Duration(seconds: 0));
     _showThankYouDialog();
 
-    // Navigate to the profile page after showing the dialog
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => Shop(currentIndex: 4)),
@@ -103,7 +109,7 @@ class _RateAppPageState extends State<RateAppPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the thank you dialog
+                Navigator.of(context).pop();
               },
               child: Text('OK'),
             ),
@@ -125,7 +131,7 @@ class _RateAppPageState extends State<RateAppPage> {
     } else if (rating == 5) {
       return 'Great!';
     } else {
-      return ''; // Handle other cases if needed
+      return '';
     }
   }
 }

@@ -8,6 +8,8 @@ import 'package:shedmedd/database/firebase_options.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
 import 'package:shedmedd/screens/AppSupport/DirectMessage.dart';
+import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
+
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/QuickSearchResults.dart';
