@@ -27,6 +27,23 @@ class ChatDatabase {
   }
 
   /**
+   * delete group chats (after deleting an item)
+   */
+  Future<void> deleteChatGroups(String itemId) async {
+    try {
+      // query the chatgroups with itemId
+      QuerySnapshot chatGroupsSnapshot = await chatgroup
+        .where('item_id', isEqualTo: itemId)
+        .get();
+      for (DocumentSnapshot document in chatGroupsSnapshot.docs) {
+        await document.reference.delete();
+      }
+    } catch (e) {
+      print('error deleting item');
+    }
+  }
+
+  /**
    * add a message to group chat
    */
   Future<void> addMessageToGroupChat(

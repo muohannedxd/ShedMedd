@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shedmedd/database/chatDB.dart';
 import 'package:uuid/uuid.dart';
 
 class ItemsDatabase {
@@ -164,6 +165,9 @@ class ItemsDatabase {
       for (String imageUrl in imageUrls) {
         await FirebaseStorage.instance.refFromURL(imageUrl).delete();
       }
+
+      // delete all its chatgroups
+      await ChatDatabase().deleteChatGroups(itemId);
 
       return true;
     } catch (error) {
