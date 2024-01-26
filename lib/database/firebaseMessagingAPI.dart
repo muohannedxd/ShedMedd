@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart';
 import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/database/usersDB.dart';
+import 'package:shedmedd/main.dart';
+import 'package:shedmedd/screens/Shop/Home.dart';
 
 class FirebaseMessagingApi {
   // initialize an instance of firebase messaging
@@ -27,6 +30,7 @@ class FirebaseMessagingApi {
       await users.doc(user_id).update({
         'fcmToken': fCMToken,
       });
+      initPushNotifications();
     }
   }
 
@@ -67,5 +71,24 @@ class FirebaseMessagingApi {
     } catch (e) {
       print("error: $e");
     }
+  }
+
+  /**
+   * to handle the notification click
+   */
+  void handleMessage(RemoteMessage? message) {
+    if (message == null) return;
+    navigatorKey.currentState
+        ?.push(MaterialPageRoute(builder: (_) => Shop(currentIndex: 3)));
+  }
+
+  /**
+   * initialize background settings
+   */
+  Future initPushNotifications() async {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((value) => handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 }

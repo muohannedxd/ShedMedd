@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/controller/Profile/profileController.dart';
