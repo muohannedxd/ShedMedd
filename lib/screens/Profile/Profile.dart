@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
 import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/controller/Profile/profileController.dart';
 import 'package:shedmedd/utilities/searchArguments.dart';
+
+import '../../components/customCircularProg.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -51,8 +54,8 @@ class _ProfileState extends State<Profile> {
                 return FutureBuilder<Map<String, dynamic>>(
                   future: _profileController.getOneUserProfile(userId),
                   builder: (context, userSnapshot) {
-                    bool isLoading = userSnapshot.connectionState ==
-                        ConnectionState.waiting;
+                    bool isLoading =
+                        userSnapshot.connectionState == ConnectionState.waiting;
 
                     if (isLoading) {
                       return Center(
@@ -66,6 +69,7 @@ class _ProfileState extends State<Profile> {
 
                     String userName = userSnapshot.data!['name'] ?? '';
                     String userEmail = userSnapshot.data!['email'] ?? '';
+                    String initials = userName.toUpperCase().substring(0, 2);
 
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -73,29 +77,48 @@ class _ProfileState extends State<Profile> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(
-                                userSnapshot.data!['profile_pic'],
+                            Container(
+                              width: 80,
+                              height: 80,
+                              child: CircleAvatar(
+                                backgroundColor: CustomColors.grey,
+                                child: ClipOval(
+                                    child: CachedNetworkImage(
+                                  imageUrl: userSnapshot.data!['profile_pic'],
+                                  fit: BoxFit.cover,
+                                  width: 80,
+                                  height: 80,
+                                  progressIndicatorBuilder: (context, url,
+                                          progress) =>
+                                      Center(child: CustomCircularProgress()),
+                                  errorWidget: (context, url, error) =>
+                                      Center(child: Text(initials)),
+                                )),
                               ),
                             ),
                             SizedBox(width: 20),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  userName,
-                                  style: TextStyle(
-                                    color: CustomColors.textPrimary,
-                                    fontSize: TextSizes.title - 6,
-                                    fontWeight: FontWeight.bold,
+                                Container(
+                                  width: 140,
+                                  child: Text(
+                                    userName,
+                                    style: TextStyle(
+                                      color: CustomColors.textPrimary,
+                                      fontSize: TextSizes.title - 6,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  userEmail,
-                                  style: TextStyle(
-                                    color: CustomColors.textPrimary,
-                                    fontSize: TextSizes.subtitle - 8,
+                                Container(
+                                  width: 140,
+                                  child: Text(
+                                    userEmail,
+                                    style: TextStyle(
+                                      color: CustomColors.textPrimary,
+                                      fontSize: TextSizes.subtitle - 8,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -144,12 +167,11 @@ class _ProfileState extends State<Profile> {
                 );
               },
             ),
-
             Container(
               margin: EdgeInsets.only(top: 40),
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: CustomColors.white,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
                   color: CustomColors.grey,
@@ -157,7 +179,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: CustomColors.grey.withOpacity(0.3),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: Offset(0, 3),
@@ -229,7 +251,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: CustomColors.white,
           title: Text(
             'Logout',
             style: TextStyle(
