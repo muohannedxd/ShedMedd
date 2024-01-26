@@ -7,6 +7,9 @@ import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/controller/Profile/profileController.dart';
 import 'package:shedmedd/database/usersDB.dart';
 
+import '../../components/floating_button.dart';
+import '../../utilities/returnAction.dart';
+
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({Key? key}) : super(key: key);
 
@@ -89,13 +92,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BarWithReturn(context, 'Profile Settings', returnPage: '/profile'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 10),
+            Padding(
+            padding: const EdgeInsets.only(bottom: 20, top: 10),
+            child:
+                FloatingButton(action: returnToPreviousPage, title: 'Profile Settings'),
+          ),
             Stack(
               children: [
                 GestureDetector(
