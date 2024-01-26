@@ -8,8 +8,6 @@ import 'package:shedmedd/database/firebase_options.dart';
 import 'package:shedmedd/screens/Authentification/sign_up.dart';
 import 'package:shedmedd/screens/Post_item/post_an_new_item.dart';
 import 'package:shedmedd/screens/AppSupport/DirectMessage.dart';
-import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
-
 import 'package:shedmedd/screens/Shop/Discover.dart';
 import 'package:shedmedd/screens/Shop/Home.dart';
 import 'package:shedmedd/screens/Shop/QuickSearchResults.dart';
@@ -18,6 +16,8 @@ import 'package:shedmedd/screens/AppSupport/RateAppPage.dart';
 import 'package:shedmedd/screens/AppSupport/ChatInbox.dart';
 import 'package:shedmedd/screens/Profile/Profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   // firebase configurations
@@ -71,13 +71,14 @@ class _MyAppState extends State<MyApp> {
         '/discover': (context) => Discover(),
         '/discover/results': (context) => QuickSearchResults(),
         '/signup': (context) => SignUp(),
+        '/inbox': (context) => ChatInbox(),
         '/message': (context) => DirectMessage(),
         '/post_item': (context) => PostAnItem(),
         '/profile': (context) => const Profile(),
         '/rateApp': (context) => RateAppPage(),
-        '/inbox': (context) => ChatInbox(),
       },
       home: const Splash(),
+      navigatorKey: navigatorKey,
     );
   }
 }
