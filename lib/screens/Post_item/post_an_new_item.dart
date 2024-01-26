@@ -201,10 +201,7 @@ class _PostAnItemState extends State<PostAnItem> {
                                   child: ElevatedButton(
                                     onPressed: _pickImage,
                                     style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      primary: Colors.white,
-                                      onPrimary:
-                                          CustomColors.backgroundForPostItem,
+                                      foregroundColor: CustomColors.backgroundForPostItem, backgroundColor: Colors.white, elevation: 0,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(32.0),
@@ -254,10 +251,8 @@ class _PostAnItemState extends State<PostAnItem> {
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    primary: Colors.white,
-                                                    onPrimary: CustomColors
-                                                        .backgroundForPostItem,
+                                                    foregroundColor: CustomColors
+                                                        .backgroundForPostItem, backgroundColor: Colors.white, elevation: 0,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -483,8 +478,7 @@ class _PostAnItemState extends State<PostAnItem> {
                         child: ElevatedButton(
                           onPressed: addNewItem,
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
-                            onPrimary: Colors.white,
+                            foregroundColor: Colors.white, backgroundColor: Colors.black,
                             textStyle: TextStyle(color: Colors.white),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 16), // Adjust padding as needed
