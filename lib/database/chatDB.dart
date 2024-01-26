@@ -32,9 +32,8 @@ class ChatDatabase {
   Future<void> deleteChatGroups(String itemId) async {
     try {
       // query the chatgroups with itemId
-      QuerySnapshot chatGroupsSnapshot = await chatgroup
-        .where('item_id', isEqualTo: itemId)
-        .get();
+      QuerySnapshot chatGroupsSnapshot =
+          await chatgroup.where('item_id', isEqualTo: itemId).get();
       for (DocumentSnapshot document in chatGroupsSnapshot.docs) {
         await document.reference.delete();
       }
@@ -48,18 +47,33 @@ class ChatDatabase {
    */
   Future<void> addMessageToGroupChat(
       String gc_id, String sender_id, String message) async {
-    DocumentReference groupChatRef = chatgroup.doc(gc_id);
-    Map<String, dynamic> messageObject = {
-      'message': message,
-      'sender_id': sender_id,
-      'created_at': Timestamp.now()
-    };
+    DocumentSnapshot groupChatSnapshot = await chatgroup.doc(gc_id).get();
 
-    await groupChatRef.update({
-      'messages': FieldValue.arrayUnion([messageObject])
-    });
+    if (groupChatSnapshot.exists) {
+      Map<String, dynamic> groupChatData =
+          groupChatSnapshot.data() as Map<String, dynamic>;
 
-    FirebaseMessagingApi().sendMessageNotification(sender_id, message, gc_id);
+      String sellerId = groupChatData['seller_id'];
+      String buyerId = groupChatData['buyer_id'];
+      String receiver_id = sender_id == sellerId ? buyerId : sellerId;
+
+      // Update messages array in group chat document
+      Map<String, dynamic> messageObject = {
+        'message': message,
+        'sender_id': sender_id,
+        'created_at': Timestamp.now(),
+      };
+
+      await chatgroup.doc(gc_id).update({
+        'messages': FieldValue.arrayUnion([messageObject]),
+      });
+
+      // Send notification to the receiver
+      FirebaseMessagingApi()
+          .sendMessageNotification(sender_id, receiver_id, message, gc_id);
+    } else {
+      print('Group chat document does not exist');
+    }
   }
 
   /**

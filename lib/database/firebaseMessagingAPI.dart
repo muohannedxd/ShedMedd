@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart';
 import 'package:shedmedd/controller/auth/auth_controller.dart';
 import 'package:shedmedd/database/usersDB.dart';
 
@@ -32,45 +33,37 @@ class FirebaseMessagingApi {
   /**
    * to send a notification to the receiver of a message
    */
-  Future<void> sendMessageNotification(
-      String sender_id, String messageContent, String gc_id) async {
+  Future<void> sendMessageNotification(String sender_id, String receiver_id,
+      String messageContent, String gc_id) async {
     try {
       // getting the name of the sender
       String senderName = await UsersDatabase().getNameOfUser(sender_id);
-
       List<String> nameParts = senderName.split(' ');
       String senderFirstName = nameParts[0];
 
-      // getting the current user id
-      String? user_id = await authController.getCurrentUserId();
-      String token = await UsersDatabase().getUserToken(user_id!);
+      // token of the receiver user
+      String token = await UsersDatabase().getUserToken(receiver_id);
 
-      // preparing the notificaton
-      var notification = {
-        'title': senderName,
-        'body': '$senderFirstName: $messageContent',
-        'sound': 'default',
-        'badge': '1',
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'payload': {'gc_id': gc_id}
-      };
+      if (token.isNotEmpty) {
+        // preparing the notification
+        final body = {
+          'to': token,
+          'title': '$senderName',
+          'body': '$senderFirstName: $messageContent'
+        };
 
-      var message = {
-        'to': token,
-        'notification': notification,
-        'priority': 'high',
-      };
+        // sending the notification
+        var res = await post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: {
+              HttpHeaders.contentTypeHeader: 'application/json',
+              HttpHeaders.authorizationHeader: 'key=${dotenv.env['API_KEY']}'
+            },
+            body: jsonEncode(body));
 
-      var response = await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': '${dotenv.env['API_KEY']}',
-        },
-        body: jsonEncode(message),
-      );
-
-      print('FCM Response: ${response.body}');
+        // ensuring the messaging of the notifications
+        print('response: ${res.statusCode}');
+        print('body: ${res.body}');
+      }
     } catch (e) {
       print("error: $e");
     }
