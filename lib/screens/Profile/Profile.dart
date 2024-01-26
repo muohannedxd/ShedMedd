@@ -1,12 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/constants/textSizes.dart';
+import 'package:shedmedd/screens/Authentification/log_in.dart';
 import 'package:shedmedd/screens/Profile/ProfileSettings.dart';
-
-import '../../utilities/searchArguments.dart';
-import '../../database/usersDB.dart';
-import '../Shop/Home.dart';
+import 'package:shedmedd/controller/auth/auth_controller.dart';
+import 'package:shedmedd/controller/Profile/profileController.dart';
+import 'package:shedmedd/utilities/searchArguments.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,101 +18,133 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool isHovered = false;
+  final ProfileController _profileController = ProfileController();
+  final AuthController _authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) async {
-        if (didPop) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Shop(currentIndex: 0)),
-          (route) => false,
-        );
-      },
-      child: Scaffold(
-        drawer: Drawer(),
-        backgroundColor: CustomColors.bgColor,
-        body: ListView(
+    return Scaffold(
+      drawer: Drawer(),
+      backgroundColor: CustomColors.bgColor,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // Refresh the user profile when the user pulls down to refresh
+          setState(() {});
+        },
+        child: ListView(
           padding: EdgeInsets.all(28),
           children: [
-            // First Section: Profile Information
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    // Icon for Settings
-                    // Profile Picture
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage:
-                          AssetImage('assets/images/profile_picture.png'),
-                    ),
-                    // Add padding between the image and the name
-                    SizedBox(width: 20),
-                    // Name and Email of the Person
-                    Column(
+            FutureBuilder<String?>(
+              future: _authController.getCurrentUserId(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasError || snapshot.data == null) {
+                  return Text('Error fetching user ID');
+                }
+
+                String userId = snapshot.data!;
+
+                return FutureBuilder<Map<String, dynamic>>(
+                  future: _profileController.getOneUserProfile(userId),
+                  builder: (context, userSnapshot) {
+                    bool isLoading = userSnapshot.connectionState ==
+                        ConnectionState.waiting;
+
+                    if (isLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (userSnapshot.hasError || !userSnapshot.hasData) {
+                      return Text('Error fetching user information');
+                    }
+
+                    String userName = userSnapshot.data!['name'] ?? '';
+                    String userEmail = userSnapshot.data!['email'] ?? '';
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'John Doe',
-                          style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.title - 6,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'johndoe@gmail.com',
-                          style: TextStyle(
-                            color: CustomColors.textPrimary,
-                            fontSize: TextSizes.subtitle - 4,
-                          ),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                userSnapshot.data!['profile_pic'],
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userName,
+                                  style: TextStyle(
+                                    color: CustomColors.textPrimary,
+                                    fontSize: TextSizes.title - 6,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  userEmail,
+                                  style: TextStyle(
+                                    color: CustomColors.textPrimary,
+                                    fontSize: TextSizes.subtitle - 8,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30),
+                              child: MouseRegion(
+                                onEnter: (_) {
+                                  setState(() {
+                                    isHovered = true;
+                                  });
+                                },
+                                onExit: (_) {
+                                  setState(() {
+                                    isHovered = false;
+                                  });
+                                },
+                                child: Transform.rotate(
+                                  angle: isHovered ? 0.5 : 0,
+                                  child: IconButton(
+                                    icon: Image.asset(
+                                      'assets/icons/edit_profile.png',
+                                      width: 24,
+                                    ),
+                                    onPressed: () async {
+                                      bool result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSettings(),
+                                        ),
+                                      );
+                                      if (result == true) {
+                                        setState(() {});
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30),
-                      // Add padding to the right
-                      child: MouseRegion(
-                        onEnter: (_) {
-                          setState(() {
-                            isHovered = true;
-                          });
-                        },
-                        onExit: (_) {
-                          setState(() {
-                            isHovered = false;
-                          });
-                        },
-                        child: Transform.rotate(
-                          angle: isHovered ? 0.5 : 0,
-                          child: IconButton(
-                            icon: Image.asset(
-                              'assets/icons/edit_profile.png',
-                              width: 24,
-                            ),
-                            onPressed: () {
-                              // Handle settings icon press
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileSettings()),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    );
+                  },
+                );
+              },
             ),
 
-            // Second Section: Options Box
             Container(
               margin: EdgeInsets.only(top: 40),
               padding: EdgeInsets.all(20),
@@ -134,18 +167,15 @@ class _ProfileState extends State<Profile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // My Products
                   _buildOptionItem('shopping_bag.png', 'My Products', () {
                     Navigator.pushNamed(context, '/discover/results',
                         arguments: SearchArguments('My Products', true, true));
                   }),
                   Divider(),
-                  // Rate This App
                   _buildOptionItem('star.png', 'Rate This App', () {
                     Navigator.pushNamed(context, '/rateApp');
                   }),
                   Divider(),
-                  // Log Out
                   _buildOptionItem('logout.png', 'Log Out', () {
                     _showLogoutConfirmationDialog();
                   }),
@@ -166,7 +196,7 @@ class _ProfileState extends State<Profile> {
         child: Row(
           children: [
             Image.asset(
-              'assets/icons/${icon}',
+              'assets/icons/$icon',
               width: 20,
               color: CustomColors.textPrimary,
             ),
@@ -186,12 +216,11 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _signOut() async {
     try {
-      UsersDatabase().logoutUser();
+      await FirebaseAuth.instance.signOut();
       Navigator.of(context).pop();
-      Get.offAll(Shop(currentIndex: 0));
+      Get.offAll(LogIn());
     } catch (e) {
       print("Error during logout: $e");
-      // Handle errors if needed
     }
   }
 
@@ -200,7 +229,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Set background color to white
+          backgroundColor: Colors.white,
           title: Text(
             'Logout',
             style: TextStyle(

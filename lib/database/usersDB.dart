@@ -352,4 +352,38 @@ class UsersDatabase {
       return 'Error logging in with Google: $error';
     }
   }
+
+  Future<void> updateUserData(String? userId, Map<String, String> map) async {
+    try {
+      // Reference to the Firebase Firestore collection with the specific user ID
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // Reference to the specific document within the collection
+      DocumentReference userDocument = usersCollection.doc(userId);
+
+      // Update the data for the specific user ID
+      await userDocument.update(map);
+
+      print('Data updated successfully for user with ID: $userId');
+    } catch (error) {
+      print('Failed to update data: $error');
+    }
+  }
+
+  Future<void> updateUserRating(String userId, double rating) async {
+    try {
+      // Get the current user's document reference
+      DocumentReference userDocument = users.doc(userId);
+
+      // Update the user's rating field
+      await userDocument.update({'rate': rating.toString()});
+
+      print('User rating updated successfully for user with ID: $userId');
+    } catch (error) {
+      print('Failed to update user rating: $error');
+    }
+  }
+
 }
+

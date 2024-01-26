@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/constants/customColors.dart';
-
-import '../Shop/Home.dart';
-
+import 'package:shedmedd/controller/auth/auth_controller.dart';
+import 'package:shedmedd/controller/Profile/profileController.dart';
+import 'package:shedmedd/database/usersDB.dart';
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({Key? key}) : super(key: key);
@@ -13,12 +15,76 @@ class ProfileSettings extends StatefulWidget {
 }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
+  bool isSavingChanges = false;
+  String userProfilePic = "assets/images/logo_small_icon_only_inverted.png";
+
+  void _initializeUserData() async {
+    final AuthController authController = AuthController();
+    String? userId = await authController.getCurrentUserId();
+    Map<String, dynamic> userData =
+        await ProfileController().getOneUserProfile(userId!);
+
+    setState(() {
+      nameController.text = userData['name'] ?? '';
+      genderController.text = userData['gender'] ?? '';
+      phoneController.text = userData['phone'] ?? '';
+      addressController.text = userData['address'] ?? '';
+      userProfilePic = userData['profile_pic'] ??
+          "assets/images/logo_small_icon_only_inverted.png";
+    });
+  }
+
+  Future<void> _saveChanges(BuildContext context) async {
+    try {
+      setState(() {
+        isSavingChanges = true;
+      });
+
+      final AuthController authController = AuthController();
+      String? userId = await authController.getCurrentUserId();
+
+      Map<String, String> updatedUserData = {
+        'name': nameController.text,
+        'gender': genderController.text,
+        'phone': phoneController.text,
+        'address': addressController.text,
+        'profile_pic': userProfilePic,
+      };
+
+      await UsersDatabase().updateUserData(userId, updatedUserData);
+
+      Navigator.pop(context, true); // Pass true to indicate changes were saved
+    } catch (e) {
+      print('Error saving changes: $e');
+    } finally {
+      setState(() {
+        isSavingChanges = false;
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        userProfilePic = pickedFile.path;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +96,33 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 10),
-
-            // Figma-designed profile picture layout
             Stack(
               children: [
-                // Profile picture container
-                Container(
-                  width: 96,
-                  height: 96,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Image.asset(
-                    "assets/images/logo_small_icon_only_inverted.png",
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
                     width: 96,
                     height: 96,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Image.asset(
+                      userProfilePic,
+                      width: 96,
+                      height: 96,
+                    ),
                   ),
                 ),
-
-                // Camera icon positioned at the bottom right
                 Positioned(
-                    bottom: 0,
-                    right: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: _pickImage,
                     child: Container(
-                      padding: EdgeInsets.all(4), // Adjust padding as needed
+                      padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Colors.grey[200], // Light grey background color
-                        borderRadius: BorderRadius.circular(20), // Adjust the border radius as needed
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Icon(
                         Icons.camera_alt,
@@ -65,107 +131,44 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       ),
                     ),
                   ),
-
+                ),
               ],
             ),
-
-            // Rest of your code...
-              SizedBox(height: 50),
-            _buildNameRow('First Name', 'Last Name'),
-             SizedBox(height: 15),
-            _buildInfoModificationRow('Email', emailController),
+            SizedBox(height: 50),
+            _buildInfoModificationRow('Full Name', nameController),
             _buildInfoModificationRow('Gender', genderController),
-            _buildInfoModificationRow('Phone', phoneController),
+            _buildInfoModificationPhone('Phone', phoneController),
             _buildInfoModificationRow('Address', addressController),
-
             SizedBox(height: 25),
-
-           Container(
-  width: 203,
-  height: 48,
-  child: ElevatedButton(
-    onPressed: () {
-      _saveChanges(context);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xff343434),
-      padding: EdgeInsets.symmetric(horizontal: 16), // Adjust padding as needed
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ),
-    child: Text(
-      'Save Changes',
-      style: TextStyle(color: Colors.white, fontSize: 18),
-    ),
-  ),
-),
-
+            ElevatedButton(
+              onPressed: isSavingChanges ? null : () => _saveChanges(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff343434),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
+              child: isSavingChanges
+                  ? CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    )
+                  : Text(
+                      'Save Changes',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+            ),
           ],
         ),
       ),
     );
   }
 
- Widget _buildNameRow(String label1, String label2) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 5),
-    child: Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label1,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              TextField(
-                controller: firstNameController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your $label1',
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(width: 15),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label2,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-              ),
-              TextField(
-                controller: lastNameController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your $label2',
-                  focusColor: CustomColors.buttonSecondary,
-                ),
-              ),
-            ],
-            
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-
- Widget _buildInfoModificationRow(String label, TextEditingController controller) {
+  Widget _buildInfoModificationPhone(String label, TextEditingController controller) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 3),
     child: Container(
-      width: double.infinity, // Set the width to occupy the available space
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,10 +183,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           SizedBox(width: 30),
           Expanded(
             child: Container(
-              // Set the width for the TextField
               width: double.infinity,
               child: TextField(
                 controller: controller,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   hintText: 'Enter your $label',
                   focusColor: CustomColors.buttonSecondary,
@@ -197,14 +201,39 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   );
 }
 
-
-void _saveChanges(BuildContext context) {
-    // Implement your save changes logic here
-
-    // Navigate to the profile page after saving changes
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => Shop(currentIndex: 4)),
+Widget _buildInfoModificationRow(
+      String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(width: 30),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: 'Enter your $label',
+                    focusColor: CustomColors.buttonSecondary,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
