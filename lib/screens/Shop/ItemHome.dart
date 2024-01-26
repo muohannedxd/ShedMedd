@@ -36,11 +36,11 @@ class ItemHome extends StatelessWidget {
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          statusBarColor: CustomColors.bgColor, // Set the color you want
-          statusBarIconBrightness:
-              Brightness.dark, // Use dark icons for better visibility
-        ),
+      value: SystemUiOverlayStyle(
+        statusBarColor: CustomColors.bgColor, // Set the color you want
+        statusBarIconBrightness:
+            Brightness.dark, // Use dark icons for better visibility
+      ),
       child: Scaffold(
         body: FutureBuilder<DocumentSnapshot>(
           future: currentItem,
@@ -56,9 +56,9 @@ class ItemHome extends StatelessWidget {
             } else if (!snapshot.hasData || !snapshot.data!.exists) {
               return CustomErrorWidget(errorText: 'Item does not exist!');
             }
-      
+
             DocumentSnapshot<Object?>? item = snapshot.data;
-      
+
             return Stack(
               children: [
                 Center(
@@ -156,35 +156,36 @@ class DirectMessageButton extends StatelessWidget {
   void navigateToChat(
       BuildContext context, DocumentSnapshot<Object?>? user) async {
     //String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    String gc_id =
-        await ChatDatabase().getGroupChatId(sellerID, currentUserId, item_id);
 
-    // if chat does not exist
-    if (gc_id == 'null') {
-      // create one
-      gc_id = await ChatDatabase()
-          .createGroupChat(currentUserId, sellerID, item_id);
+    if (loggedIn) {
+      String gc_id =
+          await ChatDatabase().getGroupChatId(sellerID, currentUserId, item_id);
+
+      // if chat does not exist
+      if (gc_id == 'null') {
+        // create one
+        gc_id = await ChatDatabase()
+            .createGroupChat(currentUserId, sellerID, item_id);
+      }
+      Navigator.pushNamed(
+        context,
+        '/message',
+        arguments: {
+          'gc_id': gc_id, // change this later
+          'title': title,
+          'condition': condition,
+          'price': price,
+          'receiverName': user?['name']
+        },
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignUp(),
+        ),
+      );
     }
-
-    // navigate to the chat
-    loggedIn
-        ? Navigator.pushNamed(
-            context,
-            '/message',
-            arguments: {
-              'gc_id': gc_id, // change this later
-              'title': title,
-              'condition': condition,
-              'price': price,
-              'receiverName': user?['name']
-            },
-          )
-        : Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SignUp(),
-            ),
-          );
   }
 
   @override
