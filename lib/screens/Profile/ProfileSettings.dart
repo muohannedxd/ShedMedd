@@ -88,7 +88,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       _saveChanges(context);
     },
     style: ElevatedButton.styleFrom(
-      primary: Color(0xff343434),
+      backgroundColor: Color(0xff343434),
       padding: EdgeInsets.symmetric(horizontal: 16), // Adjust padding as needed
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),

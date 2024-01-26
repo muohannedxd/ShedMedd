@@ -121,8 +121,8 @@ class _ChatInboxState extends State<ChatInbox> {
                         // filter based on search key
                         List<InboxGroupChat> filteredInboxItems = inboxItems
                             .where((inboxItem) =>
-                                inboxItem.itemName.contains(searchKey) ||
-                                inboxItem.username.contains(searchKey))
+                                inboxItem.itemName.toLowerCase().contains(searchKey.toLowerCase()) ||
+                                inboxItem.username.toLowerCase().contains(searchKey.toLowerCase()))
                             .toList();
 
                         return filteredInboxItems.isNotEmpty
