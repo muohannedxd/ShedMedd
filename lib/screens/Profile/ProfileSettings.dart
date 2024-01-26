@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shedmedd/components/BarWithReturn.dart';
 import 'package:shedmedd/components/customCircularProg.dart';
 import 'package:shedmedd/constants/customColors.dart';
 import 'package:shedmedd/controller/auth/auth_controller.dart';
@@ -64,7 +63,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       String imageUrl = await _uploadImageToStorage(userId!, _image);
 
       Map<String, String> updatedUserData = {
-        'name': nameController.text ?? userName,
+        'name': nameController.text,
         'gender': selectedGender,
         'phone': phoneController.text,
         'address': addressController.text,
