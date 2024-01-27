@@ -274,7 +274,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
+          color: selectedGender == gender ? CustomColors.grey.withOpacity(0.3) : null,
           border: Border.all(
+            width: selectedGender == gender ? 2 : 1,
             color: selectedGender == gender
                 ? CustomColors.buttonSecondary
                 : Colors.grey,
