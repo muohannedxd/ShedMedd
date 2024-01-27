@@ -365,7 +365,7 @@ class UsersDatabase {
       // Update the data for the specific user ID
       await userDocument.update(map);
 
-      print('Data updated successfully for user with ID: $userId');
+      print('Data updated successfully');
     } catch (error) {
       print('Failed to update data: $error');
     }
