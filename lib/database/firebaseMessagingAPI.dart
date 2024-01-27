@@ -19,7 +19,7 @@ class FirebaseMessagingApi {
   final _androidChannel = const AndroidNotificationChannel(
       'high_importance_channel', 'High Importance Notifications',
       description: 'This channel is for notifications',
-      importance: Importance.defaultImportance);
+      importance: Importance.high);
 
   // funcion to initialize notifications
   Future<void> initNotifications() async {
@@ -58,7 +58,7 @@ class FirebaseMessagingApi {
       if (token.isNotEmpty) {
         // preparing the notification
         final body = {
-          'to': token,
+          'to': '$token',
           'title': '$senderName',
           'body': '$senderFirstName: $messageContent'
         };
@@ -74,6 +74,7 @@ class FirebaseMessagingApi {
         // ensuring the messaging of the notifications
         print('response: ${res.statusCode}');
         print('body: ${res.body}');
+        print('to: $token');
       }
     } catch (e) {
       print("error: $e");
@@ -88,8 +89,7 @@ class FirebaseMessagingApi {
   /**
    * to handle the notification click
    */
-  void handleMessage(RemoteMessage? message) {
-    if (message == null) return;
+  void handleMessage(RemoteMessage message) {
     navigatorKey.currentState
         ?.push(MaterialPageRoute(builder: (_) => Shop(currentIndex: 3)));
   }
@@ -106,7 +106,6 @@ class FirebaseMessagingApi {
     await _localNotifications.initialize(
       settings,
     );
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
 
     final platform = _localNotifications.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
@@ -116,25 +115,35 @@ class FirebaseMessagingApi {
   /**
    * initialize background settings
    */
-  Future initPushNotifications() async {
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((value) => handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  Future<void> initPushNotifications() async {
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      if (value != null) {
+        handleMessage(value);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      handleMessage(message);
+    });
+
     FirebaseMessaging.onMessage.listen((message) {
       final notification = message.notification;
-      if (notification == null) return;
-      _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
+      if (notification != null) {
+        _localNotifications.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
             android: AndroidNotificationDetails(
-                _androidChannel.id, _androidChannel.name,
-                channelDescription: _androidChannel.description,
-                icon: '@drawable/logo_small_icon_only')),
-        payload: jsonEncode(message.toMap()),
-      );
+              _androidChannel.id,
+              _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: '@drawable/logo_small_icon_only',
+            ),
+          ),
+          payload: jsonEncode(message.data),
+        );
+      }
     });
   }
 }
